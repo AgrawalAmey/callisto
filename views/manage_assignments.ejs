@@ -21,7 +21,7 @@
         <div class="small-header transition animated fadeIn">
             <div class=hpanel>
                 <div class=panel-body>
-                    <h2 class="font-light m-b-xs">Manage Manage</h2></div>
+                    <h2 class="font-light m-b-xs">Manage Assignments</h2></div>
             </div>
         </div>
         <div class="content animate-panel">
@@ -29,9 +29,9 @@
                 <div class=row>
                     <div class="col-lg-6">
                         <div class="hpanel">
-                            <div class="panel-heading">Add service</div>
+                            <div class="panel-heading">Add Assignment</div>
                             <div class="panel-body" style="display: block;">
-                                <form role="form" id="form_1" novalidate="novalidate" method="post" action="/addService">
+                                <form role="form" id="form_1" novalidate="novalidate" method="post" action="/addAssignment">
                                     <div class="form-group">
                                         <label>Name</label>
                                         <input type="text" class="form-control" name="name">
@@ -56,30 +56,29 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="checkbox">
-                                            <label><input type="checkbox form-control" value="" name="acceptSubmission">Accept Submissions</label>
+                                            <label><input type="checkbox form-control" value="false" name="acceptSubmission">Accept Submissions</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="checkbox">
-                                            <label><input type="checkbox form-control" value="" name="solutionsAvailable">Solutions Available</label>
+                                            <label><input type="checkbox form-control" value="false" name="solutionsAvailable">Solutions Available</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="checkbox">
-                                            <label><input type="checkbox form-control" value="" name="feedbackAvailable">Feedback Available</label>
+                                            <label><input type="checkbox form-control" value="false" name="feedbackAvailable">Feedback Available</label>
                                         </div>
                                     </div>
-
                                     <!-- show error message -->
-                                    <% if (typeof addServiceError !== 'undefined' && addServiceError.length > 0) { %>
+                                    <% if (typeof addAssignmentError !== 'undefined' && addAssignmentError.length > 0) { %>
                                         <div class="form-group">                                
-                                            <label class="error"><%= addServiceError %></label>
+                                            <label class="error"><%= addAssignmentError %></label>
                                         </div>
                                     <% } %>
                                     <!-- show success message -->
-                                    <% if (typeof addServiceSuccess !== 'undefined' && addServiceSuccess.length > 0) { %>
+                                    <% if (typeof addAssignmentSuccess !== 'undefined' && addAssignmentSuccess.length > 0) { %>
                                         <div class="form-group">                                
-                                            <label class="success"><%= addServiceSuccess %></label>
+                                            <label class="success"><%= addAssignmentSuccess %></label>
                                         </div>
                                     <% } %>                                    
                                     <div>
@@ -91,16 +90,16 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="hpanel">
-                            <div class="panel-heading">Edit Service</div>
+                            <div class="panel-heading">Edit Assignment</div>
                             <div class="panel-body">
-                                <form role="form" id="form_2" novalidate="novalidate" method="post" action="/editService">
+                                <form role="form" id="form_2" novalidate="novalidate" method="post" action="/editAssignment">
                                     <div class=form-group>
-                                        <label style="padding: 0">Select service</label>
+                                        <label style="padding: 0">Select assignment</label>
                                         <br>
                                         <div class=col-sm-10 style="padding: 0">
                                             <select class="form-control m-b" name="oldName">
-                                                <% for (var  i=0; i<serviceNameList.length; i++) { %>
-                                                    <option><%= serviceNameList[i] %></option>
+                                                <% for (var  i=0; i<assignments.length; i++) { %>
+                                                    <option><%= assignments[i].name %></option>
                                                 <% } %>
                                             </select>
                                         </div>
@@ -111,19 +110,49 @@
                                         <input type="text" class="form-control" name="name">
                                     </div>
                                     <div class="form-group">
-                                        <label>Price</label>
-                                        <input type="text" class="form-control" name="price">
+                                        <label>Start Time</label>
+                                        <div class="input-group date" id="datepicker">
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-calendar"></span>
+                                                </span>
+                                            <input type="text" class="form-control" name="startTime">
+                                        </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label>End Time</label>
+                                        <div class="input-group date" id="datepicker">
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-calendar"></span>
+                                                </span>
+                                            <input type="text" class="form-control" name="endTime">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                            <label><input type="checkbox form-control" value="false" name="acceptSubmission">Accept Submissions</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                            <label><input type="checkbox form-control" value="false" name="solutionsAvailable">Solutions Available</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                            <label><input type="checkbox form-control" value="false" name="feedbackAvailable">Feedback Available</label>
+                                        </div>
+                                    </div>
+
                                     <!-- show any errors -->
-                                    <% if (typeof editServiceError !== 'undefined' && editServiceError.length > 0) { %>
+                                    <% if (typeof editAssignmentError !== 'undefined' && editAssignmentError.length > 0) { %>
                                     <div class="form-group">                                
-                                        <label class="error"><%= editServiceError %></label>
+                                        <label class="error"><%= editAssignmentError %></label>
                                     </div>
                                     <% } %>
                                     <!-- show any messages that come back with authentication -->
-                                    <% if (typeof editServiceSuccess !== 'undefined' && editServiceSuccess.length > 0) { %>
+                                    <% if (typeof editAssignmentSuccess !== 'undefined' && editAssignmentSuccess.length > 0) { %>
                                     <div class="form-group">                                
-                                        <label class="success"><%= editServiceSuccess %></label>
+                                        <label class="success"><%= editAssignmentSuccess %></label>
                                     </div>
                                     <% } %>
                                     <div>
@@ -135,31 +164,31 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="hpanel">
-                            <div class="panel-heading">Remove Service</div>
+                            <div class="panel-heading">Remove Assignment</div>
                             <div class="panel-body">
-                                <form role="form" id="form_3" novalidate="novalidate" method="post" action="/removeService">
+                                <form role="form" id="form_3" novalidate="novalidate" method="post" action="/removeAssignment">
                                     <div class=form-group>
-                                        <label style="padding: 0">Select service</label>
+                                        <label style="padding: 0">Select assignment</label>
                                         <br>
                                         <div class=col-sm-10 style="padding: 0">
                                             <select class="form-control m-b" name="name">
-                                                <% for (var  i=0; i<serviceNameList.length; i++) { %>
-                                                    <option><%= serviceNameList[i] %></option>
+                                                <% for (var  i=0; i<assignments.length; i++) { %>
+                                                    <option><%= assignments[i].name %></option>
                                                 <% } %>
                                             </select>
                                         </div>
                                         <div class=col-sm-2 style="height: 49px"></div>
                                     </div>
                                     <!-- show any errors -->
-                                    <% if (typeof removeServiceError !== 'undefined' && removeServiceError.length > 0) { %>
+                                    <% if (typeof removeAssignmentError !== 'undefined' && removeAssignmentError.length > 0) { %>
                                     <div class="form-group">                                
-                                        <label class="error"><%= removeServiceError %></label>
+                                        <label class="error"><%= removeAssignmentError %></label>
                                     </div>
                                     <% } %>
                                     <!-- show any messages that come back with authentication -->
-                                    <% if (typeof removeServiceSuccess !== 'undefined' && removeServiceSuccess.length > 0) { %>
+                                    <% if (typeof removeAssignmentSuccess !== 'undefined' && removeAssignmentSuccess.length > 0) { %>
                                     <div class="form-group">                                
-                                        <label class="success"><%= removeServiceSuccess %></label>
+                                        <label class="success"><%= removeAssignmentSuccess %></label>
                                     </div>
                                     <% } %>
                                     <div>
@@ -173,27 +202,32 @@
             </div>
         </div>
         <!-- Footer-->
-        <footer class=footer>&copy; 2016 Padmavati Hospital</footer>
+        <footer class=footer>&copy; Team NNFL</footer>
     </div>
 
     <% include ./partials/js_imports.ejs %>
 
     <script>
     $(function() {
+        var options={
+            format: 'yyyy/mm/dd',
+            todayHighlight: true,
+            autoclose: true,
+            endDate: "0d"
+        };
+        $('#datepicker').datepicker(options);
         $("#form_1").validate({
             rules: {
                 name: {
                     required: true
                 },
-                price: {
+                startTime: {
                     required: true,
-                    number: true
-                }
-            },
-            messages: {
-                price: {
-                    required: "This field is required.",
-                    number: "Please enter valid number.",
+                    date: true
+                },
+                endTime: {
+                    required: true,
+                    date: true
                 }
             },
             submitHandler: function(form) {
@@ -208,15 +242,13 @@
                 name: {
                     required: true
                 },
-                price: {
+                startTime: {
                     required: true,
-                    number: true
-                }
-            },
-            messages: {
-                price: {
-                    required: "This field is required.",
-                    number: "Please enter valid number.",
+                    date: true
+                },
+                endTime: {
+                    required: true,
+                    date: true
                 }
             },
             submitHandler: function(form) {

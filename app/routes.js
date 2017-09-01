@@ -100,7 +100,7 @@ module.exports = function(app, passport) {
     // =====================================
 
     app.get('/manageAssignments', isLoggedIn, isAdmin, function(req, res) {
-        Assignment.find({}, function(err, assignments) {
+        Assignments.find({}, function(err, assignments) {
             res.render('manage_assignments.ejs', {
                 user: req.user,
                 assignments: assignments,
