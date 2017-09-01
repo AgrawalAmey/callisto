@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ./partials/head.ejs %>
+    <title>Neural Nets & Fuzzy Logic | Account settings</title>
+</head>
+
+<body class="fixed-navbar fixed-sidebar">
+    <% if (user.isAdmin) { %>
+            <% include ./partials/admin_header.ejs %> 
+    <% } else { %>
+        <% include ./partials/user_header.ejs %>
+    <% } %>
+    <% if (user.isAdmin) { %>
+            <% include ./partials/admin_nav.ejs %> 
+    <% } else { %>
+        <% include ./partials/user_nav.ejs %>
+    <% } %>
+    <!-- Main Wrapper -->
+    <div id="wrapper" style="min-height: 679px;">
+        <div class="small-header transition animated fadeIn">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <h2 class="font-light m-b-xs">Account Setting</h2> <small>Edit the account details</small> </div>
+            </div>
+        </div>
+        <div class="content animate-panel">
+            <div>
+                <div class="row">
+                    <div class="col-lg-6 central-form">
+                        <div class="hpanel">
+                            <div class="panel-heading">Change profile information</div>
+                            <div class="panel-body" style="display: block;">
+                                <form role="form" id="form_1" novalidate="novalidate" action="/changeProfile" method="post">
+                                    <input type="text" name="username" style="display: none"value=<%= user.username %>>
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text" placeholder="Name" class="form-control" name="name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input type="password" placeholder="Password" class="form-control" name="password">
+                                    </div>
+                                    <!-- show error message -->
+                                    <% if (typeof addUserError !== 'undefined' && addUserError.length > 0) { %>
+                                        <div class="form-group">                                
+                                            <label class="error" for="password"><%= addUserError %></label>
+                                        </div>
+                                    <% } %>
+                                    <!-- show success message -->
+                                    <% if (typeof addUserSuccess !== 'undefined' && addUserSuccess.length > 0) { %>
+                                        <div class="form-group">                                
+                                            <label class="success" for="password"><%= addUserSuccess %></label>
+                                        </div>
+                                    <% } %>  
+                                    <div>
+                                        <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit</strong></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer-->
+        <footer class="footer">&copy; Team NNFL</footer>
+    </div>
+    <!-- Vendor scripts -->
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/jquery-ui.min.js"></script>
+    <script src="./js/jquery.slimscroll.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/metisMenu.min.js"></script>
+    <script src="./js/icheck.min.js"></script>
+    <script src="./js/index.js"></script>
+    <script src="./js/jquery.validate.min.js"></script>
+    <!-- App scripts -->
+    <script src=./js/homer.js></script>
+    <script>
+    $(function() {
+        $("#form_1").validate({
+            rules: {
+                name: {
+                    required: true
+                },
+                mobile_number: {
+                    required: true,
+                    number: true,
+                    maxlength: 10,
+                    minlength: 10
+                },
+                password: {
+                    required: true,
+                }
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    });
+    </script>
+</body>
+
+</html>

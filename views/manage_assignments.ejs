@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ./partials/head.ejs %>
+    <title>Neural Nets & Fuzzy Logic | Manage Assignments</title>
+</head>
+
+<body class="fixed-navbar fixed-sidebar">
+    <% if (user.isAdmin) { %>
+            <% include ./partials/admin_header.ejs %> 
+    <% } else { %>
+        <% include ./partials/user_header.ejs %>
+    <% } %>
+    <% if (user.isAdmin) { %>
+            <% include ./partials/admin_nav.ejs %> 
+    <% } else { %>
+        <% include ./partials/user_nav.ejs %>
+    <% } %>
+    <!-- Main Wrapper -->
+    <div id=wrapper>
+        <div class="small-header transition animated fadeIn">
+            <div class=hpanel>
+                <div class=panel-body>
+                    <h2 class="font-light m-b-xs">Manage Manage</h2></div>
+            </div>
+        </div>
+        <div class="content animate-panel">
+            <div>
+                <div class=row>
+                    <div class="col-lg-6">
+                        <div class="hpanel">
+                            <div class="panel-heading">Add service</div>
+                            <div class="panel-body" style="display: block;">
+                                <form role="form" id="form_1" novalidate="novalidate" method="post" action="/addService">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" name="name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Start Time</label>
+                                        <div class="input-group date" id="datepicker">
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-calendar"></span>
+                                                </span>
+                                            <input type="text" class="form-control" name="startTime">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>End Time</label>
+                                        <div class="input-group date" id="datepicker">
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-calendar"></span>
+                                                </span>
+                                            <input type="text" class="form-control" name="endTime">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                            <label><input type="checkbox form-control" value="" name="acceptSubmission">Accept Submissions</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                            <label><input type="checkbox form-control" value="" name="solutionsAvailable">Solutions Available</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                            <label><input type="checkbox form-control" value="" name="feedbackAvailable">Feedback Available</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- show error message -->
+                                    <% if (typeof addServiceError !== 'undefined' && addServiceError.length > 0) { %>
+                                        <div class="form-group">                                
+                                            <label class="error"><%= addServiceError %></label>
+                                        </div>
+                                    <% } %>
+                                    <!-- show success message -->
+                                    <% if (typeof addServiceSuccess !== 'undefined' && addServiceSuccess.length > 0) { %>
+                                        <div class="form-group">                                
+                                            <label class="success"><%= addServiceSuccess %></label>
+                                        </div>
+                                    <% } %>                                    
+                                    <div>
+                                        <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit</strong></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="hpanel">
+                            <div class="panel-heading">Edit Service</div>
+                            <div class="panel-body">
+                                <form role="form" id="form_2" novalidate="novalidate" method="post" action="/editService">
+                                    <div class=form-group>
+                                        <label style="padding: 0">Select service</label>
+                                        <br>
+                                        <div class=col-sm-10 style="padding: 0">
+                                            <select class="form-control m-b" name="oldName">
+                                                <% for (var  i=0; i<serviceNameList.length; i++) { %>
+                                                    <option><%= serviceNameList[i] %></option>
+                                                <% } %>
+                                            </select>
+                                        </div>
+                                        <div class=col-sm-2 style="height: 49px"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" name="name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Price</label>
+                                        <input type="text" class="form-control" name="price">
+                                    </div>
+                                    <!-- show any errors -->
+                                    <% if (typeof editServiceError !== 'undefined' && editServiceError.length > 0) { %>
+                                    <div class="form-group">                                
+                                        <label class="error"><%= editServiceError %></label>
+                                    </div>
+                                    <% } %>
+                                    <!-- show any messages that come back with authentication -->
+                                    <% if (typeof editServiceSuccess !== 'undefined' && editServiceSuccess.length > 0) { %>
+                                    <div class="form-group">                                
+                                        <label class="success"><%= editServiceSuccess %></label>
+                                    </div>
+                                    <% } %>
+                                    <div>
+                                        <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit</strong></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="hpanel">
+                            <div class="panel-heading">Remove Service</div>
+                            <div class="panel-body">
+                                <form role="form" id="form_3" novalidate="novalidate" method="post" action="/removeService">
+                                    <div class=form-group>
+                                        <label style="padding: 0">Select service</label>
+                                        <br>
+                                        <div class=col-sm-10 style="padding: 0">
+                                            <select class="form-control m-b" name="name">
+                                                <% for (var  i=0; i<serviceNameList.length; i++) { %>
+                                                    <option><%= serviceNameList[i] %></option>
+                                                <% } %>
+                                            </select>
+                                        </div>
+                                        <div class=col-sm-2 style="height: 49px"></div>
+                                    </div>
+                                    <!-- show any errors -->
+                                    <% if (typeof removeServiceError !== 'undefined' && removeServiceError.length > 0) { %>
+                                    <div class="form-group">                                
+                                        <label class="error"><%= removeServiceError %></label>
+                                    </div>
+                                    <% } %>
+                                    <!-- show any messages that come back with authentication -->
+                                    <% if (typeof removeServiceSuccess !== 'undefined' && removeServiceSuccess.length > 0) { %>
+                                    <div class="form-group">                                
+                                        <label class="success"><%= removeServiceSuccess %></label>
+                                    </div>
+                                    <% } %>
+                                    <div>
+                                        <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit</strong></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer-->
+        <footer class=footer>&copy; 2016 Padmavati Hospital</footer>
+    </div>
+
+    <% include ./partials/js_imports.ejs %>
+
+    <script>
+    $(function() {
+        $("#form_1").validate({
+            rules: {
+                name: {
+                    required: true
+                },
+                price: {
+                    required: true,
+                    number: true
+                }
+            },
+            messages: {
+                price: {
+                    required: "This field is required.",
+                    number: "Please enter valid number.",
+                }
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+        $("#form_2").validate({
+            rules: {
+                oldName: {
+                    required: true
+                },
+                name: {
+                    required: true
+                },
+                price: {
+                    required: true,
+                    number: true
+                }
+            },
+            messages: {
+                price: {
+                    required: "This field is required.",
+                    number: "Please enter valid number.",
+                }
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+        $("#form_3").validate({
+            rules: {
+                name: {
+                    required: true
+                }
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    });
+    </script>
+</body>
+
+</html>

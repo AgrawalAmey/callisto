@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ./partials/head.ejs %>
+    <title>Neural Nets & Fuzzy Logic | Assignments</title>
+</head>
+
+<body class="fixed-navbar fixed-sidebar">
+    <% if (user.isAdmin) { %>
+            <% include ./partials/admin_header.ejs %> 
+    <% } else { %>
+        <% include ./partials/user_header.ejs %>
+    <% } %>
+    <% if (user.isAdmin) { %>
+            <% include ./partials/admin_nav.ejs %> 
+    <% } else { %>
+        <% include ./partials/user_nav.ejs %>
+    <% } %>
+    <!-- Main Wrapper -->
+    <div id=wrapper>
+        <div class="small-header transition animated fadeIn">
+            <div class=hpanel>
+                <div class=panel-body>
+                    <h2 class="font-light m-b-xs">Assignments</h2></div>
+            </div>
+        </div>
+        <div class="content animate-panel">
+            <div>
+                <div class=row>
+                    <div class="col-lg-12">
+                        <div class="hpanel">
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <h4>Evaluative Assignments</h4>
+                                    <% if (assignments.length == 0) { %>
+                                        <tr>
+                                            No evaluative assignments available.
+                                        </tr>
+                                    <% } else { %>
+                                        <table cellpadding="1" cellspacing="1" class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Start Time</th>
+                                                    <th>End Time</th>
+                                                    <th>Active</th>
+                                                    <th>Submitted</th>
+                                                    <th>Solutions Available</th>
+                                                    <th>Feedback Available</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% for (var  i=0; i<assignments.length; i++) { %>
+                                                    <% if (assignments[i].showToStudents || user.isAdmin) { %>
+                                                    <tr>
+                                                        <td><%= assignments[i].name  %></td>
+                                                        <td><%= assignments[i].startTime %></td>
+                                                        <td><%= assignments[i].endTime %></td>
+                                                        <td><%= assignments[i].isActive %></td>
+                                                        <td><%= assignments[i].isSubmitted %></td>
+                                                        <td><%= assignments[i].solutionsAvailable %></td>
+                                                        <td><%= assignments[i].feedbacksAvailable %></td>
+                                                    </tr>
+                                                    <% } %>
+                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    <% } %>    
+                                </div>
+                                <div class="table-responsive">
+                                    <h4>Practice Assignments</h4>
+                                    <% if (assignments.length == 0) { %>
+                                        <tr>
+                                            No practice assignments available.
+                                        </tr>
+                                    <% } else { %>
+                                        <table cellpadding="1" cellspacing="1" class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Solutions Available</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% for (var  i=0; i<assignments.length; i++) { %>
+                                                    <% if (assignments[i].showToStudents || user.isAdmin) { %>
+                                                    <tr>
+                                                        <td><%= assignments[i].name  %></td>
+                                                        <td><%= assignments[i].solutionsAvailable %></td>
+                                                    </tr>
+                                                    <% } %>
+                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    <% } %>
+                                </div>
+                            </div>      
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer-->
+        <footer class=footer>&copy; Team NNFL</footer>
+    </div>
+</body>
+
+</html>
