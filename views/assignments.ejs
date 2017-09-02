@@ -44,7 +44,11 @@
                                                     <th>Start Time</th>
                                                     <th>End Time</th>
                                                     <th>Active</th>
-                                                    <th>Submitted</th>
+                                                    <% if (user.isAdmin) { %>
+                                                        <th>Total submissions</th> 
+                                                    <% } else { %>
+                                                        <th>Submitted</th>
+                                                    <% } %>
                                                     <th>Solutions Available</th>
                                                     <th>Feedback Available</th>
                                                 </tr>
@@ -57,9 +61,13 @@
                                                         <td><%= assignments[i].startTime %></td>
                                                         <td><%= assignments[i].endTime %></td>
                                                         <td><%= assignments[i].isActive %></td>
-                                                        <td><%= assignments[i].isSubmitted %></td>
+                                                        <% if (user.isAdmin) { %>
+                                                            <td><%= assignments[i].whoSubmitted.length %></td> 
+                                                        <% } else { %>
+                                                            <%= assignments[i].isSubmitted %>
+                                                        <% } %>
                                                         <td><%= assignments[i].solutionsAvailable %></td>
-                                                        <td><%= assignments[i].feedbacksAvailable %></td>
+                                                        <td><%= assignments[i].feedbackAvailable %></td>
                                                     </tr>
                                                     <% } %>
                                                 <% } %>

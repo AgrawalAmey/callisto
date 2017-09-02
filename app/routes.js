@@ -42,10 +42,10 @@ module.exports = function(app, passport) {
     app.get('/assignments', isLoggedIn, function(req, res) {
         Assignments.find({}, function(err, assignments) {
             for(i=0; i<assignments.length; i++){
-                date = new Date(assignments[i].endTime);
-                assignments[i].endTime = date.toLocalString();
+                // date = new Date(assignments[i].endTime);
+                // assignments[i].endTime = date.toLocalString();
                 assignments[i].isSubmitted = req.user._id in assignments[i].whoSubmitted;
-                assignments[i].isActive = (assignments[i].endTime - new Date() > 0);
+                assignments[i].isActive = (assignments[i].endTime - new Date() > 0 && assignments[i].startTime - new Date() < 0);
                 assignments[i].showToStudents = (new Date() - assignments[i].startTime > 0);
             }
             res.render('assignments.ejs', {
@@ -60,10 +60,10 @@ module.exports = function(app, passport) {
     
     app.get('/assignment/:assignmentId', isLoggedIn, function(req, res) {
         Assignments.findOne({'_id': req.params.assignmentId}, function(err, assignment) {
-            date = new Date(assignment.endTime);
-            assignment.endTime = date.toLocalString();
+            // date = new Date(assignment.endTime);
+            // assignment.endTime = date.toLocalString();
             assignment.isSubmitted = req.user._id in assignment.whoSubmitted;
-            assignment.isActive = (assignment.endTime - new Date() > 0);
+            assignment.isActive = (assignment.endTime - new Date() > 0  && assignments[i].startTime - new Date() < 0);
             res.render('reception_desk.ejs', {
                 user: req.user,
                 assignment: assignment

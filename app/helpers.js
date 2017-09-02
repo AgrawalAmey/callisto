@@ -177,9 +177,9 @@ module.exports = {
                 newAssignment.name = req.body.name;
                 newAssignment.startTime = req.body.startTime;
                 newAssignment.endTime = req.body.endTime;
-                newAssignment.solutionsAvailable = req.body.solutionsAvailable;
-                newAssignment.feedbackAvailable = req.body.feedbackAvailable;
-                newAssignment.acceptSubmission = req.body.acceptSubmission;
+                newAssignment.solutionsAvailable = req.body.solutionsAvailable || false;
+                newAssignment.feedbackAvailable = req.body.feedbackAvailable || false;
+                newAssignment.acceptSubmission = req.body.acceptSubmission || false;
                 
                 newAssignment.save(function(err) {
                     if (err) {
@@ -214,12 +214,12 @@ module.exports = {
                     return;                
                 }
     
-                newAssignment.name = req.body.name;
-                newAssignment.startTime = req.body.startTime;
-                newAssignment.endTime = req.body.endTime;
-                newAssignment.solutionsAvailable = req.body.solutionsAvailable;
-                newAssignment.feedbackAvailable = req.body.feedbackAvailable;
-                newAssignment.acceptSubmission = req.body.acceptSubmission;
+                existingAssignment.name = req.body.name;
+                existingAssignment.startTime = req.body.startTime;
+                existingAssignment.endTime = req.body.endTime;
+                existingAssignment.solutionsAvailable = req.body.solutionsAvailable || false;
+                existingAssignment.feedbackAvailable = req.body.feedbackAvailable || false;
+                existingAssignment.acceptSubmission = req.body.acceptSubmission || false;
 
                 existingAssignment.save(function(err) {
                     if (err) {

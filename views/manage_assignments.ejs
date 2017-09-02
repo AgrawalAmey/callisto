@@ -38,7 +38,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Start Time</label>
-                                        <div class="input-group date" id="datepicker">
+                                        <div class="input-group date datepicker">
                                                 <span class="input-group-addon">
                                                     <span class="fa fa-calendar"></span>
                                                 </span>
@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>End Time</label>
-                                        <div class="input-group date" id="datepicker">
+                                        <div class="input-group date datepicker">
                                                 <span class="input-group-addon">
                                                     <span class="fa fa-calendar"></span>
                                                 </span>
@@ -55,18 +55,21 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="checkbox">
-                                            <label><input type="checkbox form-control" value="false" name="acceptSubmission">Accept Submissions</label>
+                                        <div class="checkbox checkbox-primary">
+                                            <input type="checkbox" id="cb0" name="acceptSubmission">
+                                            <label for="cb0">Accept Submissions</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="checkbox">
-                                            <label><input type="checkbox form-control" value="false" name="solutionsAvailable">Solutions Available</label>
+                                        <div class="checkbox checkbox-primary">
+                                            <input type="checkbox" id="cb1" name="solutionsAvailable">
+                                            <label for="cb1">Solutions Available</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="checkbox">
-                                            <label><input type="checkbox form-control" value="false" name="feedbackAvailable">Feedback Available</label>
+                                        <div class="checkbox checkbox-primary">
+                                            <input type="checkbox" id="cb2" name="feedbackAvailable">
+                                            <label for="cb2">Feedback Available</label>
                                         </div>
                                     </div>
                                     <!-- show error message -->
@@ -111,7 +114,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Start Time</label>
-                                        <div class="input-group date" id="datepicker">
+                                        <div class="input-group date datepicker">
                                                 <span class="input-group-addon">
                                                     <span class="fa fa-calendar"></span>
                                                 </span>
@@ -120,7 +123,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>End Time</label>
-                                        <div class="input-group date" id="datepicker">
+                                        <div class="input-group date datepicker">
                                                 <span class="input-group-addon">
                                                     <span class="fa fa-calendar"></span>
                                                 </span>
@@ -128,18 +131,21 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="checkbox">
-                                            <label><input type="checkbox form-control" value="false" name="acceptSubmission">Accept Submissions</label>
+                                        <div class="checkbox checkbox-primary">
+                                            <input type="checkbox" id="cb3" name="acceptSubmission">
+                                            <label for="cb3">Accept Submissions</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="checkbox">
-                                            <label><input type="checkbox form-control" value="false" name="solutionsAvailable">Solutions Available</label>
+                                        <div class="checkbox checkbox-primary">
+                                            <input type="checkbox" id="cb4" name="solutionsAvailable">
+                                            <label for="cb4">Solutions Available</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="checkbox">
-                                            <label><input type="checkbox form-control" value="false" name="feedbackAvailable">Feedback Available</label>
+                                        <div class="checkbox checkbox-primary">
+                                            <input type="checkbox" id="cb5" name="feedbackAvailable">
+                                            <label for="cb5">Feedback Available</label>
                                         </div>
                                     </div>
 
@@ -212,10 +218,9 @@
         var options={
             format: 'yyyy/mm/dd',
             todayHighlight: true,
-            autoclose: true,
-            endDate: "0d"
+            autoclose: true
         };
-        $('#datepicker').datepicker(options);
+        $('.datepicker').datepicker(options);
         $("#form_1").validate({
             rules: {
                 name: {

@@ -33,10 +33,6 @@
                                         <input type="text" class="form-control" name="name">
                                     </div>
                                     <div class="form-group">
-                                        <label>Mobile Number</label>
-                                        <input type="text" class="form-control" name="mobile_number">
-                                    </div>
-                                    <div class="form-group">
                                         <label>Password</label>
                                         <input type="password" class="form-control" name="password">
                                     </div>
@@ -79,10 +75,6 @@
                                     <div class="form-group">
                                         <label>Name</label>
                                         <input type="text" class="form-control" name="name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Mobile Number</label>
-                                        <input type="text" class="form-control" name="mobile_number">
                                     </div>
                                     <div class="form-group">
                                         <label>Password</label>
@@ -162,24 +154,12 @@
                 name: {
                     required: true
                 },
-                mobile_number: {
-                    required: true,
-                    number: true,
-                    maxlength: 10,
-                    minlength: 10
-                },
                 password: {
                     required: true,
                     minlength: 8
                 }
             },
             messages: {
-                mobile_number: {
-                    required: "This field is required.",
-                    number: "Please enter valid mobile number.",
-                    maxlength: "Please enter valid mobile number.",
-                    minlength: "Please enter valid mobile number."
-                },
                 password: {
                     required: "This field is required.",
                     minlength: "Password should be at least 8 characters long."
@@ -197,24 +177,12 @@
                 name: {
                     required: true
                 },
-                mobile_number: {
-                    required: true,
-                    number: true,
-                    maxlength: 10,
-                    minlength: 10
-                },
                 password: {
                     required: true,
                     minlength: 8
                 }
             },
             messages: {
-                mobile_number: {
-                    required: "This field is required.",
-                    number: "Please enter valid mobile number.",
-                    maxlength: "Please enter valid mobile number.",
-                    minlength: "Please enter valid mobile number."
-                },
                 password: {
                     required: "This field is required.",
                     minlength: "Password should be at least 8 characters long."
