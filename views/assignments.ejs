@@ -57,7 +57,9 @@
                                                 <% for (var  i=0; i<assignments.length; i++) { %>
                                                     <% if (assignments[i].showToStudents || user.isAdmin) { %>
                                                     <tr>
-                                                        <td><%= assignments[i].name  %></td>
+                                                        <td>
+                                                            <a href="/assignment?name=<%= assignments[i].name %>"><%= assignments[i].name %></a>
+                                                        </td>
                                                         <td><%= assignments[i].startTime %></td>
                                                         <td><%= assignments[i].endTime %></td>
                                                         <td><%= assignments[i].isActive %></td>
@@ -93,7 +95,9 @@
                                                 <% for (var  i=0; i<assignments.length; i++) { %>
                                                     <% if (assignments[i].showToStudents || user.isAdmin) { %>
                                                     <tr>
-                                                        <td><%= assignments[i].name  %></td>
+                                                        <td>
+                                                            <a href="/assignment?name=<%= assignments[i].name %>"><%= assignments[i].name %></a>
+                                                        </td>
                                                         <td><%= assignments[i].solutionsAvailable %></td>
                                                     </tr>
                                                     <% } %>
@@ -110,6 +114,7 @@
         </div>
         <!-- Footer-->
         <footer class=footer>&copy; Team NNFL</footer>
+        <% include ./partials/js_imports.ejs %>
     </div>
 </body>
 

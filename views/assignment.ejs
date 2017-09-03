@@ -21,7 +21,7 @@
         <div class="small-header transition animated fadeIn">
             <div class=hpanel>
                 <div class=panel-body>
-                    <h2 class="font-light m-b-xs"><%= assignments[i].name  %></h2></div>
+                    <h2 class="font-light m-b-xs"><%= assignment.name %></h2></div>
             </div>
         </div>
         <div class="content animate-panel">
@@ -30,74 +30,51 @@
                     <div class="col-lg-12">
                         <div class="hpanel">
                             <div class="panel-body">
-                                <div class="table-responsive">
-                                    <h4>Start Time: <%= assignments[i].startTime %></h4>
-
-                                        <table cellpadding="1" cellspacing="1" class="table table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Start Time</th>
-                                                    <th>End Time</th>
-                                                    <th>Active</th>
-                                                    <% if (user.isAdmin) { %>
-                                                        <th>Total submissions</th> 
-                                                    <% } else { %>
-                                                        <th>Submitted</th>
-                                                    <% } %>
-                                                    <th>Solutions Available</th>
-                                                    <th>Feedback Available</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <% for (var  i=0; i<assignments.length; i++) { %>
-                                                    <% if (assignments[i].showToStudents || user.isAdmin) { %>
-                                                    <tr>
-                                                        <td><%= assignments[i].name  %></td>
-                                                        <td><%= assignments[i].startTime %></td>
-                                                        <td><%= assignments[i].endTime %></td>
-                                                        <td><%= assignments[i].isActive %></td>
-                                                        <% if (user.isAdmin) { %>
-                                                            <td><%= assignments[i].whoSubmitted.length %></td> 
-                                                        <% } else { %>
-                                                            <%= assignments[i].isSubmitted %>
-                                                        <% } %>
-                                                        <td><%= assignments[i].solutionsAvailable %></td>
-                                                        <td><%= assignments[i].feedbackAvailable %></td>
-                                                    </tr>
-                                                    <% } %>
-                                                <% } %>
-                                            </tbody>
-                                        </table>
-                                    <% } %>    
-                                </div>
-                                <div class="table-responsive">
-                                    <h4>Practice Assignments</h4>
-                                    <% if (assignments.length == 0) { %>
-                                        <tr>
-                                            No practice assignments available.
-                                        </tr>
-                                    <% } else { %>
-                                        <table cellpadding="1" cellspacing="1" class="table table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Solutions Available</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <% for (var  i=0; i<assignments.length; i++) { %>
-                                                    <% if (assignments[i].showToStudents || user.isAdmin) { %>
-                                                    <tr>
-                                                        <td><%= assignments[i].name  %></td>
-                                                        <td><%= assignments[i].solutionsAvailable %></td>
-                                                    </tr>
-                                                    <% } %>
-                                                <% } %>
-                                            </tbody>
-                                        </table>
-                                    <% } %>
-                                </div>
+                                <h5>Start Time: <%= assignment.startTime %></h5>
+                                <h5>End Time: <%= assignment.endTime %></h5>
+                                <% if (user.isAdmin) { %>
+                                    <h5>Total submissions: <%= assignment.whoSubmitted.length %></h5> 
+                                <% } else { %>
+                                    <h5>Submitted: <%= assignment.isSubmitted %></h5>
+                                <% } %>
+                                <h5> 
+                                    <a target="_blank" href="/assignment/release/<%= assignment.name %>">Download assignment</a>
+                                </h5>
+                                <% if (assignment.solutionsAvailable) { %>
+                                    <h5> 
+                                        <a target="_blank" href="/assignment/solutions/<%= assignment.name %>">Download solutions</a>
+                                    </h5>
+                                <% } %>
+                                <% if (assignment.feedbackAvailable && !user.isAdmin) { %>
+                                    <h5> 
+                                        <a target="_blank" href="/assignment/feedback/<%= assignment.name %>">Download feedback</a>
+                                    </h5>
+                                <% } %>
+                                <% if (assignment.isActive) { %>
+                                    <h3 style="margin-top: 65px;">Make submission</h3>
+                                    <form role="form" method="post" enctype="multipart/form-data" action="/assignment/upload/<%= assignment.name %>">
+                                        <div class="form-group">                                
+                                            <label class="btn btn-default">
+                                                Selct file <input type="file" name="file" hidden>
+                                            </label>
+                                        </div>
+                                        <!-- show error message -->
+                                        <% if (typeof uploadAssignmentError !== 'undefined' && uploadAssignmentError.length > 0) { %>
+                                            <div class="form-group">                                
+                                                <label class="error" for="file"><%= uploadAssignmentError %></label>
+                                            </div>
+                                        <% } %>
+                                        <!-- show success message -->
+                                        <% if (typeof uploadAssignmentSuccess !== 'undefined' && uploadAssignmentSuccess.length > 0) { %>
+                                            <div class="form-group">                                
+                                                <label class="success" for="file"><%= uploadAssignmentSuccess %></label>
+                                            </div>
+                                        <% } %>                                    
+                                        <div>
+                                            <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit</strong></button>
+                                        </div>
+                                    </form>
+                                <% } %>
                             </div>      
                         </div>
                     </div>
@@ -106,6 +83,7 @@
         </div>
         <!-- Footer-->
         <footer class=footer>&copy; Team NNFL</footer>
+        <% include ./partials/js_imports.ejs %>
     </div>
 </body>
 

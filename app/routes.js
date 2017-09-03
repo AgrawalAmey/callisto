@@ -1,10 +1,23 @@
 var express = require('express');
+var multer  =   require('multer');
+var path = require('path');
 
 // load up the user model
 var Users = require('./models/user');
 var Assignments = require('./models/assignment');
 
 var helpers = require('./helpers');
+
+var storage =   multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, 'assignments/' + req.params.assignmentName + '/submissions');
+  },
+  filename: function (req, file, callback) {
+    callback(null, req.user.username + '.zip');
+  }
+});
+
+var upload = multer({ storage : storage }).single('file');
 
 
 module.exports = function(app, passport) {
@@ -59,17 +72,19 @@ module.exports = function(app, passport) {
     // Details of specific assignment ======
     // =====================================
     
-    app.get('/assignment/:assignmentName', isLoggedIn, function(req, res) {
-        Assignments.findOne({'name': req.params.assignmentName}, function(err, assignment) {
+    app.get('/assignment', isLoggedIn, function(req, res) {
+        Assignments.findOne({'name': req.query.name}, function(err, assignment) {
             startDate = new Date(assignment.startTime);
             endDate = new Date(assignment.endTime);
             assignment.isSubmitted = req.user._id in assignment.whoSubmitted;
             assignment.isActive = (endDate - new Date() > 0 && startDate - new Date() < 0);
             assignment.showToStudents = (new Date() - startDate > 0);
             if(assignment.showToStudents || req.user.isAdmin){
-                res.render('reception_desk.ejs', {
+                res.render('assignment.ejs', {
                     user: req.user,
-                    assignment: assignment
+                    assignment: assignment,
+                    uploadAssignmentError: req.flash('uploadAssignmentError'),
+                    uploadAssignmentSuccess: req.flash('uploadAssignmentSuccess'),
                 });
             } else {
                 res.redirect('/assignments');
@@ -81,7 +96,7 @@ module.exports = function(app, passport) {
     // Serve assignment file          ======
     // =====================================    
 
-    app.get('/assignment/release/:assignmentName/', isLoggedIn, function(req, res) {
+    app.get('/assignment/release/:assignmentName', isLoggedIn, function(req, res) {
         Assignments.findOne({'name': req.params.assignmentName}, function(err, assignment) {
             startDate = new Date(assignment.startTime);
             endDate = new Date(assignment.endTime);
@@ -99,7 +114,7 @@ module.exports = function(app, passport) {
     // Serve assignment solution      ======
     // =====================================    
 
-    app.get('/assignment/solutions/:assignmentName/', isLoggedIn, function(req, res) {
+    app.get('/assignment/solutions/:assignmentName', isLoggedIn, function(req, res) {
         Assignments.findOne({'name': req.params.assignmentName}, function(err, assignment) {
             startDate = new Date(assignment.startTime);
             endDate = new Date(assignment.endTime);
@@ -117,7 +132,7 @@ module.exports = function(app, passport) {
     // Serve assignment feedback      ======
     // =====================================    
 
-    app.get('/assignment/feedback/:assignmentName/', isLoggedIn, function(req, res) {
+    app.get('/assignment/feedback/:assignmentName', isLoggedIn, function(req, res) {
         Assignments.findOne({'name': req.params.assignmentName}, function(err, assignment) {
             startDate = new Date(assignment.startTime);
             endDate = new Date(assignment.endTime);
@@ -127,6 +142,33 @@ module.exports = function(app, passport) {
                 res.download('assignments/' + assignment.name + '/feedback/' + req.user.username + '.zip');
             } else {
                 res.redirect('/assignments');
+            }
+        });
+    });
+
+    // =====================================
+    // Assignment upload              ======
+    // ===================================== 
+
+    app.post('/assignment/upload/:assignmentName', isLoggedIn, function(req, res) {
+        Assignments.findOne({'name': req.params.assignmentName}, function(err, assignment) {
+            startDate = new Date(assignment.startTime);
+            endDate = new Date(assignment.endTime);
+            assignment.isActive = (endDate - new Date() > 0 && startDate - new Date() < 0);
+            if(assignment.isActive || req.user.isAdmin){
+                upload(req, res, function(err) {
+                    if(err) {
+                        console.log("error");
+                        req.flash('uploadAssignmentError', 'Oops! Something went wrong.');
+                        res.redirect('/assignment?name=' + req.params.assignmentName);
+
+                    }
+                    console.log("success");
+                    req.flash('uploadAssignmentSuccess', 'Assignment submitted successfully.');
+                    res.redirect('/assignment?name=' + req.params.assignmentName);
+                }); 
+            } else {
+                res.redirect('/assignment?name=' + req.params.assignmentName);
             }
         });
     });
