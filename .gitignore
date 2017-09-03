@@ -1,2 +1,4 @@
-/node_modules/*
-/mongo-express/*
+node_modules/
+mongo-express/
+docs/
+assignments/

@@ -17,7 +17,14 @@ var storage =   multer.diskStorage({
   }
 });
 
-var upload = multer({ storage : storage }).single('file');
+var upload = multer({
+    storage : storage,
+    fileFilter: function(req, file, cb) {
+        console.log(path.extname(file.originalname));
+        if (path.extname(file.originalname) !== '.zip') {
+            return cb(null, false)
+        } cb(null, true)
+    }}).single('file');
 
 
 module.exports = function(app, passport) {
@@ -49,7 +56,27 @@ module.exports = function(app, passport) {
     });
 
     // =====================================
-    // All assignments ======================
+    // Docs ================================
+    // =====================================
+
+    app.get('/docs', isLoggedIn, function (req, res) {
+        if (!req.user.isAdmin) {
+            res.render('docs.ejs', {
+                user: req.user,
+            });
+        } else {
+            res.redirect('/assignments');
+        }
+    });
+
+    app.get('/docs/:path', isLoggedIn, function (req, res) {
+        console.log(req, req.params.path);
+        res.download('docs/' + req.params.path);
+    });
+
+
+    // =====================================
+    // All assignments =====================
     // =====================================
 
     app.get('/assignments', isLoggedIn, function(req, res) {
@@ -158,15 +185,17 @@ module.exports = function(app, passport) {
             if(assignment.isActive || req.user.isAdmin){
                 upload(req, res, function(err) {
                     if(err) {
+                        console.log(err);
                         console.log("error");
                         req.flash('uploadAssignmentError', 'Oops! Something went wrong.');
                         res.redirect('/assignment?name=' + req.params.assignmentName);
 
-                    }
-                    console.log("success");
-                    req.flash('uploadAssignmentSuccess', 'Assignment submitted successfully.');
-                    res.redirect('/assignment?name=' + req.params.assignmentName);
-                }); 
+                    } else {
+                        console.log("success");
+                        req.flash('uploadAssignmentSuccess', 'Assignment submitted successfully.');
+                        res.redirect('/assignment?name=' + req.params.assignmentName);
+                    }}
+                ); 
             } else {
                 res.redirect('/assignment?name=' + req.params.assignmentName);
             }

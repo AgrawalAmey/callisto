@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ./partials/head.ejs %>
+    <title>Neural Nets & Fuzzy Logic | Docs</title>
+</head>
+
+<body class="fixed-navbar fixed-sidebar">
+    <% if (user.isAdmin) { %>
+            <% include ./partials/admin_header.ejs %> 
+    <% } else { %>
+        <% include ./partials/user_header.ejs %>
+    <% } %>
+    <% if (user.isAdmin) { %>
+            <% include ./partials/admin_nav.ejs %> 
+    <% } else { %>
+        <% include ./partials/user_nav.ejs %>
+    <% } %>
+    <!-- Main Wrapper -->
+    <div id=wrapper>
+        <div class="small-header transition animated fadeIn">
+            <div class=hpanel>
+                <div class=panel-body>
+                    <h2 class="font-light m-b-xs">Docs</h2></div>
+            </div>
+        </div>
+        <div class="content animate-panel">
+            <div>
+                <div class=row>
+                    <div class="col-lg-12">
+                        <div class="hpanel">
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <h4>Reference Documentation</h4>
+                                        <table cellpadding="1" cellspacing="1" class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Python</td>
+                                                    <td><a href="/docs/python-pdf.zip" class="btn btn-info btn-xs" role="button">Download PDF</a></td>
+                                                    <td><a href="/docs/python-html.zip" class="btn btn-info btn-xs" role="button">Download HTML</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Numpy</td>
+                                                    <td><a href="/docs/numpy-pdf.pdf" class="btn btn-info btn-xs" role="button">Download PDF</a></td>
+                                                    <td><a href="/docs/numpy-html.zip" class="btn btn-info btn-xs" role="button">Download HTML</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Tutorial</td>
+                                                    <td><a href="/docs/python-numpy.pdf" class="btn btn-info btn-xs" role="button">Download PDF</a></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                            </div>      
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer-->
+        <footer class=footer>&copy; Team NNFL</footer>
+        <% include ./partials/js_imports.ejs %>
+    </div>
+</body>
+
+</html>

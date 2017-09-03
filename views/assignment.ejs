@@ -34,24 +34,29 @@
                                 <h5>End Time: <%= assignment.endTime %></h5>
                                 <% if (user.isAdmin) { %>
                                     <h5>Total submissions: <%= assignment.whoSubmitted.length %></h5> 
+                                <% } else if (assignment.isSubmitted) { %>
+                                    <h5>Submitted: Yes</h5>
                                 <% } else { %>
-                                    <h5>Submitted: <%= assignment.isSubmitted %></h5>
+                                    <h5>Submitted: No</h5>
                                 <% } %>
-                                <h5> 
-                                    <a target="_blank" href="/assignment/release/<%= assignment.name %>">Download assignment</a>
-                                </h5>
+                                <h4>
+                                    <a target="_blank" href="/assignment/release/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Assignment</a>
+                                </h4>
                                 <% if (assignment.solutionsAvailable) { %>
                                     <h5> 
-                                        <a target="_blank" href="/assignment/solutions/<%= assignment.name %>">Download solutions</a>
+                                        <a target="_blank" href="/assignment/solutions/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Solutions</a>
                                     </h5>
                                 <% } %>
                                 <% if (assignment.feedbackAvailable && !user.isAdmin) { %>
-                                    <h5> 
-                                        <a target="_blank" href="/assignment/feedback/<%= assignment.name %>">Download feedback</a>
+                                    <h5>
+                                        <a target="_blank" href="/assignment/feedback/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Feedback</a>
                                     </h5>
                                 <% } %>
                                 <% if (assignment.isActive) { %>
-                                    <h3 style="margin-top: 65px;">Make submission</h3>
+                                    <h4 style="margin-top: 50px;">Make submission</h4>
+                                    <h5>Please make sure you upload a ZIP archive of your submission.</h5>
+                                    <h5>You can upload as many times as you want within the stipulated time.</h5>
+                                    <h5>The most recent submission will overwrite any previous ones.</h5>
                                     <form role="form" method="post" enctype="multipart/form-data" action="/assignment/upload/<%= assignment.name %>">
                                         <div class="form-group">                                
                                             <label class="btn btn-default">
