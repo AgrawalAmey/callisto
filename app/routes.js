@@ -42,11 +42,11 @@ module.exports = function(app, passport) {
     app.get('/assignments', isLoggedIn, function(req, res) {
         Assignments.find({}, function(err, assignments) {
             for(i=0; i<assignments.length; i++){
-                // date = new Date(assignments[i].endTime);
-                // assignments[i].endTime = date.toLocalString();
+                startDate = new Date(assignments[i].startTime);
+                endDate = new Date(assignments[i].endTime);
                 assignments[i].isSubmitted = req.user._id in assignments[i].whoSubmitted;
-                assignments[i].isActive = (assignments[i].endTime - new Date() > 0 && assignments[i].startTime - new Date() < 0);
-                assignments[i].showToStudents = (new Date() - assignments[i].startTime > 0);
+                assignments[i].isActive = (endDate - new Date() > 0 && startDate - new Date() < 0);
+                assignments[i].showToStudents = (new Date() - startDate > 0);
             }
             res.render('assignments.ejs', {
                 user: req.user,
@@ -60,14 +60,19 @@ module.exports = function(app, passport) {
     
     app.get('/assignment/:assignmentId', isLoggedIn, function(req, res) {
         Assignments.findOne({'_id': req.params.assignmentId}, function(err, assignment) {
-            // date = new Date(assignment.endTime);
-            // assignment.endTime = date.toLocalString();
+            startDate = new Date(assignment.startTime);
+            endDate = new Date(assignment.endTime);
             assignment.isSubmitted = req.user._id in assignment.whoSubmitted;
-            assignment.isActive = (assignment.endTime - new Date() > 0  && assignments[i].startTime - new Date() < 0);
-            res.render('reception_desk.ejs', {
-                user: req.user,
-                assignment: assignment
-            });
+            assignment.isActive = (endDate - new Date() > 0 && startDate - new Date() < 0);
+            assignment.showToStudents = (new Date() - startDate > 0);
+            if(assignment.showToStudents){
+                res.render('reception_desk.ejs', {
+                    user: req.user,
+                    assignment: assignment
+                });
+            } else {
+                res.redirect('/assignments');
+            }
         });
     });
 
