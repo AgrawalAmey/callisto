@@ -54,18 +54,19 @@ module.exports = function(app, passport) {
             });
         });
     });
+ 
     // =====================================
     // Details of specific assignment ======
     // =====================================
     
-    app.get('/assignment/:assignmentId', isLoggedIn, function(req, res) {
-        Assignments.findOne({'_id': req.params.assignmentId}, function(err, assignment) {
+    app.get('/assignment/:assignmentName', isLoggedIn, function(req, res) {
+        Assignments.findOne({'name': req.params.assignmentName}, function(err, assignment) {
             startDate = new Date(assignment.startTime);
             endDate = new Date(assignment.endTime);
             assignment.isSubmitted = req.user._id in assignment.whoSubmitted;
             assignment.isActive = (endDate - new Date() > 0 && startDate - new Date() < 0);
             assignment.showToStudents = (new Date() - startDate > 0);
-            if(assignment.showToStudents){
+            if(assignment.showToStudents || req.user.isAdmin){
                 res.render('reception_desk.ejs', {
                     user: req.user,
                     assignment: assignment
@@ -76,6 +77,59 @@ module.exports = function(app, passport) {
         });
     });
 
+    // =====================================
+    // Serve assignment file          ======
+    // =====================================    
+
+    app.get('/assignment/release/:assignmentName/', isLoggedIn, function(req, res) {
+        Assignments.findOne({'name': req.params.assignmentName}, function(err, assignment) {
+            startDate = new Date(assignment.startTime);
+            endDate = new Date(assignment.endTime);
+            assignment.isActive = (endDate - new Date() > 0 && startDate - new Date() < 0);
+            assignment.showToStudents = (new Date() - startDate > 0);
+            if(assignment.showToStudents || req.user.isAdmin){
+                res.download('assignments/' + assignment.name + '/release.zip');
+            } else {
+                res.redirect('/assignments');
+            }
+        });
+    });
+
+    // =====================================
+    // Serve assignment solution      ======
+    // =====================================    
+
+    app.get('/assignment/solutions/:assignmentName/', isLoggedIn, function(req, res) {
+        Assignments.findOne({'name': req.params.assignmentName}, function(err, assignment) {
+            startDate = new Date(assignment.startTime);
+            endDate = new Date(assignment.endTime);
+            assignment.isActive = (endDate - new Date() > 0 && startDate - new Date() < 0);
+            assignment.showToStudents = (new Date() - startDate > 0);
+            if((assignment.showToStudents && assignment.solutionsAvailable) || req.user.isAdmin){
+                res.download('assignments/' + assignment.name + '/solutions.zip');
+            } else {
+                res.redirect('/assignments');
+            }
+        });
+    });
+
+    // =====================================
+    // Serve assignment feedback      ======
+    // =====================================    
+
+    app.get('/assignment/feedback/:assignmentName/', isLoggedIn, function(req, res) {
+        Assignments.findOne({'name': req.params.assignmentName}, function(err, assignment) {
+            startDate = new Date(assignment.startTime);
+            endDate = new Date(assignment.endTime);
+            assignment.isActive = (endDate - new Date() > 0 && startDate - new Date() < 0);
+            assignment.showToStudents = (new Date() - startDate > 0);
+            if((assignment.showToStudents && assignment.feedbackAvailable) || req.user.isAdmin){
+                res.download('assignments/' + assignment.name + '/feedback/' + req.user.username + '.zip');
+            } else {
+                res.redirect('/assignments');
+            }
+        });
+    });
 
     // =====================================
     // Manage users ========================
@@ -180,8 +234,9 @@ function isLoggedIn(req, res, next) {
 // route middleware to make sure a user is admin
 function isAdmin(req, res, next) {
     // if user is authenticated in the session, carry on 
-    if (req.user.isAdmin || req.body.username == req.user.username);
-    return next();
+    if (req.user.isAdmin || req.body.username == req.user.username){
+        return next();
+    };
 
     // if they aren't redirect them to the home page
     res.redirect('/forbidden');

@@ -362,3 +362,8 @@
   border-color: #5cb85c; }
 .radio-success input[type="radio"]:checked + label::after {
   background-color: #5cb85c; }
+
+/* For file upload button*/
+[hidden] {
+  display: none !important;
+}

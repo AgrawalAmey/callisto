@@ -202,6 +202,8 @@ module.exports = {
 
     editAssignment: function(req, res) {
             
+        console.log(req.body);
+
         // asynchronous
         process.nextTick(function() {
     
@@ -213,7 +215,9 @@ module.exports = {
                     res.redirect('/manageAssignments');
                     return;                
                 }
-    
+                
+                console.log(existingAssignment);
+
                 existingAssignment.name = req.body.name;
                 existingAssignment.startTime = req.body.startTime;
                 existingAssignment.endTime = req.body.endTime;
