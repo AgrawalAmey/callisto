@@ -1,6 +1,7 @@
 var express = require('express');
 var multer  =   require('multer');
 var path = require('path');
+var formidable = require('formidable');
 
 // load up the user model
 var Users = require('./models/user');
@@ -18,12 +19,12 @@ var storage =   multer.diskStorage({
 });
 
 var upload = multer({
-    storage : storage,
-    fileFilter: function(req, file, cb) {
-        console.log(path.extname(file.originalname));
-        if (path.extname(file.originalname) !== '.zip') {
-            return cb(null, false)
-        } cb(null, true)
+        storage : storage,
+        fileFilter: function(req, file, cb) {
+            if (path.extname(file.originalname) !== '.zip') {
+                return cb(new Error('FileTypeNotSupported'));
+            } 
+            cb(null, true);
     }}).single('file');
 
 
@@ -185,17 +186,17 @@ module.exports = function(app, passport) {
             if(assignment.isActive || req.user.isAdmin){
                 upload(req, res, function(err) {
                     if(err) {
-                        console.log(err);
-                        console.log("error");
-                        req.flash('uploadAssignmentError', 'Oops! Something went wrong.');
+                        if(err.message== 'FileTypeNotSupported'){
+                            req.flash('uploadAssignmentError', 'Only zip files are supported.');
+                        } else {
+                            req.flash('uploadAssignmentError', 'Oops! Something went wrong.');                            
+                        }
                         res.redirect('/assignment?name=' + req.params.assignmentName);
-
                     } else {
-                        console.log("success");
                         req.flash('uploadAssignmentSuccess', 'Assignment submitted successfully.');
                         res.redirect('/assignment?name=' + req.params.assignmentName);
-                    }}
-                ); 
+                    }
+                }); 
             } else {
                 res.redirect('/assignment?name=' + req.params.assignmentName);
             }
@@ -311,4 +312,17 @@ function isAdmin(req, res, next) {
 
     // if they aren't redirect them to the home page
     res.redirect('/forbidden');
+}
+
+function hasFile(req, res, next){
+    var form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files) {
+        if(files.file.name == ''){
+            req.flash('uploadAssignmentError', 'No file selected.');
+            res.redirect('/assignment?name=' + req.params.assignmentName); 
+            return;               
+        } else { 
+            return next();
+        }
+    });
 }
