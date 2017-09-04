@@ -104,7 +104,14 @@ module.exports = function(app, passport) {
         Assignments.findOne({'name': req.query.name}, function(err, assignment) {
             startDate = new Date(assignment.startTime);
             endDate = new Date(assignment.endTime);
-            assignment.isSubmitted = req.user._id in assignment.whoSubmitted;
+            assignment.isSubmitted = false;
+            for(i=0; i<assignment.whoSubmitted.length; i++){
+                if(assignment.whoSubmitted[i] == req.user.username){
+                    assignment.isSubmitted = true;
+                    break;
+                }
+            }
+            console.log(assignment.isSubmitted);
             assignment.isActive = (endDate - new Date() > 0 && startDate - new Date() < 0);
             assignment.showToStudents = (new Date() - startDate > 0);
             if(assignment.showToStudents || req.user.isAdmin){
@@ -193,8 +200,18 @@ module.exports = function(app, passport) {
                         }
                         res.redirect('/assignment?name=' + req.params.assignmentName);
                     } else {
-                        req.flash('uploadAssignmentSuccess', 'Assignment submitted successfully.');
-                        res.redirect('/assignment?name=' + req.params.assignmentName);
+                        assignment.whoSubmitted.push(req.user.username);
+                            
+                        assignment.save(function(err, editedUser) {
+                            if (err) {
+                                req.flash('uploadAssignmentError', 'Oops! Something went wrong.');
+                            } else {
+                                req.flash('uploadAssignmentSuccess', 'Assignment submitted successfully.');
+                            }
+                            res.redirect('/assignment?name=' + req.params.assignmentName);
+                            return;    
+                        });
+
                     }
                 }); 
             } else {

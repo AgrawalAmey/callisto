@@ -57,6 +57,7 @@
                                     </h5>
                                 <% } %>
                                 <% if (assignment.feedbackAvailable && !user.isAdmin) { %>
+                                    <br>
                                     <h5>
                                         <a target="_blank" href="/assignment/feedback/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Feedback</a>
                                     </h5>
