@@ -39,9 +39,17 @@
                                 <% } else { %>
                                     <h5>Submitted: No</h5>
                                 <% } %>
+                                <h4 style="margin-top: 50px;">Download Assignment</h4>
                                 <h4>
-                                    <a target="_blank" href="/assignment/release/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Assignment</a>
+                                    <a target="_blank" href="/assignment/release/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download</a>
                                 </h4>
+                                <h5>Clicking the download button will download the problem set in the form of a ZIP archive.</h5>
+                                <h5>The archive contains problems in the form of Jupyter notebooks.</h5>
+                                <h5>You are required to run the notebooks locally and fill in your solution.</h5>
+                                <h5>Click on the DOCS tab on the left if you need to access any documentation.</h5>
+                                <h5>Once you are done, save your notebook(s) and create a single ZIP archive of your submission.</h5>
+                                <h5>Upload the ZIP archive using the button below</h5>
+
                                 <% if (assignment.solutionsAvailable) { %>
                                     <h5> 
                                         <a target="_blank" href="/assignment/solutions/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Solutions</a>
@@ -55,7 +63,7 @@
                                 <% if (assignment.isActive) { %>
                                     <h4 style="margin-top: 50px;">Make submission</h4>
                                     <h5>Please make sure you upload a ZIP archive of your submission.</h5>
-                                    <h5>You can upload as many times as you want within the stipulated time.</h5>
+                                    <h5>You can submit as many times as you want within the stipulated time.</h5>
                                     <h5>The most recent submission will overwrite any previous ones.</h5>
                                     <form role="form" method="post" enctype="multipart/form-data" action="/assignment/upload/<%= assignment.name %>">
                                         <div class="form-group">                                
