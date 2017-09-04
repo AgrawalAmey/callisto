@@ -46,8 +46,6 @@
                                                     <th>Status</th>
                                                     <% if (user.isAdmin) { %>
                                                         <th>Total submissions</th> 
-                                                    <% } else { %>
-                                                        <th>Submitted</th>
                                                     <% } %>
                                                     <th>Solutions</th>
                                                     <th>Feedback</th>
@@ -69,10 +67,6 @@
                                                         <% } %>
                                                         <% if (user.isAdmin) { %>
                                                             <td><%= assignments[i].whoSubmitted.length %></td> 
-                                                        <% } else if (assignments[i].isSubmitted) { %>
-                                                            <td>Yes</td>
-                                                        <% } else { %>
-                                                            <td>No</td>
                                                         <% } %>
                                                         <% if (assignments[i].solutionsAvailable) { %>
                                                             <td>Available</td>
