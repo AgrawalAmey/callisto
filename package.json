@@ -1,5 +1,5 @@
 {
-  "name": "Padmavati-Hospital-Billing-System",
+  "name": "nnfl-portal",
   "main": "server.js",
   "dependencies": {
     "bcrypt-nodejs": "latest",
@@ -21,8 +21,9 @@
     "passport-google-oauth": "~0.1.5",
     "passport-local": "~0.1.6"
   },
+  "repository": "agrawalamey/nnfl-portal",
   "version": "0.0.5",
-  "description": "Billing System",
+  "description": "Submission portal for NNFL",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
