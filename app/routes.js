@@ -61,13 +61,9 @@ module.exports = function(app, passport) {
     // =====================================
 
     app.get('/docs', isLoggedIn, function (req, res) {
-        if (!req.user.isAdmin) {
             res.render('docs.ejs', {
                 user: req.user,
             });
-        } else {
-            res.redirect('/assignments');
-        }
     });
 
     app.get('/docs/:path', isLoggedIn, function (req, res) {
