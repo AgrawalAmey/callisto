@@ -39,28 +39,42 @@
                                 <% } else { %>
                                     <h5>Submitted: No</h5>
                                 <% } %>
+                                <h4 style="margin-top: 30px;">Download Problems</h4>
+                                <h6>Clicking the download button will download the problem set in the form of a ZIP archive.</h6>
+                                <h6>The archive contains problems in the form of Jupyter notebooks.</h6>
+                                <h6>You are required to run the notebooks locally and fill in your solution.</h6>
+                                <h6>Click on the DOCS tab on the left if you need to access any documentation.</h6>
                                 <h4>
-                                    <a target="_blank" href="/assignment/release/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Assignment</a>
+                                    <a target="_blank" href="/assignment/release/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Problems</a>
                                 </h4>
+                                <br>  
                                 <% if (assignment.solutionsAvailable) { %>
-                                    <h5> 
+                                    <h4>Download Solutions</h4>
+                                    <h6>Download solutions for this assignment.</h6>
+                                    <h4> 
                                         <a target="_blank" href="/assignment/solutions/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Solutions</a>
-                                    </h5>
+                                    </h4>
                                 <% } %>
                                 <% if (assignment.feedbackAvailable && !user.isAdmin) { %>
-                                    <h5>
+                                    <br>
+                                    <h4>Download Feedback</h4>
+                                    <h6>Download graded assignment.</h6>
+                                    <h4>
                                         <a target="_blank" href="/assignment/feedback/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Feedback</a>
-                                    </h5>
+                                    </h4>
                                 <% } %>
                                 <% if (assignment.isActive) { %>
-                                    <h4 style="margin-top: 50px;">Make submission</h4>
-                                    <h5>Please make sure you upload a ZIP archive of your submission.</h5>
-                                    <h5>You can upload as many times as you want within the stipulated time.</h5>
-                                    <h5>The most recent submission will overwrite any previous ones.</h5>
-                                    <form id="form_1" novalidate="novalidate" role="form" method="post" enctype="multipart/form-data" action="/assignment/upload/<%= assignment.name %>">
+                                    <br>
+                                    <h4>Submit Solutions</h4>
+                                    <h6>Once you are done with the assignments, save your notebook(s) and upload a single ZIP archive of your submission.</h6>
+                                    <h6>Please make sure you upload a ZIP archive of your submission. Any other formats will not be accepted.</h6>
+                                    <h6>You can submit as many times as you want within the stipulated time.</h6>
+                                    <h6>The most recent submission will overwrite any previous ones.</h6>
+                                    <br>
+                                    <form id="form_1" novalidate="novalidate"  role="form" method="post" enctype="multipart/form-data" action="/assignment/upload/<%= assignment.name %>">
                                         <div class="form-group">                                
                                             <label class="btn btn-default">
-                                                Selct file <input type="file" id="file" name="file" hidden>
+                                                Selct file <input type="file" name="file">
                                             </label>
                                         </div>
                                         <!-- show error message -->
@@ -76,7 +90,7 @@
                                             </div>
                                         <% } %>                                    
                                         <div>
-                                            <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit</strong></button>
+                                            <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit Solutions</strong></button>
                                         </div>
                                     </form>
                                 <% } %>
@@ -92,21 +106,12 @@
         <script>
             $("#form_1").validate({
                 rules: {
-                    file: {
+                  file: {
                     required: true,
-                    extension: "zip"
-                    }
-                },
-                messages: {
-                    file: {
-                        required: "Please select a file to upload.",
-                        extension: "File type should be zip."
-                    }
-                },
-                submitHandler: function(form) {
-                    form.submit();
+                    extension: 'zip'
+                  }
                 }
-            });
+              });              
         </script>
     </div>
 </body>

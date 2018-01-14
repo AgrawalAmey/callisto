@@ -1,6 +1,7 @@
 var express = require('express');
 var multer  =   require('multer');
 var path = require('path');
+var formidable = require('formidable');
 
 // load up the user model
 var Users = require('./models/user');
@@ -18,12 +19,12 @@ var storage =   multer.diskStorage({
 });
 
 var upload = multer({
-    storage : storage,
-    fileFilter: function(req, file, cb) {
-        console.log(path.extname(file.originalname));
-        if (path.extname(file.originalname) !== '.zip') {
-            return cb(null, false)
-        } cb(null, true)
+        storage : storage,
+        fileFilter: function(req, file, cb) {
+            if (path.extname(file.originalname) !== '.zip') {
+                return cb(new Error('FileTypeNotSupported'));
+            } 
+            cb(null, true);
     }}).single('file');
 
 
@@ -60,13 +61,9 @@ module.exports = function(app, passport) {
     // =====================================
 
     app.get('/docs', isLoggedIn, function (req, res) {
-        if (!req.user.isAdmin) {
             res.render('docs.ejs', {
                 user: req.user,
             });
-        } else {
-            res.redirect('/assignments');
-        }
     });
 
     app.get('/docs/:path', isLoggedIn, function (req, res) {
@@ -103,7 +100,14 @@ module.exports = function(app, passport) {
         Assignments.findOne({'name': req.query.name}, function(err, assignment) {
             startDate = new Date(assignment.startTime);
             endDate = new Date(assignment.endTime);
-            assignment.isSubmitted = req.user._id in assignment.whoSubmitted;
+            assignment.isSubmitted = false;
+            for(i=0; i<assignment.whoSubmitted.length; i++){
+                if(assignment.whoSubmitted[i] == req.user.username){
+                    assignment.isSubmitted = true;
+                    break;
+                }
+            }
+            console.log(assignment.isSubmitted);
             assignment.isActive = (endDate - new Date() > 0 && startDate - new Date() < 0);
             assignment.showToStudents = (new Date() - startDate > 0);
             if(assignment.showToStudents || req.user.isAdmin){
@@ -185,17 +189,27 @@ module.exports = function(app, passport) {
             if(assignment.isActive || req.user.isAdmin){
                 upload(req, res, function(err) {
                     if(err) {
-                        console.log(err);
-                        console.log("error");
-                        req.flash('uploadAssignmentError', 'Oops! Something went wrong.');
+                        if(err.message== 'FileTypeNotSupported'){
+                            req.flash('uploadAssignmentError', 'Only zip files are supported.');
+                        } else {
+                            req.flash('uploadAssignmentError', 'Oops! Something went wrong.');                            
+                        }
                         res.redirect('/assignment?name=' + req.params.assignmentName);
-
                     } else {
-                        console.log("success");
-                        req.flash('uploadAssignmentSuccess', 'Assignment submitted successfully.');
-                        res.redirect('/assignment?name=' + req.params.assignmentName);
-                    }}
-                ); 
+                        assignment.whoSubmitted.push(req.user.username);
+                            
+                        assignment.save(function(err, editedUser) {
+                            if (err) {
+                                req.flash('uploadAssignmentError', 'Oops! Something went wrong.');
+                            } else {
+                                req.flash('uploadAssignmentSuccess', 'Assignment submitted successfully.');
+                            }
+                            res.redirect('/assignment?name=' + req.params.assignmentName);
+                            return;    
+                        });
+
+                    }
+                }); 
             } else {
                 res.redirect('/assignment?name=' + req.params.assignmentName);
             }
@@ -311,4 +325,17 @@ function isAdmin(req, res, next) {
 
     // if they aren't redirect them to the home page
     res.redirect('/forbidden');
+}
+
+function hasFile(req, res, next){
+    var form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files) {
+        if(files.file.name == ''){
+            req.flash('uploadAssignmentError', 'No file selected.');
+            res.redirect('/assignment?name=' + req.params.assignmentName); 
+            return;               
+        } else { 
+            return next();
+        }
+    });
 }

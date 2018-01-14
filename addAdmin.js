@@ -4,7 +4,7 @@ mongoose.connect('mongodb://127.0.0.1/nnfl');
 var newUser = new User();
 newUser.username = "admin";
 newUser.password = newUser.generateHash("admin");
-newUser.name = "Amey Agrawal";
+newUser.name = "Team NNFL";
 newUser.isAdmin = true;
 newUser.save(function(err) {
     if (err)

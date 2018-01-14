@@ -21,6 +21,7 @@
     "passport-local": "^1.0.0",
     "request": "^2.83.0"
   },
+  "repository": "agrawalamey/nnfl-portal",
   "version": "0.0.5",
   "description": "NNFL Portal",
   "scripts": {
