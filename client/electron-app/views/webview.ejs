@@ -3,8 +3,17 @@
   <head>
     <meta charset="UTF-8">
     <title>Neural Networks and Fuzzy Logic</title>
+    <link rel=stylesheet href=../static/css/client.css>
   </head>
   <body>
-    <webview id="webview" src="<%= remoteServerAddr %>"></webview>
+    <webview id="webview" src="<%= remoteServerAddr %>" 
+      preload="../static/js/ipc_preload.js" nodeintegration>
+    </webview>
+    <script>
+    const webview = document.querySelector('webview')
+      webview.addEventListener('console-message', (e) => {
+        console.log('Guest page logged a message:', e.message)
+      })
+    </script>
   </body>
 </html>

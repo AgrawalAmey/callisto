@@ -15,8 +15,9 @@ module.exports = {
         });
 
         //test
-        ipc.on('test', function (event) {
+        ipc.on('test', function (event, data) {
             console.log("yooooooooooooooo");
+            console.log(data);
         });
     }
 }
