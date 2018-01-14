@@ -1,25 +1,18 @@
 {
-  "name": "electron-quick-start",
+  "name": "NNFL-App",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Official app for NNFL",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
-  ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "Team NNFL",
+  "license": "MIT",
   "devDependencies": {
     "electron": "~1.7.8"
   },
   "dependencies": {
-    "ejs-electron": "^2.0.1"
+    "ejs-electron": "^2.0.1",
+    "request": "^2.83.0"
   }
 }
