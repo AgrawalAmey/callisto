@@ -13,5 +13,10 @@ module.exports = {
         ipc.on('serverBtn-click', function (event, remoteServerAddr) {
             helpers.renderWebviewIndex(mainWindow, remoteServerAddr);
         });
+
+        //test
+        ipc.on('test', function (event) {
+            console.log("yooooooooooooooo");
+        });
     }
 }

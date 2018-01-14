@@ -1,5 +1,5 @@
 {
   "pyServerAddr": "localhost:17350",
-  "remoteServerAddr": "localhost:50501",
+  "remoteServerAddr": "localhost:18350",
   "jupyterAddr": "localhost:19350"
 }

@@ -1,14 +1,14 @@
 const ipc = require('electron').ipcRenderer;
 
-$(function(){
+$(function () {
     $("#serverForm").validate({
         rules: {
             remoteServerAddr: {
                 required: true
             }
         },
-        submitHandler: function(form) {
-			ipc.send('serverBtn-click', $('#remoteServerAddr').val());
+        submitHandler: function (form) {
+            ipc.send('serverBtn-click', $('#remoteServerAddr').val());
         }
     });
 });

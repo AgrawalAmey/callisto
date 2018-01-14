@@ -13,7 +13,7 @@ module.exports = {
         var config = require('../config');
         config.remoteServerAddr = remoteServerAddr;
 
-        fs.writeFile(configFile, JSON.stringify(config, null, 2), function (err) {
+        fs.writeFile("./config.json", JSON.stringify(config, null, 2), function (err) {
             if (err) return console.log(err);
         });
     }
