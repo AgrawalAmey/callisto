@@ -1,0 +1,14 @@
+{
+	"pyServer": {
+		"host": "localhost",
+		"port": 17350
+	},
+	"remoteServer": {
+		"host": "localhost",
+		"port": 18350
+	},
+	"jupyter": {
+		"host": "localhost",
+		"port": 19350
+	}
+}

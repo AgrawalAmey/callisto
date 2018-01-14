@@ -1,5 +1,7 @@
-node_modules/
+server/node_modules/
 mongo-express/
 docs/
 assignments/
 passwords.csv
+client/electron-app/.DS_Store
+client/electron-app/node_modules
