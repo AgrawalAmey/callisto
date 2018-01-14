@@ -1,3 +1,8 @@
+<!-- Insert this line above script imports  -->
+<script>
+if (typeof module === 'object') { window.module = module; module = undefined; }
+</script>
+
 <!-- Vendor scripts -->
 <script src="./bower_components/jquery/dist/jquery.min.js"></script>
 <script src="./bower_components/jquery-ui/jquery-ui.min.js"></script>
@@ -11,3 +16,6 @@
 <script src="./bower_components/jquery-validation/dist/additional-methods.min.js"></script>
 <script src=./js/index.js></script>
 <script src="./js/homer.js"></script>
+
+<!-- Insert this line after script imports -->
+<script>if (window.module) module = window.module;</script>
