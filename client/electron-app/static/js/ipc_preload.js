@@ -8,9 +8,5 @@ global.isAssignment = (assignmentName, url) => {
     var userDataPath = app.getPath('userData');
     var assignmentFilePath = path.join(userDataPath, 'assignments', assignmentName)
     // Check if file is present
-    if (fs.existsSync(assignmentFilePath)) {
-        console.log("Exists")
-    } else {
-        console.log("no")
-    }
+    return fs.existsSync(assignmentFilePath)
 }
