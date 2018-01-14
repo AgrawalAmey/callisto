@@ -3,5 +3,5 @@ mongo-express/
 docs/
 assignments/
 passwords.csv
-client/electron-app/.DS_Store
+*/.DS_Store
 client/electron-app/node_modules
