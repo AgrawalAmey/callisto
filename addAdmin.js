@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
-var User       = require('./app/models/user');
+var User = require('./app/models/user');
 mongoose.connect('mongodb://127.0.0.1/nnfl');
-var newUser            = new User();
+var newUser = new User();
 newUser.username = "admin";
 newUser.password = newUser.generateHash("admin");
 newUser.name = "Amey Agrawal";
@@ -12,3 +12,6 @@ newUser.save(function(err) {
     console.log("Added");
     return;
 });
+
+
+mongoose.connection.close()
