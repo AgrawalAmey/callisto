@@ -1,5 +1,5 @@
 const electron = require('electron');
-const ejse = require('ejs-electron').options('debug', true);
+const ejse = require('ejs-electron').options('debug', false);
 const path = require('path');
 const request = require('request');
 const url = require('url');
@@ -9,10 +9,12 @@ const app = electron.app;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
-// Load config file
-const config = require('./config');
-const remoteServerAddr = 'http://' + config.remoteServer.host + ':' + config.remoteServer.port;
+const ipc = electron.ipcMain;
 
+// Load config file
+var config = require('./config');
+var remoteServerAddr = 'http://' + config.remoteServer.host + ':' + config.remoteServer.port;
+ejse.data('remoteServerAddrPlaceholder', config.remoteServer.host + ':' + config.remoteServer.port);
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -26,7 +28,8 @@ function createWindow () {
 
   request.get(remoteServerAddr, function(err, body, res) {
     if(err) {
-      console.log(err);
+      // console.log(err);
+      ejse.data('message', 'Cannot connect to remote server');
       mainWindow.loadURL(path.join('file://', __dirname, 'views', 'remoteAddr.ejs'));
     } else {
       ejse.data('remoteServerAddr', remoteServerAddr);
@@ -71,3 +74,21 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+ipc.on('serverBtn-click', function(event, remoteServerAddrArg) {
+  console.log('hi');
+  var remoteServerAddr = "http://" + remoteServerAddrArg;
+  request.get(remoteServerAddr, function(err, body, res) {
+    if(err) {
+      // console.log(err);
+      ejse.data('remoteServerAddrPlaceholder', remoteServerAddrArg);
+      ejse.data('message', 'Cannot connect to remote server');
+      mainWindow.loadURL(path.join('file://', __dirname, 'views', 'remoteAddr.ejs'));
+    } else {
+      ejse.data('remoteServerAddr', remoteServerAddr);
+      mainWindow.loadURL(path.join('file://', __dirname, 'views', 'webview.ejs'));
+    }
+  });
+  // ejse.data('message', 'Cannot connect to remote server sbkjasbjkcb');
+      // mainWindow.loadURL(path.join('file://', __dirname, 'views', 'remoteAddr.ejs'));
+})
