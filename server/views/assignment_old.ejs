@@ -103,7 +103,16 @@
         <!-- Footer-->
         <footer class=footer>&copy; Team NNFL</footer>
         <% include ./partials/js_imports.ejs %>
-        <script type="text/javascript" src="./js/assignment.js"></script>
+        <script>
+            $("#form_1").validate({
+                rules: {
+                  file: {
+                    required: true,
+                    extension: 'zip'
+                  }
+                }
+              });              
+        </script>
     </div>
 </body>
 

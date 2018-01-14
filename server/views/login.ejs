@@ -62,6 +62,14 @@
             });
         });
     </script>
+
+    <script type="text/javascript">
+        console.log('yolo');
+
+        const ipc = require('electron').ipcRenderer;
+
+        ipc.send('test');
+    </script>
 </body>
 
 </html>
