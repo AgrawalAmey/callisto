@@ -52,9 +52,4 @@ global.saveUserCreds = (username, password) => {
 // Create channel to remove user credentials
 global.removeUserCreds = () => {
 	ipcRenderer.send('removeUserCreds');
-    request({url: assignmentURL, encoding: null})
-    	.pipe(fs.createWriteStream(tempFileName))
-		.on('close', function() {
-			fs.createReadStream(tempFileName).pipe(unzip.Extract({ path: assignmentDir }));
-		});
 }
