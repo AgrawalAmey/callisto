@@ -63,7 +63,9 @@ module.exports = {
         var tempDir = app.getPath('temp')
         var credsPath = path.join(tempDir, 'creds')
 
-        fs.unlinkSync(credsPath)
+        if (fs.existsSync(credsPath)) {
+            fs.unlinkSync(credsPath)
+        }
     }
     
 }
