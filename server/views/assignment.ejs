@@ -103,6 +103,16 @@
         <!-- Footer-->
         <footer class=footer>&copy; Team NNFL</footer>
         <% include ./partials/js_imports.ejs %>
+        <script type="text/javascript">
+
+            var getAssignmentName = function() {
+                return "<%= assignment.name %>"
+            };
+
+            var getassignmentDownloadURL = function() {
+                return "http://localhost:18350/assignment/release/<%= assignment.name %>"
+            };
+        </script>
         <script type="text/javascript" src="./js/assignment.js"></script>
     </div>
 </body>
