@@ -2,8 +2,8 @@ const { app } = require('electron').remote;
 const { ipcRenderer } = require('electron')
 const fs = require('fs')
 const path = require('path')
-const request = require('request');
-const unzip = require('unzip');
+const request = require('request')
+const unzip = require('unzip')
 
 global.isAssignment = (assignmentName) => {
     // Get path to assignment
@@ -32,15 +32,10 @@ global.downloadAssignment = (assignmentName, assignmentURL) => {
 	    directory: userDataPath,
 	    filename: Date.now() + '.zip'
 	}
-		 
-	download(assignmentURL, options, function(err){
-	    if (err) throw err
-	    console.log("meow")
-	}) 
 
-  //   request({url: assignmentURL, encoding: null})
-  //   	.pipe(fs.createWriteStream(tempFileName))
-		// .on('close', function() {
-		// 	fs.createReadStream(tempFileName).pipe(unzip.Extract({ path: assignmentDir }));
-		// });
+    request({url: assignmentURL, encoding: null})
+    	.pipe(fs.createWriteStream(tempFileName))
+		.on('close', function() {
+			fs.createReadStream(tempFileName).pipe(unzip.Extract({ path: assignmentDir }));
+		});
 }

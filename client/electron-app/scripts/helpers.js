@@ -4,7 +4,7 @@ const path = require('path');
 const ejse = require('ejs-electron');
 
 // Load custom scripts
-const utils = require('./utils.js');
+const utils = require('./file_utils.js');
 
 module.exports = {
     renderWebviewIndex: function (mainWindow, remoteServerAddr) {

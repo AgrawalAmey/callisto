@@ -8,7 +8,7 @@ const helpers = require('./helpers.js');
 const ipc = electron.ipcMain;
 
 module.exports = {
-    setEventListerns: function (mainWindow){
+    setEventListerns: (mainWindow) => {
         // On submission of server address form
         ipc.on('serverBtn-click', function (event, remoteServerAddr) {
             helpers.renderWebviewIndex(mainWindow, remoteServerAddr);
@@ -19,5 +19,7 @@ module.exports = {
             console.log("yooooooooooooooo");
             console.log(data);
         });
-    }
+    },
+
+
 }
