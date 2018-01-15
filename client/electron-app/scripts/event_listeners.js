@@ -11,10 +11,10 @@ const helpers = require('./helpers.js');
 const ipc = electron.ipcMain;
 
 // Utility functions
-const utils = require('./utils');
+const file_utils = require('./file_utils');
 
 module.exports = {
-    setEventListerns: function (mainWindow){
+    setEventListerns: (mainWindow) => {
         // On submission of server address form
         ipc.on('serverBtn-click', function (event, remoteServerAddr) {
             helpers.renderWebviewIndex(mainWindow, remoteServerAddr);
@@ -28,22 +28,22 @@ module.exports = {
 
         // Delete user credentials on logout
         ipc.on('removeUserCreds', function () {
-            utils.removeCreds();
+            file_utils.removeCreds();
         });
 
         // Delete user credentials on closing all windows of app
         app.on('window-all-closed', function() {
-            utils.removeCreds();
+            file_utils.removeCreds();
         });
 
         // Delete user credentials on closing main window
         mainWindow.on('closed', function() {
-            utils.removeCreds();
+            file_utils.removeCreds();
         });
 
         // Save user credentials on login
         ipc.on('saveUserCreds', function (event, userCreds) {
-            utils.saveCreds(userCreds.username, userCreds.password);
+            file_utils.saveCreds(userCreds.username, userCreds.password);
         });
     }
 }

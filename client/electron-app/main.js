@@ -6,7 +6,7 @@ const request = require('request');
 const url = require('url');
 
 // Load custom scripts
-const utils = require('./scripts/utils.js');
+const utils = require('./scripts/file_utils.js');
 const helpers = require('./scripts/helpers.js');
 const event_listeners = require('./scripts/event_listeners.js');
 
