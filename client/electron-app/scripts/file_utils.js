@@ -41,8 +41,6 @@ module.exports = {
         fs.writeFileSync(credsPath, JSON.stringify(encryptedCreds, null, 2), function (err) {
             if (err) return console.log(err);
         });
-
-        console.log(credsPath);
     },
 
     getCreds: () => {

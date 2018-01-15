@@ -14,7 +14,7 @@ module.exports = {
 
         //test
         ipcMain.on('test', function (event, data) {
-            console.log("yooooooooooooooo");
+            console.log("Test:");
             console.log(data);
         });
 
