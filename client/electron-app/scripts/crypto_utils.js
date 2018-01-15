@@ -1,17 +1,18 @@
 const crypto = require('crypto');
 
+var getCipher = () => {
+    var config = require('../config');
+
+    var algorithm = 'aes256';
+    var key = config.encryptionKey;
+
+    var cipher = crypto.createCipher(algorithm, key);
+    var decipher = crypto.createDecipher(algorithm, key);
+
+    return { "cipher": cipher, "decipher": decipher }
+}
+
 module.exports = {
-    getCipher: () => {
-        var config = require('../config');
-
-        var algorithm = 'aes256';
-        var key = config.encryptionKey;
-
-        var cipher = crypto.createCipher(algorithm, key);
-        var decipher = crypto.createDecipher(algorithm, key);
-
-        return { "cipher": cipher, "decipher": decipher }
-    },
 
     encrypt: (text) => {
         var cipher = getCipher().cipher

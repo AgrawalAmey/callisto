@@ -26,7 +26,7 @@ function createWindow () {
   mainWindow.maximize();
 
   // Set event handlers
-  event_listeners.setEventListerns(mainWindow);
+  event_listeners.setEventListeners(mainWindow);
 
   // Render webview
   var remoteServerAddr = utils.getRemoteServerAddr();

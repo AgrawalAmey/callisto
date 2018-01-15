@@ -56,6 +56,7 @@
                     }
                 },
                 submitHandler: function(form) {
+                    saveUserCreds($("#username").val(), $("#password").val())
                     form.submit();
                 }
             });

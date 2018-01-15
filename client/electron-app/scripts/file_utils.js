@@ -1,5 +1,7 @@
 // Vendor scripts
+const { app } = require('electron')
 const fs = require('fs');
+const path = require('path');
 
 // Custom scripts
 const crypto_utils = require('./crypto_utils.js')
@@ -36,9 +38,11 @@ module.exports = {
         var tempDir = app.getPath('temp')
         var credsPath = path.join(tempDir, 'creds')
         
-        fs.writeFile(credsPath, JSON.stringify(encryptedCreds, null, 2), function (err) {
+        fs.writeFileSync(credsPath, JSON.stringify(encryptedCreds, null, 2), function (err) {
             if (err) return console.log(err);
         });
+
+        console.log(credsPath);
     },
 
     getCreds: () => {
