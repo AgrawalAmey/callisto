@@ -1,2 +1,2 @@
-require('./assignments_preload.js')
-require('./creds_preload.js')
+require('./preload/session.js')
+require('./preload/assignments.js')

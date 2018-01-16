@@ -56,7 +56,10 @@
                     }
                 },
                 submitHandler: function(form) {
-                    saveUserCreds($("#username").val(), $("#password").val())
+                    username = $("#username").val()                    
+                    password = $("#password").val()
+                    session.login(username, password)
+
                     form.submit();
                 }
             });

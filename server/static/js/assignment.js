@@ -1,8 +1,7 @@
-if (isAssignment(getAssignmentName())) {
-	console.log(listPythonNotebooks(getAssignmentName()));
-} else {
-	downloadAssignment(getAssignmentName(), getassignmentDownloadURL());
-}
+$(document).ready(() => {
+	assignments.getNotebooksList(getAssignmentName(), 
+								 getAssignmentURL())
+});
 
 $("#form_1").validate({
 	rules: {

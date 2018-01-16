@@ -6,9 +6,9 @@ const request = require('request');
 const url = require('url');
 
 // Load custom scripts
-const utils = require('./scripts/file_utils.js');
+const ipcChannels = require('./scripts/ipcChannels.js');
 const helpers = require('./scripts/helpers.js');
-const event_listeners = require('./scripts/event_listeners.js');
+const remoteServerAddrHandler = require('./scripts/remoteServerAddrHandler.js');
 
 // Module to control application life.
 const app = electron.app;
@@ -26,10 +26,10 @@ function createWindow () {
   mainWindow.maximize();
 
   // Set event handlers
-  event_listeners.setEventListeners(mainWindow);
+  ipcChannels.setChannels(mainWindow);
 
   // Render webview
-  var remoteServerAddr = utils.getRemoteServerAddr();
+  var remoteServerAddr = remoteServerAddrHandler.getRemoteServerAddr();
   helpers.renderWebviewIndex(mainWindow, remoteServerAddr);
 
   // Open the DevTools.

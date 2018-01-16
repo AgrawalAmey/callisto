@@ -4,7 +4,7 @@ const path = require('path');
 const ejse = require('ejs-electron');
 
 // Load custom scripts
-const utils = require('./file_utils.js');
+const remoteServerAddrHandler = require('./remoteServerAddrHandler.js');
 
 module.exports = {
     renderWebviewIndex: function (mainWindow, remoteServerAddr) {
@@ -27,7 +27,7 @@ module.exports = {
                 return;
             }
             // Save address
-            utils.saveRemoteServerAddr(remoteServerAddr);
+            remoteServerAddrHandler.saveRemoteServerAddr(remoteServerAddr);
             // Render webview
             ejse.data('remoteServerAddr', remoteServerURL);
             mainWindow.loadURL(path.join('file://', __dirname, '../views', 'webview.ejs'));

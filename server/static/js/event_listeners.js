@@ -1,5 +1,5 @@
 $('#logoutBtn').click(function () {
-	removeUserCreds();
+	session.logout()
 	window.location.replace('/logout');
 });
 
