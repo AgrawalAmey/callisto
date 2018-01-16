@@ -1,4 +1,5 @@
 var express = require('express');
+var fs = require('fs');
 var multer  =   require('multer');
 var path = require('path');
 var formidable = require('formidable');
@@ -110,10 +111,19 @@ module.exports = function(app, passport) {
             console.log(assignment.isSubmitted);
             assignment.isActive = (endDate - new Date() > 0 && startDate - new Date() < 0);
             assignment.showToStudents = (new Date() - startDate > 0);
+
+            var notebooks = fs.readdirSync(path.join('./assignments', assignment.name, 'release')).filter(file => file.endsWith('.ipynb'));
+            var solution = fs.readdirSync(path.join('./assignments', assignment.name, 'solution')).filter(file => file.endsWith('.ipynb'));
+
+            console.log(assignment.name);
+            console.log(path.join('./assignments', assignment.name, 'release'))
+
             if(assignment.showToStudents || req.user.isAdmin){
                 res.render('assignment.ejs', {
                     user: req.user,
                     assignment: assignment,
+                    notebooks: notebooks,
+                    solution: solution,
                     uploadAssignmentError: req.flash('uploadAssignmentError'),
                     uploadAssignmentSuccess: req.flash('uploadAssignmentSuccess'),
                 });

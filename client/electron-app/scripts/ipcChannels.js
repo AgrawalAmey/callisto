@@ -29,7 +29,6 @@ const setChannels = (mainWindow) => {
 
     ipcMain.on('getNotebooksList', (event, assignmentName, assignmentURL) => {
         assignments.getNotebooksList(assignmentName, assignmentURL, (notebooksList) => {
-            console.log("2")
             event.sender.send('getNotebooksList-reply', notebooksList)
         })
     })

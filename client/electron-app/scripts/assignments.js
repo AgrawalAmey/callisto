@@ -33,7 +33,6 @@ function Assignments() {
             returnNotebooksList()
         } else {
             this.downloadAssignment(assignmentName, assignmentURL, () => {
-                console.log("1")
                 returnNotebooksList()
             });
         }
@@ -49,13 +48,9 @@ function Assignments() {
 
         request = sessionHandler.getRequestHandler()
 
-        request(options, (err, resp, body) => {
-            if(err) throw err
-            unzip.Extract({ path: assignmentDir })
-        })
+        request(options)
             .pipe(unzip.Extract({ path: assignmentDir }))
-            .on('response', function(){
-                console.log(122312)
+            .on('close', () => {
                 callback()
             })
     }

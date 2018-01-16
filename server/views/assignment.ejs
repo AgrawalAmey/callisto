@@ -94,6 +94,44 @@
                                         </div>
                                     </form>
                                 <% } %>
+                                                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <h4>Assignment Notebooks</h4>
+                                    <% if (notebooks.length == 0) { %>
+                                        <tr>
+                                            No notebooks available.
+                                        </tr>
+                                    <% } else { %>
+                                        <table cellpadding="1" cellspacing="1" class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Score</th>
+                                                    <% if (assignment.solutionsAvailable) { %>
+                                                        <th>Solution</th> 
+                                                    <% } %>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% for (var  i=0; i<notebooks.length; i++) { %>
+                                                    <tr>
+                                                        <td>
+                                                            <a href="#"><%= notebooks[i] %></a>
+                                                        </td>
+                                                        <td><%= notebooks[i].score %></td>
+                                                        <!--td><%= assignment.endTime %></td-->
+                                                        <% if (assignment.solutionsAvailable) { %>
+                                                        <td>
+                                                            <a href="#"><%= solution[i] %></a>
+                                                        </td>
+                                                        <% } %>
+                                                    </tr>
+                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    <% } %>    
+                                </div>
+
                             </div>      
                         </div>
                     </div>
