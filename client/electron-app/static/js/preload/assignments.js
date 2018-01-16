@@ -4,13 +4,14 @@ function Assignments() {
     // To save creds
     this.getNotebooksList = (assignmentName, assignmentURL) => {
 
-        notebooksList = await ipcRenderer.send('getNotebooksList', 
-                                                assignmentName, 
-                                                assignmentURL)
-        
-        console.log(notebooksList)
+        ipcRenderer.send('getNotebooksList', 
+                         assignmentName, 
+                         assignmentURL)
+        ipcRenderer.on('getNotebooksList-reply', function(event, arg) {
+            console.log(arg); // prints "pong"
+        });
 
-        return notebooksList
+        // return notebooksList
     }
 }
 

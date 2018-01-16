@@ -1,42 +1,47 @@
+// Load vender scripts
 const { app } = require('electron');
 const fs = require('fs')
 const path = require('path')
 const unzip = require('unzip')
 
+// Load custom scripts
+const sessionHandler = require('./sessionHandler.js')
+
 function Assignments() {
-    this.isAssignment = (assignmentName) => {
-        // Get path to assignment
+    this.getPath = (assignmentName) => {
         var userDataPath = app.getPath('userData');
-        var assignmentFilePath = path.join(userDataPath, 'assignments', assignmentName)
-        // Check if file is present
-        return fs.existsSync(assignmentFilePath)
+        return path.join(userDataPath, 'assignments', assignmentName)
+    } 
+
+    this.isAssignment = (assignmentName) => {
+        // Check if folder is present
+        return fs.existsSync(this.getPath(assignmentName))
     }
 
     this.listNotebooks = (assignmentName) => {
-        var userDataPath = app.getPath('userData');
-        var assignmentDir = path.join(userDataPath, 'assignments', assignmentName);
-
+        var assignmentDir = this.getPath(assignmentName)
         return fs.readdirSync(assignmentDir).filter(file => file.endsWith('.ipynb'));
     }
 
-    this.getNotebooksList = (assignmentName, assignmentURL) => {
+    this.getNotebooksList = (assignmentName, assignmentURL, callback) => {
+        var returnNotebooksList = () => {
+            var notebooksList = this.listNotebooks(assignmentName)
+            callback(notebooksList)
+        }
+
         if (this.isAssignment(assignmentName)) {
-            console.log(this.listPythonNotebooks(assignmentName));
-            return this.listPythonNotebooks(assignmentName)
+            returnNotebooksList()
         } else {
             this.downloadAssignment(assignmentName, assignmentURL, () => {
-                console.log("yo")
-                console.log(this.listPythonNotebooks(assignmentName));
-                return this.listPythonNotebooks(assignmentName)
+                console.log("1")
+                returnNotebooksList()
             });
         }
     }
 
     this.downloadAssignment = (assignmentName, assignmentURL, callback) => {
-        var userDataPath = app.getPath('userData');
-        var assignmentDir = path.join(userDataPath, 'assignments', assignmentName);
+        var assignmentDir = this.getPath(assignmentName)
 
-        var assignmentURL = 'http://localhost:18350/'
         var options = {
             url: assignmentURL,
             encoding: null
@@ -44,12 +49,15 @@ function Assignments() {
 
         request = sessionHandler.getRequestHandler()
 
-        // request(options)            
-        //     .pipe(fs.createWriteStream(assignmentDir + '.zip'))
-
-        request(options)
+        request(options, (err, resp, body) => {
+            if(err) throw err
+            unzip.Extract({ path: assignmentDir })
+        })
             .pipe(unzip.Extract({ path: assignmentDir }))
-            .on('end', callback)
+            .on('response', function(){
+                console.log(122312)
+                callback()
+            })
     }
 }
 
