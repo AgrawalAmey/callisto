@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ./partials/head.ejs %>
+    <title>Neural Nets & Fuzzy Logic | Assignments</title>
+</head>
+
+<body class="fixed-navbar fixed-sidebar">
+    <% if (user.isAdmin) { %>
+            <% include ./partials/admin_header.ejs %> 
+    <% } else { %>
+        <% include ./partials/user_header.ejs %>
+    <% } %>
+    <% if (user.isAdmin) { %>
+            <% include ./partials/admin_nav.ejs %> 
+    <% } else { %>
+        <% include ./partials/user_nav.ejs %>
+    <% } %>
+    <!-- Main Wrapper -->
+    <div id=wrapper>
+        <div class="small-header transition animated fadeIn">
+            <div class=hpanel>
+                <div class=panel-body>
+                    <h2 class="font-light m-b-xs"><%= assignment.name %></h2></div>
+            </div>
+        </div>
+        <div class="content animate-panel">
+            <div>
+                <div class=row>
+                    <div class="col-lg-12">
+                        <div class="hpanel">
+                            <div class="panel-body">
+                                <h5>Start Time: <%= assignment.startTime %></h5>
+                                <h5>End Time: <%= assignment.endTime %></h5>
+                                <% if (user.isAdmin) { %>
+                                    <h5>Total submissions: <%= assignment.whoSubmitted.length %></h5> 
+                                <% } else if (assignment.isSubmitted) { %>
+                                    <h5>Submitted: Yes</h5>
+                                <% } else { %>
+                                    <h5>Submitted: No</h5>
+                                <% } %>
+                                <h4 style="margin-top: 30px;">Download Problems</h4>
+                                <h6>Clicking the download button will download the problem set in the form of a ZIP archive.</h6>
+                                <h6>The archive contains problems in the form of Jupyter notebooks.</h6>
+                                <h6>You are required to run the notebooks locally and fill in your solution.</h6>
+                                <h6>Click on the DOCS tab on the left if you need to access any documentation.</h6>
+                                <h4>
+                                    <a target="_blank" href="/assignment/release/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Problems</a>
+                                </h4>
+                                <br>  
+                                <% if (assignment.solutionsAvailable) { %>
+                                    <h4>Download Solutions</h4>
+                                    <h6>Download solutions for this assignment.</h6>
+                                    <h4> 
+                                        <a target="_blank" href="/assignment/solutions/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Solutions</a>
+                                    </h4>
+                                <% } %>
+                                <% if (assignment.feedbackAvailable && !user.isAdmin) { %>
+                                    <br>
+                                    <h4>Download Feedback</h4>
+                                    <h6>Download graded assignment.</h6>
+                                    <h4>
+                                        <a target="_blank" href="/assignment/feedback/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Feedback</a>
+                                    </h4>
+                                <% } %>
+                                <% if (assignment.isActive) { %>
+                                    <br>
+                                    <h4>Submit Solutions</h4>
+                                    <h6>Once you are done with the assignments, save your notebook(s) and upload a single ZIP archive of your submission.</h6>
+                                    <h6>Please make sure you upload a ZIP archive of your submission. Any other formats will not be accepted.</h6>
+                                    <h6>You can submit as many times as you want within the stipulated time.</h6>
+                                    <h6>The most recent submission will overwrite any previous ones.</h6>
+                                    <br>
+                                    <form id="form_1" novalidate="novalidate"  role="form" method="post" enctype="multipart/form-data" action="/assignment/upload/<%= assignment.name %>">
+                                        <div class="form-group">                                
+                                            <label class="btn btn-default">
+                                                Selct file <input type="file" name="file">
+                                            </label>
+                                        </div>
+                                        <!-- show error message -->
+                                        <% if (typeof uploadAssignmentError !== 'undefined' && uploadAssignmentError.length > 0) { %>
+                                            <div class="form-group">                                
+                                                <label class="error" for="file"><%= uploadAssignmentError %></label>
+                                            </div>
+                                        <% } %>
+                                        <!-- show success message -->
+                                        <% if (typeof uploadAssignmentSuccess !== 'undefined' && uploadAssignmentSuccess.length > 0) { %>
+                                            <div class="form-group">                                
+                                                <label class="success" for="file"><%= uploadAssignmentSuccess %></label>
+                                            </div>
+                                        <% } %>                                    
+                                        <div>
+                                            <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit Solutions</strong></button>
+                                        </div>
+                                    </form>
+                                <% } %>
+                                                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <h4>Assignment Notebooks</h4>
+                                    <% if (notebooks.length == 0) { %>
+                                        <tr>
+                                            No notebooks available.
+                                        </tr>
+                                    <% } else { %>
+                                        <table cellpadding="1" cellspacing="1" class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Score</th>
+                                                    <% if (assignment.solutionsAvailable) { %>
+                                                        <th>Solution</th> 
+                                                    <% } %>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% for (var  i=0; i<notebooks.length; i++) { %>
+                                                    <tr>
+                                                        <td>
+                                                            <a href="#"><%= notebooks[i] %></a>
+                                                        </td>
+                                                        <td><%= notebooks[i].score %></td>
+                                                        <!--td><%= assignment.endTime %></td-->
+                                                        <% if (assignment.solutionsAvailable) { %>
+                                                        <td>
+                                                            <a href="#"><%= solution[i] %></a>
+                                                        </td>
+                                                        <% } %>
+                                                    </tr>
+                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    <% } %>    
+                                </div>
+
+                            </div>      
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer-->
+        <footer class=footer>&copy; Team NNFL</footer>
+        <% include ./partials/js_imports.ejs %>
+        <script type="text/javascript">
+
+            getAssignmentName = () => {
+                return "<%= assignment.name %>"
+            }
+
+            getAssignmentURL = () => {
+                return "http://localhost:18350/assignment/release/<%= assignment.name %>"
+            }
+        </script>
+        <script type="text/javascript" src="./js/assignment.js"></script>
+    </div>
+</body>
+
+</html>

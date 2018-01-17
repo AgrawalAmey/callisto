@@ -35,27 +35,20 @@ module.exports = function(app, passport) {
     // LOGIN ===============================
     // =====================================
 
-    app.get('/login', function(req, res) {
-        // render the page and pass in any flash data if it exists
-        res.render('login.ejs', {
-            message: req.flash('loginMessage')
-        });
-    });
-
-    // process the login form
+    // process the login request
     app.post('/login', passport.authenticate('login', {
-        successRedirect: '/', // redirect to the secure profile section
-        failureRedirect: '/login', // redirect back to the signup page if there is an error
+        successRedirect: '/loginSuccess',
+        failureRedirect: '/loginFailue',
         failureFlash: true // allow flash messages
     }));
 
-    // =====================================
-    // HOME PAGE (once logged in) ==========
-    // =====================================
+    app.get('/loginSuccess', function(req, res) {
+        res.status(200).send()
+    })
 
-    app.get('/', isLoggedIn, function(req, res) {
-        res.redirect('/assignments');
-    });
+    app.get('/loginFailue', function (req, res) {
+        res.status(400).send(req.flash('loginMessage')[0])
+    })
 
     // =====================================
     // Docs ================================
@@ -86,7 +79,7 @@ module.exports = function(app, passport) {
                 assignments[i].isActive = (endDate - new Date() > 0 && startDate - new Date() < 0);
                 assignments[i].showToStudents = (new Date() - startDate > 0);
             }
-            res.render('assignments.ejs', {
+            res.json({
                 user: req.user,
                 assignments: assignments
             });
@@ -102,33 +95,21 @@ module.exports = function(app, passport) {
             startDate = new Date(assignment.startTime);
             endDate = new Date(assignment.endTime);
             assignment.isSubmitted = false;
+            
             for(i=0; i<assignment.whoSubmitted.length; i++){
                 if(assignment.whoSubmitted[i] == req.user.username){
                     assignment.isSubmitted = true;
                     break;
                 }
             }
-            console.log(assignment.isSubmitted);
-            assignment.isActive = (endDate - new Date() > 0 && startDate - new Date() < 0);
-            assignment.showToStudents = (new Date() - startDate > 0);
-
-            var notebooks = fs.readdirSync(path.join('./assignments', assignment.name, 'release')).filter(file => file.endsWith('.ipynb'));
-            var solution = fs.readdirSync(path.join('./assignments', assignment.name, 'solution')).filter(file => file.endsWith('.ipynb'));
-
-            console.log(assignment.name);
-            console.log(path.join('./assignments', assignment.name, 'release'))
 
             if(assignment.showToStudents || req.user.isAdmin){
-                res.render('assignment.ejs', {
+                res.json({
                     user: req.user,
                     assignment: assignment,
-                    notebooks: notebooks,
-                    solution: solution,
-                    uploadAssignmentError: req.flash('uploadAssignmentError'),
-                    uploadAssignmentSuccess: req.flash('uploadAssignmentSuccess'),
-                });
+                })
             } else {
-                res.redirect('/assignments');
+                res.status(401).send()
             }
         });
     });
@@ -146,7 +127,7 @@ module.exports = function(app, passport) {
             if(assignment.showToStudents || req.user.isAdmin){
                 res.download('assignments/' + assignment.name + '/release.zip');
             } else {
-                res.redirect('/assignments');
+                res.status(401).send()
             }
         });
     });
@@ -164,25 +145,7 @@ module.exports = function(app, passport) {
             if((assignment.showToStudents && assignment.solutionsAvailable) || req.user.isAdmin){
                 res.download('assignments/' + assignment.name + '/solutions.zip');
             } else {
-                res.redirect('/assignments');
-            }
-        });
-    });
-
-    // =====================================
-    // Serve assignment feedback      ======
-    // =====================================    
-
-    app.get('/assignment/feedback/:assignmentName', isLoggedIn, function(req, res) {
-        Assignments.findOne({'name': req.params.assignmentName}, function(err, assignment) {
-            startDate = new Date(assignment.startTime);
-            endDate = new Date(assignment.endTime);
-            assignment.isActive = (endDate - new Date() > 0 && startDate - new Date() < 0);
-            assignment.showToStudents = (new Date() - startDate > 0);
-            if((assignment.showToStudents && assignment.feedbackAvailable) || req.user.isAdmin){
-                res.download('assignments/' + assignment.name + '/feedback/' + req.user.username + '.zip');
-            } else {
-                res.redirect('/assignments');
+                res.status(401).send()
             }
         });
     });
@@ -195,36 +158,36 @@ module.exports = function(app, passport) {
         Assignments.findOne({'name': req.params.assignmentName}, function(err, assignment) {
             startDate = new Date(assignment.startTime);
             endDate = new Date(assignment.endTime);
-            assignment.isActive = (endDate - new Date() > 0 && startDate - new Date() < 0);
+            assignment.isActive = (endDate - new Date() > 0 && startDate - new Date() < 0)
             if(assignment.isActive || req.user.isAdmin){
                 upload(req, res, function(err) {
                     if(err) {
                         if(err.message== 'FileTypeNotSupported'){
-                            req.flash('uploadAssignmentError', 'Only zip files are supported.');
+                            req.flash('uploadAssignmentError', 'Only zip files are supported.')
                         } else {
-                            req.flash('uploadAssignmentError', 'Oops! Something went wrong.');                            
+                            req.flash('uploadAssignmentError', 'Oops! Something went wrong.')                      
                         }
-                        res.redirect('/assignment?name=' + req.params.assignmentName);
+                        res.redirect('/assignment?name=' + req.params.assignmentName)
                     } else {
-                        assignment.whoSubmitted.push(req.user.username);
+                        assignment.whoSubmitted.push(req.user.username)
                             
                         assignment.save(function(err, editedUser) {
                             if (err) {
-                                req.flash('uploadAssignmentError', 'Oops! Something went wrong.');
+                                req.flash('uploadAssignmentError', 'Oops! Something went wrong.')
                             } else {
-                                req.flash('uploadAssignmentSuccess', 'Assignment submitted successfully.');
+                                req.flash('uploadAssignmentSuccess', 'Assignment submitted successfully.')
                             }
-                            res.redirect('/assignment?name=' + req.params.assignmentName);
+                            res.redirect('/assignment?name=' + req.params.assignmentName)
                             return;    
                         });
 
                     }
                 }); 
             } else {
-                res.redirect('/assignment?name=' + req.params.assignmentName);
+                res.redirect('/assignment?name=' + req.params.assignmentName)
             }
-        });
-    });
+        })
+    })
 
     // =====================================
     // Manage users ========================
@@ -236,7 +199,7 @@ module.exports = function(app, passport) {
             for (var i = 0; i < users.length; i++) {
                 usernameList.push(users[i].username);
             }
-            res.render('manage_users.ejs', {
+            res.json({
                 user: req.user,
                 usernameList: usernameList,
                 addUserError: req.flash('addUserError'),
@@ -245,9 +208,9 @@ module.exports = function(app, passport) {
                 addUserSuccess: req.flash('addUserSuccess'),
                 editUserSuccess: req.flash('editUserSuccess'),
                 removeUserSuccess: req.flash('removeUserSuccess'),
-            });
-        });
-    });
+            })
+        })
+    })
 
     // =====================================
     // Manage services =====================
@@ -255,7 +218,7 @@ module.exports = function(app, passport) {
 
     app.get('/manageAssignments', isLoggedIn, isAdmin, function(req, res) {
         Assignments.find({}, function(err, assignments) {
-            res.render('manage_assignments.ejs', {
+            res.json({
                 user: req.user,
                 assignments: assignments,
                 addAssignmentError: req.flash('addAssignmentError'),
@@ -273,12 +236,12 @@ module.exports = function(app, passport) {
     // =====================================
 
     app.get('/accountSettings', isLoggedIn, function(req, res) {
-        res.render('account_setting.ejs', {
+        res.json({
             user: req.user,
             editUserError: req.flash('editUserError'),
             editUserSuccess: req.flash('editUserSuccess')
-        });
-    });
+        })
+    })
 
     // =====================================
     // Add/Edit/Remove user ================
@@ -311,8 +274,7 @@ module.exports = function(app, passport) {
     // =====================================
 
     app.get('/logout', function(req, res) {
-        req.logout();
-        res.redirect('/');
+        req.logout()
     });
 };
 

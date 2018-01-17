@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ./partials/head.ejs %>
+    <title>Neural Nets & Fuzzy Logic | Manage USers</title>
+</head>
+
+<body class="fixed-navbar fixed-sidebar">
+    <% include ./partials/admin_header.ejs %>
+    <% include ./partials/admin_nav.ejs %>
+    <!-- Main Wrapper -->
+    <div id=wrapper>
+        <div class="small-header transition animated fadeIn">
+            <div class=hpanel>
+                <div class=panel-body>
+                    <h2 class="font-light m-b-xs">Manage Users</h2></div>
+            </div>
+        </div>
+        <div class="content animate-panel">
+            <div>
+                <div class=row>
+                    <div class="col-lg-6">
+                        <div class="hpanel">
+                            <div class="panel-heading">Add user</div>
+                            <div class="panel-body" style="display: block;">
+                                <form role="form" id="form_1" novalidate="novalidate" method="post" action="/addUser">
+                                    <div class="form-group">
+                                        <label>Username</label>
+                                        <input type="text" class="form-control" name="username">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" name="name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input type="password" class="form-control" name="password">
+                                    </div>
+                                    <!-- show error message -->
+                                    <% if (typeof addUserError !== 'undefined' && addUserError.length > 0) { %>
+                                        <div class="form-group">                                
+                                            <label class="error" for="password"><%= addUserError %></label>
+                                        </div>
+                                    <% } %>
+                                    <!-- show success message -->
+                                    <% if (typeof addUserSuccess !== 'undefined' && addUserSuccess.length > 0) { %>
+                                        <div class="form-group">                                
+                                            <label class="success" for="password"><%= addUserSuccess %></label>
+                                        </div>
+                                    <% } %>                                    
+                                    <div>
+                                        <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit</strong></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="hpanel">
+                            <div class="panel-heading">Edit User</div>
+                            <div class="panel-body">
+                                <form role="form" id="form_2" novalidate="novalidate" method="post" action="/editUser">
+                                    <div class=form-group>
+                                        <label style="padding: 0">Select user</label>
+                                        <br>
+                                        <div class=col-sm-10 style="padding: 0">
+                                            <select class="form-control m-b" name=username>
+                                                <% for (var  i=0; i<usernameList.length; i++) { %>
+                                                    <option><%= usernameList[i] %></option>
+                                                <% } %>
+                                            </select>
+                                        </div>
+                                        <div class=col-sm-2 style="height: 49px"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" name="name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input type="password" placeholder="Password" class="form-control" name="password">
+                                    </div>
+                                    <!-- show any errors -->
+                                    <% if (typeof editUserError !== 'undefined' && editUserError.length > 0) { %>
+                                    <div class="form-group">                                
+                                        <label class="error" for="password"><%= editUserError %></label>
+                                    </div>
+                                    <% } %>
+                                    <!-- show any messages that come back with authentication -->
+                                    <% if (typeof editUserSuccess !== 'undefined' && editUserSuccess.length > 0) { %>
+                                    <div class="form-group">                                
+                                        <label class="success" for="password"><%= editUserSuccess %></label>
+                                    </div>
+                                    <% } %>
+                                    <div>
+                                        <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit</strong></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="hpanel">
+                            <div class="panel-heading">Remove User</div>
+                            <div class="panel-body">
+                                <form role="form" id="form_3" novalidate="novalidate" method="post" action="/removeUser">
+                                    <div class=form-group>
+                                        <label style="padding: 0">Select User</label>
+                                        <br>
+                                        <div class=col-sm-10 style="padding: 0">
+                                            <select class="form-control m-b" name="username">
+                                                <% for (var  i=0; i<usernameList.length; i++) { %>
+                                                    <option><%= usernameList[i] %></option>
+                                                <% } %>
+                                            </select>
+                                        </div>
+                                        <div class=col-sm-2 style="height: 49px"></div>
+                                    </div>
+                                    <!-- show any errors -->
+                                    <% if (typeof removeUserError !== 'undefined' && removeUserError.length > 0) { %>
+                                    <div class="form-group">                                
+                                        <label class="error"><%= removeUserError %></label>
+                                    </div>
+                                    <% } %>
+                                    <!-- show any messages that come back with authentication -->
+                                    <% if (typeof removeUserSuccess !== 'undefined' && removeUserSuccess.length > 0) { %>
+                                    <div class="form-group">                                
+                                        <label class="success"><%= removeUserSuccess %></label>
+                                    </div>
+                                    <% } %>
+                                    <div>
+                                        <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit</strong></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer-->
+        <footer class=footer>&copy; 2016 Padmavati Hospital</footer>
+    </div>
+
+    <% include ./partials/js_imports.ejs %>
+
+    <script>
+    $(function() {
+        $("#form_1").validate({
+            rules: {
+                username: {
+                    required: true
+                },
+                name: {
+                    required: true
+                },
+                password: {
+                    required: true,
+                    minlength: 8
+                }
+            },
+            messages: {
+                password: {
+                    required: "This field is required.",
+                    minlength: "Password should be at least 8 characters long."
+                }
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+        $("#form_2").validate({
+            rules: {
+                username: {
+                    required: true
+                },
+                name: {
+                    required: true
+                },
+                password: {
+                    required: true,
+                    minlength: 8
+                }
+            },
+            messages: {
+                password: {
+                    required: "This field is required.",
+                    minlength: "Password should be at least 8 characters long."
+                }
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+        $("#form_3").validate({
+            rules: {
+                username: {
+                    required: true
+                }
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    });
+    </script>
+</body>
+
+</html>

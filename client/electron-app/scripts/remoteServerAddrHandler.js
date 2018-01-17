@@ -11,12 +11,13 @@ function RemoteServerAddrHandler() {
         return config.remoteServerAddr;
     }
 
-    this.saveRemoteServerAddr = (remoteServerAddr) => {
+    this.saveRemoteServerAddr = (remoteServerAddr, callback) => {
         var config = require('../config');
         config.remoteServerAddr = remoteServerAddr;
 
         fs.writeFile("./config.json", JSON.stringify(config, null, 2), function (err) {
             if (err) return console.log(err);
+            callback()
         });
     }
 }

@@ -17,7 +17,7 @@ function Creds() {
         return this.credsPath
     }
 
-    this.login = (username, password) => {
+    this.login = (username, password, callback) => {
         var credsPath = this.getCredsPath()
 
         var encryptedCreds = {
@@ -25,8 +25,9 @@ function Creds() {
             "password": cipher.encrypt(password)
         }
 
-        fs.writeFileSync(credsPath, JSON.stringify(encryptedCreds, null, 2), function (err) {
+        fs.writeFile(credsPath, JSON.stringify(encryptedCreds, null, 2), function (err) {
             if (err) return console.log(err);
+            callback()
         });
     }
 
@@ -50,4 +51,4 @@ function Creds() {
     }
 }
 
-module.exports = new Creds()
+module.exports = Creds

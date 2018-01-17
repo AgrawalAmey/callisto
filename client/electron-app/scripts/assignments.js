@@ -4,9 +4,6 @@ const fs = require('fs')
 const path = require('path')
 const unzip = require('unzip')
 
-// Load custom scripts
-const sessionHandler = require('./sessionHandler.js')
-
 function Assignments() {
     this.getPath = (assignmentName) => {
         var userDataPath = app.getPath('userData');
@@ -38,7 +35,7 @@ function Assignments() {
         }
     }
 
-    this.downloadAssignment = (assignmentName, assignmentURL, callback) => {
+    this.downloadAssignment = (session, assignmentName, assignmentURL, callback) => {
         var assignmentDir = this.getPath(assignmentName)
 
         var options = {
@@ -46,7 +43,7 @@ function Assignments() {
             encoding: null
         }
 
-        request = sessionHandler.getRequestHandler()
+        request = session.getRequestHandler()
 
         request(options)
             .pipe(unzip.Extract({ path: assignmentDir }))

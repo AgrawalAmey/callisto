@@ -7,11 +7,10 @@ function Assignments() {
         ipcRenderer.send('getNotebooksList', 
                          assignmentName, 
                          assignmentURL)
-        ipcRenderer.on('getNotebooksList-reply', function(event, arg) {
-            console.log(arg); // prints "pong"
-        });
 
-        // return notebooksList
+        ipcRenderer.on('getNotebooksList-reply', (event, arg) => {
+            console.log(arg);
+        });
     }
 }
 

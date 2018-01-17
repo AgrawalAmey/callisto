@@ -1,17 +1,27 @@
 // Custom scripts
-const creds = require('./creds.js')
-const sessionHandler = require('./sessionHandler.js')
+const Creds = require('./creds.js')
+const SessionHandler = require('./sessionHandler.js')
 
 function Session() {
-    this.login = (username, password) => {
-        creds.login(username, password)
-        sessionHandler.login(username, password)
+    this.creds = new Creds()
+    this.sessionHandler = new SessionHandler()
+
+    this.login = (username, password, callback) => {
+        console.log(5)
+        this.creds.login(username, password, () => {
+            console.log(6)
+            this.sessionHandler.login(username, password, callback)
+        })
     }
 
-    this.logout = () => {
-        creds.logout()
-        sessionHandler.logout()
+    this.logout = (callback) => {
+        this.creds.logout()
+        this.sessionHandler.logout(callback)
+    }
+
+    this.getRequestHandler = () => {
+        return this.sessionHandler.getRequestHandler()
     }
 }
 
-module.exports = new Session()
+module.exports = Session

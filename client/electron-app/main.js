@@ -6,9 +6,10 @@ const request = require('request');
 const url = require('url');
 
 // Load custom scripts
-const ipcChannels = require('./scripts/ipcChannels.js');
-const helpers = require('./scripts/helpers.js');
+const ipcChannels = require('./scripts/ipcChannels.js')
+const Renderer = require('./scripts/renderer.js')
 const remoteServerAddrHandler = require('./scripts/remoteServerAddrHandler.js');
+const Session = require('./scripts/session.js')
 
 // Module to control application life.
 const app = electron.app;
@@ -23,14 +24,21 @@ function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600});
 
-  mainWindow.maximize();
+  mainWindow.maximize()
+  
+  // Init session
+  session = new Session()
 
+  // Create renderer
+  renderer = new Renderer(mainWindow, session)
   // Set event handlers
-  ipcChannels.setChannels(mainWindow);
+  ipcChannels.setChannels(renderer);
 
-  // Render webview
+  // Load remote server's addr from config
   var remoteServerAddr = remoteServerAddrHandler.getRemoteServerAddr();
-  helpers.renderWebviewIndex(mainWindow, remoteServerAddr);
+
+  // Render
+  renderer.renderIndex(remoteServerAddr);
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
@@ -40,7 +48,8 @@ function createWindow () {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    mainWindow = null;
+    mainWindow = null
+    session.logout()
   });
 }
 

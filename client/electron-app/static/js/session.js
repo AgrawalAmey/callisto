@@ -12,7 +12,7 @@ function Session() {
     }
 
     this.logout = () => {
-        ipcRenderer.send('logout');
+        ipcRenderer.send('logout')
     }
 }
 
