@@ -12,7 +12,14 @@ var assignmentSchema = mongoose.Schema({
     acceptSubmission: Boolean,
     solutionsAvailable: Boolean,
     feedbackAvailable: Boolean,
-    whoSubmitted: [String] 
+    whoSubmitted: [String],
+    notebooks: [String],
+    scores: {
+        user: [{
+            notebook: String,
+            score: Number
+        }]
+    }
 });
 
 // create the model for assignments and expose it to our app
