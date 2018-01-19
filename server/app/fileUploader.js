@@ -35,7 +35,7 @@ function FileUploader(basePath) {
             callback(null, this.problemsPath + req.params.assignmentName)
         },
         filename: function (req, file, callback) {
-            callback(null, this.problemsFileName)
+            callback(null, this.problemsFileName)   
         }
     })
 
@@ -59,12 +59,14 @@ function FileUploader(basePath) {
 
     this.uploadProblems = multer({
         storage: this.releaseStorage,
-        fileFilter: this.fileFilter
+        fileFilter: this.fileFilter,
+        fieldname: 'problems'
     }).single('file')
     
     this.uploadSolutions = multer({
         storage: this.solutionsStorage,
-        fileFilter: this.fileFilter
+        fileFilter: this.fileFilter,
+        fieldname: 'solutions'
     }).single('file')
 
     this.uploadSubmission = multer({

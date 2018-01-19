@@ -208,7 +208,6 @@ module.exports = {
                 newAssignment.startTime = req.body.startTime;
                 newAssignment.endTime = req.body.endTime;
                 newAssignment.solutionsAvailable = req.body.solutionsAvailable || false;
-                newAssignment.feedbackAvailable = req.body.feedbackAvailable || false;
                 newAssignment.acceptSubmission = req.body.acceptSubmission || false;
 
                 newAssignment.save(function (err) {
@@ -217,9 +216,34 @@ module.exports = {
                         res.redirect('/manageAssignments');
                         return;
                     }
-                    req.flash('addAssignmentSuccess', 'Assignment added successfully.');
-                    res.redirect('/manageAssignments');
-                    return;
+
+                    fileUploader.uploadProblems(req, res, function (err) {
+                        if (err) {
+                            if (err.message == 'FileTypeNotSupported') {
+                                req.flash('addAssignmentError', 'Select a zip file for uploading problems.');
+                            } else {
+                                req.flash('addAssignmentError', 'Oops! Something went wrong.');
+                            }
+
+                            res.redirect('/manageAssignments');
+                            return;
+                        } else {
+                            fileUploader.uploadSolutions(req, res, function (err) {
+                                if (err) {
+                                    if (err.message == 'FileTypeNotSupported') {
+                                        req.flash('addAssignmentError', 'Select a zip file for uploading solutions.');
+                                    } else {
+                                        req.flash('addAssignmentError', 'Oops! Something went wrong.');
+                                    }
+                                } else {
+                                    req.flash('addAssignmentSuccess', 'Assignment added successfully.');
+                                }
+
+                                res.redirect('/manageAssignments');
+                                return;
+                            })
+                        }
+                    })
                 });
             });
         });
@@ -260,9 +284,33 @@ module.exports = {
                         res.redirect('/manageAssignments');
                         return;
                     }
-                    req.flash('editAssignmentSuccess', 'Assignment edited successfully.');
-                    res.redirect('/manageAssignments');
-                    return;
+                    fileUploader.uploadProblems(req, res, function (err) {
+                        if (err) {
+                            if (err.message == 'FileTypeNotSupported') {
+                                req.flash('editAssignmentError', 'Select a zip file for uploading problems.');
+                            } else {
+                                req.flash('editAssignmentError', 'Oops! Something went wrong.');
+                            }
+
+                            res.redirect('/manageAssignments');
+                            return;
+                        } else {
+                            fileUploader.uploadSolutions(req, res, function (err) {
+                                if (err) {
+                                    if (err.message == 'FileTypeNotSupported') {
+                                        req.flash('editAssignmentError', 'Select a zip file for uploading solutions.');
+                                    } else {
+                                        req.flash('editAssignmentError', 'Oops! Something went wrong.');
+                                    }
+                                } else {
+                                    req.flash('editAssignmentSuccess', 'Assignment added successfully.');
+                                }
+
+                                res.redirect('/manageAssignments');
+                                return;
+                            })
+                        }
+                    })
                 });
             });
         });
