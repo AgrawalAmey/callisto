@@ -42,17 +42,17 @@
                                 <h4 style="margin-top: 30px;">Download Problems</h4>
                                 <h6>Clicking the download button will download the problem set in the form of a ZIP archive.</h6>
                                 <h6>The archive contains problems in the form of Jupyter notebooks.</h6>
-                                <h6>You are required to run the notebooks locally and fill in your solution.</h6>
+                                <h6>You are required to run the notebooks locally and fill in your s.</h6>
                                 <h6>Click on the DOCS tab on the left if you need to access any documentation.</h6>
                                 <h4>
                                     <a target="_blank" href="/assignment/release/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Problems</a>
                                 </h4>
                                 <br>  
-                                <% if (assignment.solutionsAvailable) { %>
-                                    <h4>Download Solutions</h4>
-                                    <h6>Download solutions for this assignment.</h6>
+                                <% if (assignment.ssAvailable) { %>
+                                    <h4>Download ss</h4>
+                                    <h6>Download ss for this assignment.</h6>
                                     <h4> 
-                                        <a target="_blank" href="/assignment/solutions/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Solutions</a>
+                                        <a target="_blank" href="/assignment/ss/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download ss</a>
                                     </h4>
                                 <% } %>
                                 <% if (assignment.feedbackAvailable && !user.isAdmin) { %>
@@ -65,7 +65,7 @@
                                 <% } %>
                                 <% if (assignment.isActive) { %>
                                     <br>
-                                    <h4>Submit Solutions</h4>
+                                    <h4>Submit ss</h4>
                                     <h6>Once you are done with the assignments, save your notebook(s) and upload a single ZIP archive of your submission.</h6>
                                     <h6>Please make sure you upload a ZIP archive of your submission. Any other formats will not be accepted.</h6>
                                     <h6>You can submit as many times as you want within the stipulated time.</h6>
@@ -90,7 +90,7 @@
                                             </div>
                                         <% } %>                                    
                                         <div>
-                                            <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit Solutions</strong></button>
+                                            <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit ss</strong></button>
                                         </div>
                                     </form>
                                 <% } %>
@@ -107,8 +107,8 @@
                                                 <tr>
                                                     <th>Name</th>
                                                     <th>Score</th>
-                                                    <% if (assignment.solutionsAvailable) { %>
-                                                        <th>Solution</th> 
+                                                    <% if (assignment.ssAvailable) { %>
+                                                        <th>s</th> 
                                                     <% } %>
                                                 </tr>
                                             </thead>
@@ -122,7 +122,7 @@
                                                         <!--td><%= assignment.endTime %></td-->
                                                         <% if (assignment.solutionsAvailable) { %>
                                                         <td>
-                                                            <a href="#"><%= solution[i] %></a>
+                                                            <a href="#"><%= solutions[i] %></a>
                                                         </td>
                                                         <% } %>
                                                     </tr>

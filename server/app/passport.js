@@ -5,7 +5,7 @@ var request = require('request');
 
 // load up the user model
 var Users = require('./models/user');
-var helpers = require('./helpers')
+var users = require('./users')
 
 module.exports = function(passport) {
 
@@ -32,6 +32,6 @@ module.exports = function(passport) {
     // =========================================================================
     passport.use('login', new LocalStrategy({
         passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
-    }, helpers.processLogin));
+    }, users.processLogin));
 };
 

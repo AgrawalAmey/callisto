@@ -20,7 +20,8 @@
     "passport-facebook": "^2.1.1",
     "passport-google-oauth": "^1.0.0",
     "passport-local": "^1.0.0",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "unzip": "^0.1.11"
   },
   "repository": "agrawalamey/nnfl-portal",
   "version": "0.0.5",
