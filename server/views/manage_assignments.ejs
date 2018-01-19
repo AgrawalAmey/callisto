@@ -31,7 +31,7 @@
                         <div class="hpanel">
                             <div class="panel-heading">Add Assignment</div>
                             <div class="panel-body" style="display: block;">
-                                <form role="form" id="form_1" novalidate="novalidate" method="post" action="/addAssignment">
+                                <form role="form" id="form_1" novalidate="novalidate" method="post" enctype="multipart/form-data" action="/addAssignment">
                                     <div class="form-group">
                                         <label>Name</label>
                                         <input type="text" class="form-control" name="name">
@@ -72,6 +72,20 @@
                                             <label for="cb2">Feedback Available</label>
                                         </div>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label class="btn btn-default">
+                                            Selct problems file
+                                            <input type="file" name="problems">
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="btn btn-default">
+                                            Selct solutions file
+                                            <input type="file" name="solutions">
+                                        </label>
+                                    </div>
                                     <!-- show error message -->
                                     <% if (typeof addAssignmentError !== 'undefined' && addAssignmentError.length > 0) { %>
                                         <div class="form-group">                                
@@ -95,7 +109,7 @@
                         <div class="hpanel">
                             <div class="panel-heading">Edit Assignment</div>
                             <div class="panel-body">
-                                <form role="form" id="form_2" novalidate="novalidate" method="post" action="/editAssignment">
+                                <form role="form" id="form_2" novalidate="novalidate" method="post" enctype="multipart/form-data" action="/editAssignment">
                                     <div class=form-group>
                                         <label style="padding: 0">Select assignment</label>
                                         <br>
@@ -149,6 +163,19 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group">
+                                        <label class="btn btn-default">
+                                            Selct problems file
+                                            <input type="file" name="problems">
+                                        </label>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="btn btn-default">
+                                            Selct solutions file
+                                            <input type="file" name="solutions">
+                                        </label>
+                                    </div>
                                     <!-- show any errors -->
                                     <% if (typeof editAssignmentError !== 'undefined' && editAssignmentError.length > 0) { %>
                                     <div class="form-group">                                

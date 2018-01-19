@@ -123,7 +123,7 @@ module.exports = {
                 endDate = new Date(assignment.endTime);
                 assignment.isActive = (endDate - new Date() > 0 && startDate - new Date() < 0);
                 if (assignment.isActive || req.user.isAdmin) {
-                    fileUploader.uploadSubmission(req, res, function (err) {
+                    fileUploader.upload(req, res, function (err) {
                         if (err) {
                             if (err.message == 'FileTypeNotSupported') {
                                 req.flash('uploadAssignmentError', 'Only zip files are supported.');
@@ -185,134 +185,115 @@ module.exports = {
         // asynchronous
         process.nextTick(function () {
 
-            Assignments.findOne({ 'name': req.body.name }, function (err, existingAssignment) {
-
-                // if there are any errors, return the error
+            fileUploader.upload(req, res, function (err) {
                 if (err) {
-                    req.flash('addAssignmentError', 'Oops! Something went wrong.');
+                    console.log(err)
+                    if (err.message == 'FileTypeNotSupported') {
+                        req.flash('addAssignmentError', 'Select a zip file for uploading problems.');
+                    } else {
+                        req.flash('addAssignmentError', 'Oops! Something went wrong.');
+                    }
+
                     res.redirect('/manageAssignments');
                     return;
                 }
 
-                // check to see if there's already a assignment with that email
-                if (existingAssignment) {
-                    req.flash('addAssignmentError', 'That name is already taken.');
-                    res.redirect('/manageAssignments');
-                    return;
-                }
+                Assignments.findOne({ 'name': req.body.name }, function (err, existingAssignment) {
 
-                // create the user
-                var newAssignment = new Assignments();
-
-                newAssignment.name = req.body.name;
-                newAssignment.startTime = req.body.startTime;
-                newAssignment.endTime = req.body.endTime;
-                newAssignment.solutionsAvailable = req.body.solutionsAvailable || false;
-                newAssignment.acceptSubmission = req.body.acceptSubmission || false;
-
-                newAssignment.save(function (err) {
                     if (err) {
                         req.flash('addAssignmentError', 'Oops! Something went wrong.');
                         res.redirect('/manageAssignments');
                         return;
                     }
 
-                    fileUploader.uploadProblems(req, res, function (err) {
-                        if (err) {
-                            if (err.message == 'FileTypeNotSupported') {
-                                req.flash('addAssignmentError', 'Select a zip file for uploading problems.');
-                            } else {
-                                req.flash('addAssignmentError', 'Oops! Something went wrong.');
-                            }
 
+                    // check to see if there's already a assignment with that email
+                    if (existingAssignment) {
+                        req.flash('addAssignmentError', 'That name is already taken.');
+                        res.redirect('/manageAssignments');
+                        return;
+                    }
+
+                    // create the user
+                    var newAssignment = new Assignments();
+
+                    newAssignment.name = req.body.name;
+                    newAssignment.startTime = req.body.startTime;
+                    newAssignment.endTime = req.body.endTime;
+                    newAssignment.solutionsAvailable = req.body.solutionsAvailable || false;
+                    newAssignment.acceptSubmission = req.body.acceptSubmission || false;
+
+
+                    newAssignment.save(function (err) {
+                        if (err) {
+                            console.log(err)
+                            req.flash('addAssignmentError', 'Oops! Something went wrong.');
                             res.redirect('/manageAssignments');
                             return;
-                        } else {
-                            fileUploader.uploadSolutions(req, res, function (err) {
-                                if (err) {
-                                    if (err.message == 'FileTypeNotSupported') {
-                                        req.flash('addAssignmentError', 'Select a zip file for uploading solutions.');
-                                    } else {
-                                        req.flash('addAssignmentError', 'Oops! Something went wrong.');
-                                    }
-                                } else {
-                                    req.flash('addAssignmentSuccess', 'Assignment added successfully.');
-                                }
-
-                                res.redirect('/manageAssignments');
-                                return;
-                            })
                         }
+                        
+                        req.flash('addAssignmentSuccess', 'Assignment added successfully.');
+
+                        res.redirect('/manageAssignments');
+                        return;
                     })
-                });
-            });
+                })
+            })
         });
     },
 
     // =========================================================================
-    // Edit Assignment ============================================================
+    // Edit Assignment =========================================================
     // =========================================================================
 
     editAssignment: function (req, res) {
 
-        console.log(req.body);
-
         // asynchronous
         process.nextTick(function () {
 
-            Assignments.findOne({ 'name': req.body.oldName }, function (err, existingAssignment) {
-
-                // if there are any errors, return the error
+            fileUploader.upload(req, res, function (err) {
                 if (err) {
-                    req.flash('editAssignmentError', 'Oops! Something went wrong.');
+                    console.log(err)
+                    if (err.message == 'FileTypeNotSupported') {
+                        req.flash('editAssignmentError', 'Select a zip file for uploading problems.');
+                    } else {
+                        req.flash('editAssignmentError', 'Oops! Something went wrong.');
+                    }
+
                     res.redirect('/manageAssignments');
                     return;
                 }
 
-                console.log(existingAssignment);
+                Assignments.findOne({ 'name': req.body.oldName }, function (err, existingAssignment) {
 
-                existingAssignment.name = req.body.name;
-                existingAssignment.startTime = req.body.startTime;
-                existingAssignment.endTime = req.body.endTime;
-                existingAssignment.solutionsAvailable = req.body.solutionsAvailable || false;
-                existingAssignment.feedbackAvailable = req.body.feedbackAvailable || false;
-                existingAssignment.acceptSubmission = req.body.acceptSubmission || false;
-
-                existingAssignment.save(function (err) {
                     if (err) {
                         req.flash('editAssignmentError', 'Oops! Something went wrong.');
                         res.redirect('/manageAssignments');
                         return;
                     }
-                    fileUploader.uploadProblems(req, res, function (err) {
-                        if (err) {
-                            if (err.message == 'FileTypeNotSupported') {
-                                req.flash('editAssignmentError', 'Select a zip file for uploading problems.');
-                            } else {
-                                req.flash('editAssignmentError', 'Oops! Something went wrong.');
-                            }
 
+                    existingAssignment.name = req.body.name;
+                    existingAssignment.startTime = req.body.startTime;
+                    existingAssignment.endTime = req.body.endTime;
+                    existingAssignment.solutionsAvailable = req.body.solutionsAvailable || false;
+                    existingAssignment.feedbackAvailable = req.body.feedbackAvailable || false;
+                    existingAssignment.acceptSubmission = req.body.acceptSubmission || false;
+
+                    existingAssignment.save(function (err) {
+                        if (err) {
+                            console.log(err)
+                            req.flash('editAssignmentError', 'Oops! Something went wrong.');
                             res.redirect('/manageAssignments');
                             return;
-                        } else {
-                            fileUploader.uploadSolutions(req, res, function (err) {
-                                if (err) {
-                                    if (err.message == 'FileTypeNotSupported') {
-                                        req.flash('editAssignmentError', 'Select a zip file for uploading solutions.');
-                                    } else {
-                                        req.flash('editAssignmentError', 'Oops! Something went wrong.');
-                                    }
-                                } else {
-                                    req.flash('editAssignmentSuccess', 'Assignment added successfully.');
-                                }
-
-                                res.redirect('/manageAssignments');
-                                return;
-                            })
                         }
+
+                        req.flash('editAssignmentSuccess', 'Assignment edited successfully.');
+
+                        res.redirect('/manageAssignments');
+                        return;
                     })
-                });
-            });
+                })
+            })
         });
     },
 

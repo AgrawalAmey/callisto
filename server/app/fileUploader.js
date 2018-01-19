@@ -1,9 +1,11 @@
 var formidable = require('formidable')
+var mkdirp = require('mkdirp')
 var multer = require('multer')
 var path = require('path')
 
 function FileUploader(basePath) {
-    
+    self = this
+
     this.problemsPath = 'assignments/problems'
     this.solutionsPath = 'assignments/solutions'
     this.submissionsPath = 'assignments/submissions'
@@ -30,49 +32,42 @@ function FileUploader(basePath) {
         cb(null, true);
     }
 
-    this.problemsStorage = multer.diskStorage({
+    this.storage = multer.diskStorage({
         destination: function (req, file, callback) {
-            callback(null, this.problemsPath + req.params.assignmentName)
+            if (file.fieldname == 'problems') {
+                prefix = self.problemsPath
+            } else if (file.fieldname == 'solutions') {
+                prefix = self.solutionsPath
+            } else if (file.fieldname == 'submissions') {
+                prefix = self.submissionsPath
+            }
+            dest = path.join(prefix, req.body.name)
+            mkdirp.sync(dest)
+            callback(null, dest)
         },
         filename: function (req, file, callback) {
-            callback(null, this.problemsFileName)   
+            switch (file.fieldname) {
+                case 'problems':
+                    callback(null, self.problemsFileName)
+                    break;
+                case 'solutions':
+                    callback(null, self.solutionsFileName)
+                    break;
+                case 'submissions':
+                    callback(null, req.user.username + '.zip')
+            } 
         }
     })
 
-    this.solutionsStorage = multer.diskStorage({
-        destination: function (req, file, callback) {
-            callback(null, this.solutionsPath + req.params.assignmentName)
-        },
-        filename: function (req, file, callback) {
-            callback(null, this.solutionsFileName)
-        }
-    })
 
-    this.submissionStorage = multer.diskStorage({
-        destination: function (req, file, callback) {
-            callback(null, this.submissionsPath + req.params.assignmentName)
-        },
-        filename: function (req, file, callback) {
-            callback(null, req.user.username + '.zip')
-        }
-    })
-
-    this.uploadProblems = multer({
-        storage: this.releaseStorage,
-        fileFilter: this.fileFilter,
-        fieldname: 'problems'
-    }).single('file')
-    
-    this.uploadSolutions = multer({
-        storage: this.solutionsStorage,
-        fileFilter: this.fileFilter,
-        fieldname: 'solutions'
-    }).single('file')
-
-    this.uploadSubmission = multer({
-        storage: this.submissionStorage,
+    this.upload = multer({
+        storage: this.storage,
         fileFilter: this.fileFilter
-    }).single('file')
+    }).fields([
+        { name: 'problems'},
+        { name: 'solutions'},
+        { name: 'submissions' }
+    ])
 }
 
 module.exports = new FileUploader()

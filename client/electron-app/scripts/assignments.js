@@ -40,9 +40,9 @@ function Assignments() {
 
     this.downloadAssignment = (assignmentName, assignmentURL, callback) => {
         var assignmentDir = this.getPath(assignmentName)
-
+        var remoteServerAddr = require('../config').remoteServerAddr
         var options = {
-            url: assignmentURL,
+            url: remoteServerAddr + assignmentURL,
             encoding: null
         }
 
