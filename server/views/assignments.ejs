@@ -31,7 +31,17 @@
                         <div class="hpanel">
                             <div class="panel-body">
                                 <div class="table-responsive">
-                                    <h4>Evaluative Assignments</h4>
+                                    <div class="col-lg-12">
+                                        <div class="col-lg-11">
+                                            <h4>Evaluative Assignments</h4>
+                                        </div>
+                                        <% if (user.isAdmin) { %>
+                                            <div class="col-lg-1">
+                                                <a data-toggle="modal" href="#addAssignmentModal"><i class="pe-7s-plus pe-2x"></i></a>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                    
                                     <% if (assignments.length == 0) { %>
                                         <tr>
                                             No evaluative assignments available.
@@ -49,6 +59,10 @@
                                                     <% } %>
                                                     <th>Solutions</th>
                                                     <th>Feedback</th>
+                                                    <% if (user.isAdmin) { %>
+                                                        <th></th>
+                                                        <th></th>
+                                                    <% } %>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -77,6 +91,14 @@
                                                             <td>Available</td>
                                                         <% } else { %>
                                                             <td>Not Available</td>
+                                                        <% } %>
+                                                        <% if (user.isAdmin) { %>
+                                                            <td>
+                                                                <a data-toggle="modal" data-id="<%= i %>" href="#editAssignmentModal"><i class="pe-7s-pen pe-lg"></i></a>
+                                                            </td>
+                                                            <td>
+                                                                <a data-toggle="modal" data-id="<%= i %>" href="#removeAssignmentModal"><i class="pe-7s-trash pe-lg"></i></a>
+                                                            </td>
                                                         <% } %>
                                                     </tr>
                                                     <% } %>
@@ -120,10 +142,240 @@
                 </div>
             </div>
         </div>
+
+        <% if (user.isAdmin) { %>
+            <div class="modal fade" id="addAssignmentModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Add Assignment</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form role="form" id="form_1" novalidate="novalidate" method="post" action="/addAssignment">
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" name="name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Start Time</label>
+                                            <div class="input-group date datetimepicker">
+                                                    <span class="input-group-addon">
+                                                        <span class="fa fa-calendar"></span>
+                                                    </span>
+                                                <input type="text" class="form-control" name="startTime">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>End Time</label>
+                                            <div class="input-group date datetimepicker">
+                                                    <span class="input-group-addon">
+                                                        <span class="fa fa-calendar"></span>
+                                                    </span>
+                                                <input type="text" class="form-control" name="endTime">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-primary">
+                                                <input type="checkbox" id="cb0" name="acceptSubmission">
+                                                <label for="cb0">Accept Submissions</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-primary">
+                                                <input type="checkbox" id="cb1" onchange="AddUploadProblemChange()">
+                                                <label for="cb1">Upload Problems</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" id="AddProblemFile">     
+                                            <label class="btn btn-default">
+                                                Select problem file <input type="file" name="problems">
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-primary">
+                                                <input type="checkbox" id="cb2" onchange="AddUploadSolutionChange()">
+                                                <label for="cb2">Upload Solutions</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group"  id="AddSolutionFile"> 
+                                            <label class="btn btn-default">
+                                                Select solution file <input type="file" name="solutions">
+                                            </label>
+                                        </div>
+                                        <!-- show error message -->
+                                        <% if (typeof addAssignmentError !== 'undefined' && addAssignmentError.length > 0) { %>
+                                            <div class="form-group">                                
+                                                <label class="error"><%= addAssignmentError %></label>
+                                            </div>
+                                        <% } %>
+                                        <!-- show success message -->
+                                        <% if (typeof addAssignmentSuccess !== 'undefined' && addAssignmentSuccess.length > 0) { %>
+                                            <div class="form-group">                                
+                                                <label class="success"><%= addAssignmentSuccess %></label>
+                                            </div>
+                                        <% } %>                                    
+                                        <div>
+                                            <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit</strong></button>
+                                        </div>
+                                    </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="editAssignmentModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title" name="oldNameHeader">Edit </h4>
+                        </div>
+                        <div class="modal-body">
+                            <form role="form" id="form_2" novalidate="novalidate" method="post" action="/editAssignment">
+                                        <div class="form-group">
+                                            <input type="hidden" class="form-control" name="oldName" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" name="name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Start Time</label>
+                                            <div class="input-group date datetimepicker">
+                                                    <span class="input-group-addon">
+                                                        <span class="fa fa-calendar"></span>
+                                                    </span>
+                                                <input type="text" class="form-control" name="startTime">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>End Time</label>
+                                            <div class="input-group date datetimepicker">
+                                                    <span class="input-group-addon">
+                                                        <span class="fa fa-calendar"></span>
+                                                    </span>
+                                                <input type="text" class="form-control" name="endTime">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-primary">
+                                                <input type="checkbox" id="cb3" name="acceptSubmission">
+                                                <label for="cb3">Accept Submissions</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-primary">
+                                                <input type="checkbox" id="cb4" onchange="EditUploadProblemChange()">
+                                                <label for="cb4">Upload Problems</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" id="EditProblemFile">     
+                                            <label class="btn btn-default">
+                                                Select problem file <input type="file" name="problems">
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-primary">
+                                                <input type="checkbox" id="cb5" onchange="EditUploadSolutionChange()">
+                                                <label for="cb5">Upload Solutions</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group"  id="EditSolutionFile"> 
+                                            <label class="btn btn-default">
+                                                Select solution file <input type="file" name="solutions">
+                                            </label>
+                                        </div>
+
+                                        <!-- show any errors -->
+                                        <% if (typeof editAssignmentError !== 'undefined' && editAssignmentError.length > 0) { %>
+                                        <div class="form-group">                                
+                                            <label class="error"><%= editAssignmentError %></label>
+                                        </div>
+                                        <% } %>
+                                        <!-- show any messages that come back with authentication -->
+                                        <% if (typeof editAssignmentSuccess !== 'undefined' && editAssignmentSuccess.length > 0) { %>
+                                        <div class="form-group">                                
+                                            <label class="success"><%= editAssignmentSuccess %></label>
+                                        </div>
+                                        <% } %>
+                                        <div>
+                                            <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit</strong></button>
+                                        </div>
+                                    </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal fade" id="removeAssignmentModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title" name="nameHeader">Are you sure you want to remove </h4>
+                        </div>
+                        <div class="modal-body">
+                            <form role="form" id="form_3" novalidate="novalidate" method="post" action="/removeAssignment">
+                                    <div class="form-group">
+                                        <input type="hidden" class="form-control" name="name" readonly>
+                                    </div>
+                                    <!-- show any errors -->
+                                    <% if (typeof removeAssignmentError !== 'undefined' && removeAssignmentError.length > 0) { %>
+                                    <div class="form-group">                                
+                                        <label class="error"><%= removeAssignmentError %></label>
+                                    </div>
+                                    <% } %>
+                                    <!-- show any messages that come back with authentication -->
+                                    <% if (typeof removeAssignmentSuccess !== 'undefined' && removeAssignmentSuccess.length > 0) { %>
+                                    <div class="form-group">                                
+                                        <label class="success"><%= removeAssignmentSuccess %></label>
+                                    </div>
+                                    <% } %>
+                                    <div>
+                                        <button class="btn btn-sm btn-default m-t-n-xs" type="submit"><strong>Yes</strong></button>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-sm btn-primary m-t-n-xs" data-dismiss="modal" type="button"><strong>No</strong></button>
+                                    </div>
+                                </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+
         <!-- Footer-->
         <footer class=footer>&copy; Team NNFL</footer>
-        <% include ./partials/js_imports.ejs %>
     </div>
+    <% include ./partials/js_imports.ejs %>
+    <script type="text/javascript">
+        function getAssignments() {
+            s = "<%= JSON.stringify(assignments) %>"
+            s = s.replace(/\\n/g, "\\n")  
+               .replace(/\\'/g, "\\'")
+               .replace(/\\"/g, '\\"')
+               .replace(/\\&/g, "\\&")
+               .replace(/\\r/g, "\\r")
+               .replace(/\\t/g, "\\t")
+               .replace(/\\b/g, "\\b")
+               .replace(/\\f/g, "\\f")
+               .replace(/&#34;/g, '"');
+            // remove non-printable and other non-valid JSON chars
+            s = s.replace(/[\u0000-\u0019]+/g,""); 
+            return JSON.parse(s);
+        }
+    </script>
+    <% if (user.isAdmin) { %>
+        <script type="text/javascript" src="./js/assignments.js"></script>
+    <% } %>
 </body>
 
 </html>
