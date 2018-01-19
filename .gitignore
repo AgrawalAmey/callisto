@@ -5,3 +5,4 @@ assignments/
 passwords.csv
 */.DS_Store
 client/electron-app/node_modules
+.vscode
