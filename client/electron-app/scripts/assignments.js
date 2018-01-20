@@ -42,7 +42,7 @@ function Assignments() {
         var assignmentDir = this.getPath(assignmentName)
         var remoteServerAddr = require('../config').remoteServerAddr
         var options = {
-            url: remoteServerAddr + assignmentURL,
+            url: 'http://' + remoteServerAddr + assignmentURL,
             encoding: null
         }
 

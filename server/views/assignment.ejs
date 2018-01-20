@@ -107,7 +107,7 @@
                                                 <tr>
                                                     <th>Name</th>
                                                     <th>Score</th>
-                                                    <% if (assignment.ssAvailable) { %>
+                                                    <% if (assignment.isAvailable) { %>
                                                         <th>s</th> 
                                                     <% } %>
                                                 </tr>
@@ -116,7 +116,7 @@
                                                 <% for (var  i=0; i<notebooks.length; i++) { %>
                                                     <tr>
                                                         <td>
-                                                            <a href="#"><%= notebooks[i] %></a>
+                                                            <a onclick="openNotebook('<%= assignment.name %>', '<%= notebooks[i] %>')"><%= notebooks[i] %></a>
                                                         </td>
                                                         <td><%= notebooks[i].score %></td>
                                                         <!--td><%= assignment.endTime %></td-->

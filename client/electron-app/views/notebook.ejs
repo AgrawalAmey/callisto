@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Neural Networks and Fuzzy Logic</title>
+    <link rel=stylesheet href=../static/css/client.css>
+  </head>
+  <body>
+    <webview id="webview" src="<%= notebookURL %>">
+    </webview>
+    <script>
+    const webview = document.querySelector('webview')
+      webview.addEventListener('console-message', (e) => {
+        console.log('Guest page logged a message:', e)
+      })
+    </script>
+  </body>
+</html>

@@ -24,7 +24,11 @@ const setChannels = (renderer, session) => {
         assignments.getNotebooksList(assignmentName, assignmentURL, (notebooksList) => {
             event.sender.send('getNotebooksList-reply', notebooksList)
         })
-    })
+    });
+
+    ipcMain.on('openNotebook', (event, assignement, notebook) => {
+        renderer.renderNotebookIndex(assignement, notebook);
+    });
 }
 
 module.exports = { setChannels }

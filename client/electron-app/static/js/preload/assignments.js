@@ -13,6 +13,10 @@ function Assignments() {
 
         // return notebooksList
     }
+
+    this.openNotebook = (assignement, notebook) => {
+        ipcRenderer.send('openNotebook', assignement, notebook);
+    }
 }
 
 global.assignments = new Assignments()

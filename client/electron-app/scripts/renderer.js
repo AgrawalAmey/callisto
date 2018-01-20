@@ -69,6 +69,17 @@ function Renderer(mainWindow){
         ejse.data('condaInstallError', message)
         this.mainWindow.loadURL(path.join('file://', __dirname, '../views', 'condaInstaller.ejs'));
     }
+
+    this.renderNotebookIndex = (assignement, notebook) => {
+        assignement = assignement.replace(/ /g, "%20")
+        notebook = notebook.replace(/ /g, "%20")
+
+        var jupyterAddr = require('../config').jupyterAddr
+        var notebookURL = "http://" + jupyterAddr + "/notebooks/" + assignement + "/" + notebook;
+
+        ejse.data('notebookURL', notebookURL);
+        this.mainWindow.loadURL(path.join('file://', __dirname, '../views', 'notebook.ejs'));
+    }
 }
 
 module.exports = Renderer
