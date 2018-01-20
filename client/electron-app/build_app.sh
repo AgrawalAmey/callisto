@@ -9,7 +9,7 @@ set -x
 buid_for_linux()
 {
     electron-packager . nnfl-app \
-        --overwrite --asar --platform=linux \
+        --overwrite --platform=linux \
         --arch=x64 --icon=static/img/icons/1024x1024.png \
         --overwrite --ignore=conda_installers/Anaconda3-5.0.1-MacOSX-x86_64.sh \
         --ignore=conda_installers/Anaconda3-5.0.1-Windows-x86_64.exe \
@@ -19,7 +19,7 @@ buid_for_linux()
 buid_for_mac()
 {
     electron-packager . nnfl-app \
-        --overwrite --asar --platform=darwin \
+        --overwrite --platform=darwin \
         --arch=x64 --icon=static/img/icons/icon.icns \
         --overwrite --ignore=conda_installers/Anaconda3-5.0.1-Linux-x86_64.sh \
         --ignore=conda_installers/Anaconda3-5.0.1-Windows-x86_64.exe \
@@ -29,7 +29,7 @@ buid_for_mac()
 buid_for_windows()
 {
     electron-packager . nnfl-app \
-        --overwrite --asar --platform=win32 \
+        --overwrite --platform=win32 \
         --arch=x64 --icon=static/img/icons/icon.ico \
         --overwrite --ignore=conda_installers/Anaconda3-5.0.1-MacOSX-x86_64.sh \
         --ignore=conda_installers/Anaconda3-5.0.1-Linux-x86_64.sh \
