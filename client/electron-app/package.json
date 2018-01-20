@@ -2,7 +2,7 @@
   "name": "NNFL-App",
   "version": "1.0.0",
   "description": "Official app for NNFL",
-  "productName": "NNFL App",
+  "productName": "NNFL-App",
   "main": "main.js",
   "scripts": {
     "start": "electron ."

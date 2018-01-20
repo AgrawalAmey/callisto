@@ -1,20 +1,20 @@
 // Load vender libraries
-const electron = require('electron');
-const ejse = require('ejs-electron');
-const path = require('path');
-const request = require('request');
-const url = require('url');
+const electron = require('electron')
+const ejse = require('ejs-electron')
+const path = require('path')
+const request = require('request')
+const url = require('url')
 
 // Load custom scripts
-const condaInstaller = require('./condaInstaller')
-const ipcChannels = require('./scripts/ipcChannels.js');
-const Renderer = require('./scripts/renderer.js');
-const remoteServerAddrHandler = require('./scripts/remoteServerAddrHandler.js');
+const ipcChannels = require('./scripts/ipcChannels')
+const Renderer = require('./scripts/renderer')
+const remoteServerAddrHandler = require('./scripts/remoteServerAddrHandler')
+const Session = require('./scripts/session')
 
 // Module to control application life.
-const app = electron.app;
+const app = electron.app
 // Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow;
+const BrowserWindow = electron.BrowserWindow
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -25,20 +25,22 @@ function createWindow () {
     mainWindow = new BrowserWindow({
         width: 800, 
         height: 600,
-        icon: path.join(__dirname, 'static/img/icons/64x64.png')
+        icon: path.join(__dirname, 'static/img/icons/1024x1024.png')
     });
 
     mainWindow.maximize();
 
-    // Set event handlers
-    ipcChannels.setChannels(mainWindow);
 
-    renderer = Renderer(mainWindow)
-    
+    renderer = new Renderer(mainWindow)
+    session = new Session()
+
+    // Set event handlers
+    ipcChannels.setChannels(renderer, session)
+
     renderer.render()
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools()
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
@@ -46,7 +48,8 @@ function createWindow () {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         mainWindow = null;
-    });
+        session.logout()
+    })
 }
 
 // This method will be called when Electron has finished

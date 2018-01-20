@@ -34,7 +34,7 @@ buid_for_windows()
         --overwrite --ignore=conda_installers/Anaconda3-5.0.1-MacOSX-x86_64.sh \
         --ignore=conda_installers/Anaconda3-5.0.1-Linux-x86_64.sh \
         --version-string.CompanyName=CE --version-string.FileDescription=CE \
-        --version-string.ProductName="NNFL App" \
+        --version-string.ProductName="NNFL-App" \
         --prune=true --out=release-builds
 }
 

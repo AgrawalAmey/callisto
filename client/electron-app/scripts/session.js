@@ -14,4 +14,4 @@ function Session() {
     }
 }
 
-module.exports = new Session()
+module.exports = Session

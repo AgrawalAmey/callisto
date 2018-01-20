@@ -9,7 +9,7 @@ function  CondaInstaller() {
 
     this.getInstallationPath = () => {
         var userDataPath = app.getPath('userData')
-        return path.join(userDataPath, 'conda_env')        
+        return path.join(userDataPath, 'conda_env')
     }
 
     this.getInstallerPath = () => {
@@ -30,22 +30,22 @@ function  CondaInstaller() {
                 break;
         }
         
-        return path.join(basePath, installtionFile)
+        return path.join(basePath, installtionFile) 
     }
 
     this.getInstallationCmd = () => {
         var installerPath = this.getInstallerPath()
         var installationPath = this.getInstallationPath()
 
-        switch (platform) {
+        switch (this.platform) {
             case 'linux':
-                var cmd = '${installerPath} -bfp ${installationPath}'
+                var cmd = installerPath + ' -bfp ' + installationPath
                 break;
             case 'darwin':
-                var cmd = '${installerPath} -bfp ${installationPath}'
+                var cmd = installerPath + ' -bfp ' + installationPath
                 break;
             case 'win32':
-                var cmd = '${installerPath} /S /D=${installationPath}'
+                var cmd = installerPath + ' /S /D=' + installationPath
                 break;
             default:
                 throw new Error("Unsupported operating system.")
@@ -64,18 +64,14 @@ function  CondaInstaller() {
         }
 
         exec(cmd, options, (err, stdout, stderr) => {
-            if (err) {
-                throw err;
-                // node couldn't execute the command
-                return;
-            }
+            if (err) throw err
 
             if(this.platform == 'linux' || this.platform == 'darwin') {
-                callback()
+                callback(err)
             } else {
-                this.waitTillWindowsInstallation(callback)
-                setTimeout(myFunc, 1500, 'funky');
-                fs.existsSync(credsPath)
+                this.waitTillWindowsInstallation(() => {
+                    callback(err)
+                })
             }
         });
     }

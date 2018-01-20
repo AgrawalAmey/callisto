@@ -13,17 +13,25 @@
 	                    <h1>Neural Nets & Fuzzy Logic</h1>
 	                    <small>Please enter Server details to proceed</small>
 	                </div>
-	                <div class="hpanel">
-	                            <!-- show any messages that come back with authentication -->
-	                            <% if (typeof message !== 'undefined' && message.length > 0) { %>
-									<div>                                
-										<label class="error" for="remoteServerAddr"><%= message %></label>
-									</div>
-	                            <% } else { %>
-									<div>
+	                <div class="hpanel" style="margin-top: 50px">
+						<!-- show any messages that come back with authentication -->
+						<% if (typeof condaInstallError !== 'undefined' && condaInstallError.length > 0) { %>
+							<div>                                
+								<label class="error" for="remoteServerAddr"><%= condaInstallError %></label>
+							</div>
+						<% } else { %>
+							<div class="text-center m-b-md">
+								<div class="row">
+									<div class="col-md-3"></div>
+									<div class="col-md-6">
 										<img src="../static/img/loader.gif" alt="loader">
-										<h4> Setting up your environment. It might take a while.</h4>
-				                	</div>
+									</div>
+									<div class="col-md-3"></div>
+								</div>
+								<h4 style="font-weight: 600"> Setting up your environment. </h4>
+								<h4> This might take a while. </h4>
+							</div>
+						<% } %>
 	            </div>
 	        </div>
 	        <div class="row">

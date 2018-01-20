@@ -3,22 +3,15 @@ const {app, ipcMain} = require('electron');
 
 // Load custom scripts
 const assignments = require('./assignments')
-const helpers = require('./helpers.js')
-const session = require('./session')
 
-const setChannels = (mainWindow) => {
+const setChannels = (renderer, session) => {
     // On submission of server address form
     ipcMain.on('serverBtn-click', function (event, remoteServerAddr) {
-        helpers.renderWebviewIndex(mainWindow, remoteServerAddr);
+        renderer.checkRemoteServerAddressAndRender(remoteServerAddr)
     });
     
     // Delete user credentials on logout
     ipcMain.on('logout', function () {
-        session.logout()
-    });
-
-    // Delete user credentials on closing main window
-    mainWindow.on('closed', function() {
         session.logout()
     });
 

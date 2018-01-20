@@ -5,11 +5,13 @@ const ejse = require('ejs-electron');
 
 // Load custom scripts
 const condaInstaller = require('./condaInstaller')
-const remoteServerAddrHandler = require('./remoteServerAddrHandler');
+const remoteServerAddrHandler = require('./remoteServerAddrHandler')
 
 function Renderer(mainWindow){
-    this.mainWindow = mainWindow
+    self = this
 
+    this.mainWindow = mainWindow
+    
     this.render = () => {
         var remoteServerAddr = remoteServerAddrHandler.getRemoteServerAddr();
 
@@ -19,10 +21,10 @@ function Renderer(mainWindow){
             this.renderCondaInstaller(undefined)
             condaInstaller.install((err) => {
                 if (err) {
-                    this.renderCondaInstaller("Installation failed.")
+                    self.renderCondaInstaller("Installation failed.")
                     return;
                 } else {
-                    this.checkRemoteServerAddressAndRender(remoteServerAddr)
+                    self.checkRemoteServerAddressAndRender(remoteServerAddr)
                 }
             })
         }
@@ -42,13 +44,13 @@ function Renderer(mainWindow){
             if (err) {
                 console.log(err);
                 // Render retry page
-                this.renderRemoteServerAddr('Cannot connect to remote server', remoteServerAddr)
+                self.renderRemoteServerAddr('Cannot connect to remote server', remoteServerAddr)
                 return;
             }
             // Save address
             remoteServerAddrHandler.saveRemoteServerAddr(remoteServerAddr);
             // Render webview
-            this.renderWebviewIndex()
+            self.renderWebviewIndex(remoteServerURL)
         });
     }
 
@@ -58,7 +60,7 @@ function Renderer(mainWindow){
         this.mainWindow.loadURL(path.join('file://', __dirname, '../views', 'remoteAddr.ejs'));
     }
 
-    this.renderWebviewIndex = () => {
+    this.renderWebviewIndex = (remoteServerURL) => {
         ejse.data('remoteServerAddr', remoteServerURL);
         this.mainWindow.loadURL(path.join('file://', __dirname, '../views', 'webview.ejs'));
     }
