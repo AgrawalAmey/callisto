@@ -58,8 +58,8 @@ module.exports = {
                     res.render('assignment.ejs', {
                         user: req.user,
                         assignment: assignment,
-                        // notebooks: ["1", "2"],
-                        // solutions: ["1", "3"],
+                        notebooks: ["1.ipnynb", "3.ipnynb"],
+                        solutions: ["1.ipnynb", "3.ipnynb"],
                         uploadAssignmentError: req.flash('uploadAssignmentError'),
                         uploadAssignmentSuccess: req.flash('uploadAssignmentSuccess'),
                     });

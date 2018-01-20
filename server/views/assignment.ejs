@@ -97,7 +97,7 @@
                                                             <div class="panel-body">
                                 <div class="table-responsive">
                                     <h4>Assignment Notebooks</h4>
-                                    <% if (assignment.notebooks.length == 0) { %>
+                                    <% if (notebooks.length == 0) { %>
                                         <tr>
                                             No notebooks available.
                                         </tr>
@@ -113,16 +113,16 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% for (var  i=0; i<assignment.notebooks.length; i++) { %>
+                                                <% for (var  i=0; i<notebooks.length; i++) { %>
                                                     <tr>
                                                         <td>
-                                                            <a href="#"><%= assignment.notebooks[i] %></a>
+                                                            <a onclick="openNotebook('<%= assignment.name %>', '<%= notebooks[i] %>')"><%= notebooks[i] %></a>
                                                         </td>
-                                                        <td><%= assignment.notebooks[i].score %></td>
+                                                        <td><%= notebooks[i].score %></td>
                                                         <!--td><%= assignment.endTime %></td-->
                                                         <% if (assignment.solutionsAvailable) { %>
                                                         <td>
-                                                            <a href="#"><%= assignment.notebooks[i] %></a>
+                                                            <a href="#"><%= solutions[i] %></a>
                                                         </td>
                                                         <% } %>
                                                     </tr>

@@ -32,5 +32,16 @@ module.exports = {
             ejse.data('remoteServerAddr', remoteServerURL);
             mainWindow.loadURL(path.join('file://', __dirname, '../views', 'webview.ejs'));
         });
+    },
+
+    renderNotebookIndex: function (mainWindow, assignement, notebook) {
+        assignement = assignement.replace(/ /g, "%20");
+        notebook = notebook.replace(/ /g, "%20");
+
+        // var notebookURL = "http://localhost:8888/notebooks/" + assignement + "/" + notebook;
+        var notebookURL = "http://localhost:8888";
+
+        ejse.data('notebookURL', notebookURL);
+        mainWindow.loadURL(path.join('file://', __dirname, '../views', 'notebook.ejs'));
     }
 }

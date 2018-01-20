@@ -9,10 +9,13 @@ function Assignments() {
                          assignmentURL)
         ipcRenderer.on('getNotebooksList-reply', function(event, arg) {
             console.log(arg); // prints "pong"
-            return arg;
         });
 
         // return notebooksList
+    }
+
+    this.openNotebook = (assignement, notebook) => {
+        ipcRenderer.send('openNotebook', assignement, notebook);
     }
 }
 
