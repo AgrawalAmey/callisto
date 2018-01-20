@@ -4,5 +4,8 @@ docs/
 assignments/
 passwords.csv
 */.DS_Store
+.DS_Store
 client/electron-app/node_modules
-.vscode
+.vscode/
+client/electron-app/conda_installers/
+client/electron-app/release-builds/
