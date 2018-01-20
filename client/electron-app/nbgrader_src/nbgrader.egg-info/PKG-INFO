@@ -1,0 +1,19 @@
+Metadata-Version: 1.1
+Name: nbgrader
+Version: 0.5.4
+Summary: A system for assigning and grading notebooks
+Home-page: https://github.com/jupyter/nbgrader
+Author: Jupyter Development Team
+Author-email: jupyter@googlegroups.com
+License: BSD
+Description-Content-Type: UNKNOWN
+Description: UNKNOWN
+Keywords: Notebooks,Grading,Homework
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5

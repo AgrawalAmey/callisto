@@ -6,8 +6,9 @@ const request = require('request');
 const url = require('url');
 
 // Load custom scripts
+const condaInstaller = require('./condaInstaller')
 const ipcChannels = require('./scripts/ipcChannels.js');
-const helpers = require('./scripts/helpers.js');
+const Renderer = require('./scripts/renderer.js');
 const remoteServerAddrHandler = require('./scripts/remoteServerAddrHandler.js');
 
 // Module to control application life.
@@ -20,32 +21,32 @@ const BrowserWindow = electron.BrowserWindow;
 let mainWindow;
 
 function createWindow () {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({
-    width: 800, 
-    height: 600,
-    icon: path.join(__dirname, 'static/img/icons/64x64.png')
-  });
+    // Create the browser window.
+    mainWindow = new BrowserWindow({
+        width: 800, 
+        height: 600,
+        icon: path.join(__dirname, 'static/img/icons/64x64.png')
+    });
 
-  mainWindow.maximize();
+    mainWindow.maximize();
 
-  // Set event handlers
-  ipcChannels.setChannels(mainWindow);
+    // Set event handlers
+    ipcChannels.setChannels(mainWindow);
 
-  // Render webview
-  var remoteServerAddr = remoteServerAddrHandler.getRemoteServerAddr();
-  helpers.renderWebviewIndex(mainWindow, remoteServerAddr);
+    renderer = Renderer(mainWindow)
+    
+    renderer.render()
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+    // Open the DevTools.
+    mainWindow.webContents.openDevTools();
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null;
-  });
+    // Emitted when the window is closed.
+    mainWindow.on('closed', function () {
+        // Dereference the window object, usually you would store windows
+        // in an array if your app supports multi windows, this is the time
+        // when you should delete the corresponding element.
+        mainWindow = null;
+    });
 }
 
 // This method will be called when Electron has finished
@@ -55,18 +56,18 @@ app.on('ready', createWindow);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+    // On OS X it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
 });
 
 app.on('activate', function () {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) {
-    createWindow();
-  }
+    // On OS X it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (mainWindow === null) {
+        createWindow();
+    }
 });
 

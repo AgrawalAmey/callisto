@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ./partials/head.ejs %>
+    <meta charset="UTF-8">
+    <title>Neural Networks and Fuzzy Logic</title>
+  </head>
+  <body class="blank">
+	    <div class="login-container">
+	        <div class="row">
+	            <div class="col-md-12">
+	                <div class="text-center m-b-md">
+	                    <h1>Neural Nets & Fuzzy Logic</h1>
+	                    <small>Please enter Server details to proceed</small>
+	                </div>
+	                <div class="hpanel">
+	                            <!-- show any messages that come back with authentication -->
+	                            <% if (typeof message !== 'undefined' && message.length > 0) { %>
+									<div>                                
+										<label class="error" for="remoteServerAddr"><%= message %></label>
+									</div>
+	                            <% } else { %>
+									<div>
+										<img src="../static/img/loader.gif" alt="loader">
+										<h4> Setting up your environment. It might take a while.</h4>
+				                	</div>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="col-md-12 text-center">
+	                &copy; Team NNFL
+	            </div>
+	        </div>
+	    </div>
+	    
+	    <% include ./partials/js_imports.ejs %>
+	</body>
+</html>

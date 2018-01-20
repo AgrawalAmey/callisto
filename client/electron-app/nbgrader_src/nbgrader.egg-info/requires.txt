@@ -1,0 +1,14 @@
+sqlalchemy
+python-dateutil
+jupyter
+notebook>=4.2
+nbconvert>=4.2
+nbformat
+traitlets
+jupyter_core
+jupyter_client
+tornado
+six>=1.9
+requests
+jsonschema
+alembic

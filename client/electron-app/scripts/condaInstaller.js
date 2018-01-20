@@ -13,7 +13,7 @@ function  CondaInstaller() {
     }
 
     this.getInstallerPath = () => {
-        var basePath = path.join(__dirname, 'conda_installers')
+        var basePath = path.join(__dirname, '..','conda_installers')
         
         switch (this.platform) {
             case 'linux':
@@ -81,14 +81,23 @@ function  CondaInstaller() {
     }
 
     this.waitTillWindowsInstallation = (callback) => {
-        var installationPath = this.getInstallationPath()
-        var pyFilePath = path.join(installationPath, 'python.exe')
-
-        if (fs.existsSync(pyFilePath)){
+        if (this.isInstalled()){
             callback()
         } else {
             setTimeout(waitTillWindowsInstallation, 10000, callback)
         }
+    }
+
+    this.isInstalled = () => {
+        var installationPath = this.getInstallationPath()
+        
+        if(this.platform == 'linux' || this.platform == 'darwin') {
+            var pyFilePath = path.join(installationPath, 'bin','python')
+        } else {
+            var pyFilePath = path.join(installationPath, 'python.exe')
+        }
+        
+        return fs.existsSync(pyFilePath)
     }
 }
 
