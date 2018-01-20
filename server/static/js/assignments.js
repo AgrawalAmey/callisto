@@ -71,3 +71,84 @@ function EditUploadSolutionChange() {
 }
 
 EditUploadSolutionChange();
+
+$('.datetimepicker').datetimepicker();
+
+$("#addAssignmentForm").validate({
+    rules: {
+        name: {
+            required: true
+        },
+        startTime: {
+            required: true,
+            date: true
+        },
+        endTime: {
+            required: true,
+            date: true
+        }
+    },
+    submitHandler: function(form) {
+        if($('#cb1').is(":checked")) {
+            var addFile = $('#addProblems').val();
+            if(addFile === '' || addFile == undefined) {
+                return; // to do: return error message
+            }
+        }
+
+        if($('#cb2').is(":checked")) {
+            var addFile = $('#addSolutions').val();
+            if(addFile === '' || addFile == undefined) {
+                return; // to do: return error message
+            }
+        }
+
+        form.submit();
+    }
+});
+
+$("#editAssignmentForm").validate({
+    rules: {
+        oldName: {
+            required: true
+        },
+        name: {
+            required: true
+        },
+        startTime: {
+            required: true,
+            date: true
+        },
+        endTime: {
+            required: true,
+            date: true
+        }
+    },
+    submitHandler: function(form) {
+        if($('#cb4').is(":checked")) {
+            var addFile = $('#editProblems').val();
+            if(addFile === '' || addFile == undefined) {
+                return; // to do: return error message
+            }
+        }
+
+        if($('#cb5').is(":checked")) {
+            var addFile = $('#editSolutions').val();
+            if(addFile === '' || addFile == undefined) {
+                return; // to do: return error message
+            }
+        }
+
+        form.submit();
+    }
+});
+$("#removeAssignmentForm").validate({
+    rules: {
+        name: {
+            required: true
+        }
+    },
+    submitHandler: function(form) {
+        form.submit();
+    }
+});

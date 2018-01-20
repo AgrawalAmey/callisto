@@ -154,7 +154,7 @@
                             <h4 class="modal-title">Add Assignment</h4>
                         </div>
                         <div class="modal-body">
-                            <form role="form" id="form_1" novalidate="novalidate" method="post" action="/addAssignment">
+                            <form role="form" id="addAssignmentForm" novalidate="novalidate" method="post" action="/addAssignment">
                                         <div class="form-group">
                                             <label>Name</label>
                                             <input type="text" class="form-control" name="name">
@@ -191,7 +191,7 @@
                                         </div>
                                         <div class="form-group" id="AddProblemFile">     
                                             <label class="btn btn-default">
-                                                Select problem file <input type="file" name="problems">
+                                                Select problem file <input type="file" name="problems" id="addProblems">
                                             </label>
                                         </div>
                                         <div class="form-group">
@@ -202,7 +202,7 @@
                                         </div>
                                         <div class="form-group"  id="AddSolutionFile"> 
                                             <label class="btn btn-default">
-                                                Select solution file <input type="file" name="solutions">
+                                                Select solution file <input type="file" name="solutions" id="addSolutions">
                                             </label>
                                         </div>
                                         <!-- show error message -->
@@ -236,7 +236,7 @@
                             <h4 class="modal-title" name="oldNameHeader">Edit </h4>
                         </div>
                         <div class="modal-body">
-                            <form role="form" id="form_2" novalidate="novalidate" method="post" action="/editAssignment">
+                            <form role="form" id="editAssignmentForm" novalidate="novalidate" method="post" action="/editAssignment">
                                         <div class="form-group">
                                             <input type="hidden" class="form-control" name="oldName" readonly>
                                         </div>
@@ -276,7 +276,7 @@
                                         </div>
                                         <div class="form-group" id="EditProblemFile">     
                                             <label class="btn btn-default">
-                                                Select problem file <input type="file" name="problems">
+                                                Select problem file <input type="file" name="problems" id="editProblems">
                                             </label>
                                         </div>
                                         <div class="form-group">
@@ -287,7 +287,7 @@
                                         </div>
                                         <div class="form-group"  id="EditSolutionFile"> 
                                             <label class="btn btn-default">
-                                                Select solution file <input type="file" name="solutions">
+                                                Select solution file <input type="file" name="solutions" id="editSolutions">
                                             </label>
                                         </div>
 
@@ -323,7 +323,7 @@
                             <h4 class="modal-title" name="nameHeader">Are you sure you want to remove </h4>
                         </div>
                         <div class="modal-body">
-                            <form role="form" id="form_3" novalidate="novalidate" method="post" action="/removeAssignment">
+                            <form role="form" id="removeAssignmentForm" novalidate="novalidate" method="post" action="/removeAssignment">
                                     <div class="form-group">
                                         <input type="hidden" class="form-control" name="name" readonly>
                                     </div>
@@ -350,6 +350,45 @@
                     </div>
                 </div>
             </div>
+
+            <% if (typeof alterAssignmentSuccess !== 'undefined' && alterAssignmentSuccess.length > 0) { %>
+            <div class="modal fade" id="alterAssignmentSuccessModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">                                
+                                <label class="success"><%= alterAssignmentSuccess %></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+
+            <% if (typeof alterAssignmentError !== 'undefined' && alterAssignmentError.length > 0) { %>
+            <div class="modal fade" id="alterAssignmentErrorModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">                                
+                                <label class="success"><%= alterAssignmentError %></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+
         <% } %>
 
         <!-- Footer-->
@@ -357,6 +396,15 @@
     </div>
     <% include ./partials/js_imports.ejs %>
     <script type="text/javascript">
+
+        <% if (typeof alterAssignmentSuccess !== 'undefined' && alterAssignmentSuccess.length > 0) { %>
+            $('#alterAssignmentSuccessModal').modal('show');
+        <% } %>
+
+        <% if (typeof alterAssignmentError !== 'undefined' && alterAssignmentError.length > 0) { %>
+            $('#alterAssignmentErrorModal').modal('show');
+        <% } %>
+
         function getAssignments() {
             s = "<%= JSON.stringify(assignments) %>"
             s = s.replace(/\\n/g, "\\n")  

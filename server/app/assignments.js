@@ -24,7 +24,9 @@ module.exports = {
                 }
                 res.render('assignments.ejs', {
                     user: req.user,
-                    assignments: assignments
+                    assignments: assignments,
+                    alterAssignmentError: req.flash('alterAssignmentError'),
+                    alterAssignmentSuccess: req.flash('alterAssignmentSuccess')
                 })
             })
         })
@@ -189,28 +191,28 @@ module.exports = {
                 if (err) {
                     console.log(err)
                     if (err.message == 'FileTypeNotSupported') {
-                        req.flash('addAssignmentError', 'Select a zip file for uploading problems.');
+                        req.flash('alterAssignmentError', 'Select a zip file for uploading problems.');
                     } else {
-                        req.flash('addAssignmentError', 'Oops! Something went wrong.');
+                        req.flash('alterAssignmentError', 'Oops! Something went wrong.');
                     }
 
-                    res.redirect('/manageAssignments');
+                    res.redirect('/assignments');
                     return;
                 }
 
                 Assignments.findOne({ 'name': req.body.name }, function (err, existingAssignment) {
 
                     if (err) {
-                        req.flash('addAssignmentError', 'Oops! Something went wrong.');
-                        res.redirect('/manageAssignments');
+                        req.flash('alterAssignmentError', 'Oops! Something went wrong.');
+                        res.redirect('/assignments');
                         return;
                     }
 
 
                     // check to see if there's already a assignment with that email
                     if (existingAssignment) {
-                        req.flash('addAssignmentError', 'That name is already taken.');
-                        res.redirect('/manageAssignments');
+                        req.flash('alterAssignmentError', 'That name is already taken.');
+                        res.redirect('/assignments');
                         return;
                     }
 
@@ -227,14 +229,14 @@ module.exports = {
                     newAssignment.save(function (err) {
                         if (err) {
                             console.log(err)
-                            req.flash('addAssignmentError', 'Oops! Something went wrong.');
-                            res.redirect('/manageAssignments');
+                            req.flash('alterAssignmentError', 'Oops! Something went wrong.');
+                            res.redirect('/assignments');
                             return;
                         }
                         
-                        req.flash('addAssignmentSuccess', 'Assignment added successfully.');
+                        req.flash('alterAssignmentSuccess', 'Assignment added successfully.');
 
-                        res.redirect('/manageAssignments');
+                        res.redirect('/assignments');
                         return;
                     })
                 })
@@ -255,20 +257,20 @@ module.exports = {
                 if (err) {
                     console.log(err)
                     if (err.message == 'FileTypeNotSupported') {
-                        req.flash('editAssignmentError', 'Select a zip file for uploading problems.');
+                        req.flash('alterAssignmentError', 'Select a zip file for uploading problems.');
                     } else {
-                        req.flash('editAssignmentError', 'Oops! Something went wrong.');
+                        req.flash('alterAssignmentError', 'Oops! Something went wrong.');
                     }
 
-                    res.redirect('/manageAssignments');
+                    res.redirect('/assignments');
                     return;
                 }
 
                 Assignments.findOne({ 'name': req.body.oldName }, function (err, existingAssignment) {
 
                     if (err) {
-                        req.flash('editAssignmentError', 'Oops! Something went wrong.');
-                        res.redirect('/manageAssignments');
+                        req.flash('alterAssignmentError', 'Oops! Something went wrong.');
+                        res.redirect('/assignments');
                         return;
                     }
 
@@ -281,14 +283,14 @@ module.exports = {
                     existingAssignment.save(function (err) {
                         if (err) {
                             console.log(err)
-                            req.flash('editAssignmentError', 'Oops! Something went wrong.');
-                            res.redirect('/manageAssignments');
+                            req.flash('alterAssignmentError', 'Oops! Something went wrong.');
+                            res.redirect('/assignments');
                             return;
                         }
 
-                        req.flash('editAssignmentSuccess', 'Assignment edited successfully.');
+                        req.flash('alterAssignmentSuccess', 'Assignment edited successfully.');
 
-                        res.redirect('/manageAssignments');
+                        res.redirect('/assignments');
                         return;
                     })
                 })
@@ -310,13 +312,13 @@ module.exports = {
 
                 // if there are any errors, return the error
                 if (err) {
-                    req.flash('removeAssignmentError', 'Oops! Something went wrong.');
-                    res.redirect('/manageAssignments');
+                    req.flash('alterAssignmentError', 'Oops! Something went wrong.');
+                    res.redirect('/assignments');
                     return;
                 }
 
-                req.flash('removeAssignmentSuccess', 'Assignment removed successfully.');
-                res.redirect('/manageAssignments');
+                req.flash('alterAssignmentSuccess', 'Assignment removed successfully.');
+                res.redirect('/assignments');
                 return;
             });
         });
@@ -336,12 +338,12 @@ module.exports = {
                 // if there are any errors, return the error
                 if (err) {
                     req.flash('updateNotebooksDatabase', 'Oops! Something went wrong.');
-                    res.redirect('/manageAssignments');
+                    res.redirect('/assignments');
                     return;
                 }
 
                 req.flash('updateNotebooksDatabase', 'Assignment removed successfully.');
-                res.redirect('/manageAssignments');
+                res.redirect('/assignments');
                 return;
             });
         });
