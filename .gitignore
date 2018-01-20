@@ -9,3 +9,4 @@ client/electron-app/node_modules
 .vscode/
 client/electron-app/conda_installers/
 client/electron-app/release-builds/
+client/electron-app/nbgrader_src/
