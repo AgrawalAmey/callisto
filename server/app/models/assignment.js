@@ -5,13 +5,19 @@ var ShortId = require('mongoose-minid');
 var assignmentSchema = mongoose.Schema({
     name : {
         type: String,
-        unique: true
+        unique: true,
+        required: true
     },
-    startTime: String,
-    endTime : String,
+    startTime: {
+        type: String,
+        required: true
+    },
+    endTime: {
+        type: String,
+        required: true
+    },
     acceptSubmission: Boolean,
     solutionsAvailable: Boolean,
-    feedbackAvailable: Boolean,
     whoSubmitted: [String],
     notebooks: [String],
     scores: {

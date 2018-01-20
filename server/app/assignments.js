@@ -276,7 +276,6 @@ module.exports = {
                     existingAssignment.startTime = req.body.startTime;
                     existingAssignment.endTime = req.body.endTime;
                     existingAssignment.solutionsAvailable = req.body.solutionsAvailable || false;
-                    existingAssignment.feedbackAvailable = req.body.feedbackAvailable || false;
                     existingAssignment.acceptSubmission = req.body.acceptSubmission || false;
 
                     existingAssignment.save(function (err) {

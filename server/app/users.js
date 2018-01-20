@@ -65,6 +65,14 @@ module.exports = {
             
         // asynchronous
         process.nextTick(function() {
+
+            // check to see if password is not empty
+            if (req.body.password == undefined || req.body.password == '') {
+                req.flash('addUserError', 'Please enter password.');
+                res.redirect('/manageUsers');
+                return;
+            }
+
     
             //  Whether we're signing up or connecting an account, we'll need
             //  to know if the email address is in use.
@@ -114,6 +122,13 @@ module.exports = {
         // asynchronous
         process.nextTick(function() {
     
+            // check to see if password is not empty
+            if (req.body.password == undefined || req.body.password == '') {
+                req.flash('addUserError', 'Please enter password.');
+                res.redirect('/manageUsers');
+                return;
+            }
+            
             //  Whether we're signing up or connecting an account, we'll need
             //  to know if the email address is in use.
             Users.findOne({'username': req.body.username}, function(err, existingUser) {
