@@ -3,8 +3,8 @@ $(document).ready(() => {
 								 getAssignmentURL())
 });
 
-function openNotebook(assignement, notebook) {
-	assignments.openNotebook(assignement, notebook);
+function openNotebook(assignement, notebook, score, attemptsRemaining) {
+	assignments.openNotebook(assignement, notebook, score, attemptsRemaining);
 }
 
 $("#form_1").validate({

@@ -3,6 +3,7 @@ const {app, ipcMain} = require('electron');
 
 // Load custom scripts
 const assignments = require('./assignments')
+const notebook = require('./notebook')
 
 const setChannels = (renderer, session) => {
     // On submission of server address form
@@ -26,8 +27,16 @@ const setChannels = (renderer, session) => {
         })
     });
 
-    ipcMain.on('openNotebook', (event, assignement, notebook) => {
-        renderer.renderNotebookIndex(assignement, notebook);
+    ipcMain.on('openNotebook', (event, assignement, notebook, score, attemptsRemaining) => {
+        renderer.renderNotebookIndex(assignement, notebook, score, attemptsRemaining);
+    });
+
+    ipcMain.on('showAssignment', (event, assignement) => {
+        renderer.renderAssignmentIndex(remoteServerURL)
+    });
+
+    ipcMain.on('submitNotebook', (event, assignement, notebook) => {
+        notebook.submitNotebook(assignement, notebook)
     });
 }
 

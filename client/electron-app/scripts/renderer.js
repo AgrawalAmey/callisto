@@ -70,15 +70,28 @@ function Renderer(mainWindow){
         this.mainWindow.loadURL(path.join('file://', __dirname, '../views', 'condaInstaller.ejs'));
     }
 
-    this.renderNotebookIndex = (assignement, notebook) => {
+    this.renderNotebookIndex = (assignement, notebook, score, attemptsRemaining) => {
         assignement = assignement.replace(/ /g, "%20")
         notebook = notebook.replace(/ /g, "%20")
 
         var jupyterAddr = require('../config').jupyterAddr
         var notebookURL = "http://" + jupyterAddr + "/notebooks/" + assignement + "/" + notebook;
 
+        ejse.data('assignement', assignement);
+        ejse.data('notebook', notebook);
+        ejse.data('score', score);
+        ejse.data('attemptsRemaining', attemptsRemaining);
         ejse.data('notebookURL', notebookURL);
         this.mainWindow.loadURL(path.join('file://', __dirname, '../views', 'notebook.ejs'));
+    }
+
+    this.renderAssignmentIndex = (assignment) => {
+        assignement = assignement.replace(/ /g, "%20")
+        var config = require('../config');
+        var remoteServerAddr = config.remoteServerAddr;
+        var remoteServerURL = "http://" + remoteServerAddr + '/assignment?name=' + assignment;
+
+        this.renderWebviewIndex(remoteServerURL);
     }
 }
 
