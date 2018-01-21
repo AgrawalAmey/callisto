@@ -202,60 +202,57 @@ function AssignmentHandler (){
                             res.status(500).send('Oops! Something went wrong.')
                             return
                         } else {
+                            var notebookIndex = assignment.notebooks.findIndex((notebook) => {
+                                return notebook.name == req.params.notebook
+                            })
+
+                            if (notebookIndex < 0) {
+                                res.status(400).send('Invalid notebook name.')
+                                return
+                            }
+
+                            var submissionIndex = assignment.notebooks[notebookIndex].submissions.findIndex((submission) => {
+                                return submission.username == req.user.username
+                            })
+
+                            if (submissionIndex < 0) {
+                                submissionIndex = assignment.notebooks[notebookIndex].submissions.length
+                                
+                                assignment.notebooks[notebookIndex].submissions.push({
+                                    username: req.user.username,
+                                    attempts: 0,
+                                    score: 0
+                                })
+                            }
+
+                            
+                            attempts = ++assignment.notebooks[notebookIndex].submissions[submissionIndex].attempts
+                            attemptsRemaining = config.maxSubmissionAttemps - attempts
+
+                            if (attemptsRemaining <0){
+                                res.status(400).send('Maximum submission limit reached.')
+                            }
+
+                            var score = 1
+                            assignment.notebooks[notebookIndex].submissions[submissionIndex].score = score
+
                             if (!assignment.whoSubmitted.includes(req.user.username)) {
                                 assignment.whoSubmitted.push(req.user.username)
                             }
-                            
-                            var notebookExists = false
 
-                            for (var i=0; i<assignment.notebooks.length; i++){
-
-                                if (assignment.notebooks[i] == req.param.notebook){
-                                    notebookExists = true
-                                    
-                                    var submissionExists = false
-
-                                    for (var j = 0; j < assignment.notebooks[i].submissions.length; j++) {
-                                        if (assignment.notebooks[i].submissions[j].username == req.user.username) {
-                                            submissionExists = true
-
-                                            if (assignment.notebooks[i].submissions[j].attempts >= config.maxSubmissionAttemps) {
-                                                res.status(400).send('Maximum attempt limit reached.')
-                                            }
-
-                                            assignment.notebooks[i].submissions[j].attempts++
-                                            assignment.notebooks[i].submissions[j].score = 1
-                                        }
-                                    }
-
-                                    if (!submissionExists) {
-                                        assignment.notebooks[i].submissions.push({
-                                            username: req.user.username,
-                                            attempts: 1,
-                                            score: score
-                                        })
-                                    }
-                                }
-                            }
-
-                            if (!notebookExists){
-                                res.status(400).send('Invalid notebook name.')
-                            }
-
-                            
                             assignment.save((err, editedUser) => {
                                 if (err) {
                                     res.status(500).send('Oops! Something went wrong.')
                                 } else {
-                                    req.json({score: score, attemptsRemaining: attemptsRemaining})
+                                    res.json({score: score, attemptsRemaining: attemptsRemaining})
                                 }
+
                                 return
                             })
                         }
                     })
                 } else {
-                    req.flash('uploadAssignmentError', 'The assignment is not accepting submissions anymore.')
-                    res.redirect('/assignment?name=' + req.params.assignmentName)
+                    res.status(500).send('Assignment is no longer accepting submissions.')
                 }
             })
         })

@@ -21,7 +21,7 @@ function FileUploader(basePath) {
         return path.join(this.solutionsBasePath, assignmentName)
     }
 
-    this.getSubmissonsPath = (username, assignmentName) => {
+    this.getSubmissionsPath = (username, assignmentName) => {
         return path.join(this.submissionsBasePath, assignmentName, username)
     }
 
@@ -34,7 +34,7 @@ function FileUploader(basePath) {
     }
 
     this.getSubmissonsNoetbookPath = (username, assignmentName, notebook) => {
-        return path.join(this.getSubmissonsPath(username, assignmentName), notebook + '.ipynb')
+        return path.join(this.getSubmissionsPath(username, assignmentName), notebook + '.ipynb')
     }
 
 
@@ -64,6 +64,8 @@ function FileUploader(basePath) {
             } else if (file.fieldname == 'submissions') {
                 dest = self.getSubmissionsPath(req.user.username, req.params.assignmentName)
             }
+
+            mkdirp(dest)
             callback(null, dest)
         },
         filename: function (req, file, callback) {
@@ -75,7 +77,7 @@ function FileUploader(basePath) {
                     callback(null, self.solutionsFileName)
                     break;
                 case 'submissions':
-                    callback(null, req.params.notebook + '.ipynb')
+                    callback(null, req.params.notebook)
             } 
         }
     })
