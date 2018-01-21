@@ -6,55 +6,64 @@ var path = require('path')
 function FileUploader(basePath) {
     self = this
 
-    this.problemsPath = 'assignments/problems'
-    this.solutionsPath = 'assignments/solutions'
-    this.submissionsPath = 'assignments/submissions'
+    this.problemsBasePath = 'assignments/problems'
+    this.solutionsBasePath = 'assignments/solutions'
+    this.submissionsBasePath = 'assignments/submissions'
 
     this.problemsFileName = 'problems.zip'
     this.solutionsFileName = 'solutions.zip'
     
     this.getProblemsPath = (assignmentName) => {
-        return path.join(this.problemsPath, assignmentName)
+        return path.join(this.problemsBasePath, assignmentName)
     }
 
     this.getSolutionsPath = (assignmentName) => {
-        return path.join(this.solutionsPath, assignmentName)
+        return path.join(this.solutionsBasePath, assignmentName)
     }
 
-    this.getSubmissonsPath = (assignmentName, username) => {
-        return path.join(this.submissionsPath, assignmentName)
+    this.getSubmissonsPath = (username, assignmentName) => {
+        return path.join(this.submissionsBasePath, assignmentName, username)
     }
 
     this.getProblemsZipPath = (assignmentName) => {
-        return path.join(this.problemsPath, assignmentName, this.problemsFileName)
+        return path.join(this.getProblemsPath(assignmentName), this.problemsFileName)
     }
 
     this.getSolutionsZipPath = (assignmentName) => {
-        return path.join(this.solutionsPath, assignmentName, this.solutionsFileName)
+        return path.join(this.getSolutionsPath(assignmentName), this.solutionsFileName)
     }
 
-    this.getSubmissonsZipPath = (assignmentName, username) => {
-        return path.join(this.submissionsPath, assignmentName, username + '.zip')
+    this.getSubmissonsNoetbookPath = (username, assignmentName, notebook) => {
+        return path.join(this.getSubmissonsPath(username, assignmentName), notebook + '.ipynb')
     }
+
 
     this.fileFilter = function (req, file, cb) {
-        if (path.extname(file.originalname) !== '.zip') {
-            return cb(new Error('FileTypeNotSupported'));
-        }
+        switch (file.fieldname) {
+            case 'problems':
+            case 'solutions':
+                if (path.extname(file.originalname) !== '.zip') {
+                    return cb(new Error('FileTypeNotSupported'));        
+                }
+                break;
+            case 'submissions':
+                if (path.extname(file.originalname) !== '.ipynb') {
+                    return cb(new Error('FileTypeNotSupported'));
+                }
+        } 
+        
         cb(null, true);
     }
 
     this.storage = multer.diskStorage({
         destination: function (req, file, callback) {
             if (file.fieldname == 'problems') {
-                prefix = self.problemsPath
+                dest = self.getProblemsPath(req.body.name)
             } else if (file.fieldname == 'solutions') {
-                prefix = self.solutionsPath
+                dest = self.getSolutionsPath(req.body.name)
             } else if (file.fieldname == 'submissions') {
-                prefix = self.submissionsPath
+                dest = self.getSubmissionsPath(req.user.username, req.params.assignmentName)
             }
-            dest = path.join(prefix, req.body.name)
-            mkdirp.sync(dest)
             callback(null, dest)
         },
         filename: function (req, file, callback) {
@@ -66,7 +75,7 @@ function FileUploader(basePath) {
                     callback(null, self.solutionsFileName)
                     break;
                 case 'submissions':
-                    callback(null, req.user.username + '.zip')
+                    callback(null, req.params.notebook + '.ipynb')
             } 
         }
     })

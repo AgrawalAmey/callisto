@@ -22,9 +22,10 @@ var assignmentSchema = mongoose.Schema({
     whoSubmitted: [String],
     notebooks: [{
         name: String,
-        scores: [{
+        submissions: [{
             username: String,
-            value: Number
+            score: Number,
+            attempts: Number
         }]
     }]
 });

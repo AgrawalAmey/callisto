@@ -1,3 +1,4 @@
+var config = require('../config')
 var fs = require('fs')
 var unzip = require('unzip')
 
@@ -43,6 +44,12 @@ function AssignmentHandler (){
         // asynchronous
         process.nextTick(() => {
             Assignments.find({}, (err, assignments) => {
+                
+                if (err) {
+                    res.redirect('/logout')
+                    return
+                }
+
                 for (i = 0; i < assignments.length; i++) {
                     assignments[i].isSubmitted = req.user._id in assignments[i].whoSubmitted
                     assignments[i].isActive = this.isActive(assignments[i])
@@ -68,6 +75,12 @@ function AssignmentHandler (){
         // asynchronous
         process.nextTick(() => {
             Assignments.findOne({ 'name': req.query.name }, (err, assignment) => {
+
+                if (err || !assignment) {
+                    res.redirect('/assignments')
+                    return
+                }
+
                 assignment.isSubmitted = false
                 for (i = 0; i < assignment.whoSubmitted.length; i++) {
                     if (assignment.whoSubmitted[i] == req.user.username) {
@@ -76,6 +89,22 @@ function AssignmentHandler (){
                     }
                 }
 
+                var scores = []
+                var attemptsRemaining = config.maxSubmissionAttemps
+
+                assignment.notebooks.forEach((notebook) => {
+                    submission = notebook.submissions.find(submission => submission.username == req.user.username)
+                    // If user has not submitted
+                    if (!submission) {
+                        score = 0
+                    } else {
+                        score = submission.score
+                        attemptsRemaining -= submission.attempts
+                    }
+                    
+                    scores.push(score)
+                })
+            
                 assignment.isActive = this.isActive(assignment)
                 assignment.showToStudents = this.showToStudents(assignment)
 
@@ -83,8 +112,8 @@ function AssignmentHandler (){
                     res.render('assignment.ejs', {
                         user: req.user,
                         assignment: assignment,
-                        uploadAssignmentError: req.flash('uploadAssignmentError'),
-                        uploadAssignmentSuccess: req.flash('uploadAssignmentSuccess'),
+                        scores: scores,
+                        attemptsRemaining: attemptsRemaining
                     })
                 } else {
                     res.redirect('/assignments')
@@ -101,6 +130,12 @@ function AssignmentHandler (){
         // asynchronous
         process.nextTick(() => {
             Assignments.findOne({ 'name': req.params.assignmentName }, (err, assignment) => {
+
+                if (err || !assignment) {
+                    res.redirect('/assignments')
+                    return
+                }
+
                 assignment.isActive = this.isActive(assignment)
                 assignment.showToStudents = this.showToStudents(assignment)
 
@@ -121,6 +156,12 @@ function AssignmentHandler (){
         // asynchronous
         process.nextTick(() => {
             Assignments.findOne({ 'name': req.params.assignmentName }, (err, assignment) => {
+
+                if (err || !assignment) {
+                    res.redirect('/assignments')
+                    return
+                }
+
                 assignment.isActive = this.isActive(assignment)
                 assignment.showToStudents = this.showToStudents(assignment)
 
@@ -142,33 +183,78 @@ function AssignmentHandler (){
         // asynchronous
         process.nextTick(() => {
             Assignments.findOne({ 'name': req.params.assignmentName }, (err, assignment) => {
-                
+               
+                if(err){
+                    res.status(500).send('Oops! Something went wrong.')
+                    return
+                }
+
+                if (!assignment) {
+                    res.status(400).send('Invalid assignment name.')
+                    return
+                }
+
                 assignment.isActive = this.isActive(assignment)
 
-                if (assignment.isActive || req.user.isAdmin) {
+                if (assignment.isActive) {
                     fileUploader.upload(req, res, (err) => {
                         if (err) {
-                            if (err.message == 'FileTypeNotSupported') {
-                                req.flash('uploadAssignmentError', 'Only zip files are supported.')
-                            } else {
-                                req.flash('uploadAssignmentError', 'Oops! Something went wrong.')
-                            }
-                            res.redirect('/assignment?name=' + req.params.assignmentName)
+                            res.status(500).send('Oops! Something went wrong.')
+                            return
                         } else {
-                            assignment.whoSubmitted.push(req.user.username)
+                            if (!assignment.whoSubmitted.includes(req.user.username)) {
+                                assignment.whoSubmitted.push(req.user.username)
+                            }
+                            
+                            var notebookExists = false
 
+                            for (var i=0; i<assignment.notebooks.length; i++){
+
+                                if (assignment.notebooks[i] == req.param.notebook){
+                                    notebookExists = true
+                                    
+                                    var submissionExists = false
+
+                                    for (var j = 0; j < assignment.notebooks[i].submissions.length; j++) {
+                                        if (assignment.notebooks[i].submissions[j].username == req.user.username) {
+                                            submissionExists = true
+
+                                            if (assignment.notebooks[i].submissions[j].attempts >= config.maxSubmissionAttemps) {
+                                                res.status(400).send('Maximum attempt limit reached.')
+                                            }
+
+                                            assignment.notebooks[i].submissions[j].attempts++
+                                            assignment.notebooks[i].submissions[j].score = 1
+                                        }
+                                    }
+
+                                    if (!submissionExists) {
+                                        assignment.notebooks[i].submissions.push({
+                                            username: req.user.username,
+                                            attempts: 1,
+                                            score: score
+                                        })
+                                    }
+                                }
+                            }
+
+                            if (!notebookExists){
+                                res.status(400).send('Invalid notebook name.')
+                            }
+
+                            
                             assignment.save((err, editedUser) => {
                                 if (err) {
-                                    req.flash('uploadAssignmentError', 'Oops! Something went wrong.')
+                                    res.status(500).send('Oops! Something went wrong.')
                                 } else {
-                                    req.flash('uploadAssignmentSuccess', 'Assignment submitted successfully.')
+                                    req.json({score: score, attemptsRemaining: attemptsRemaining})
                                 }
-                                res.redirect('/assignment?name=' + req.params.assignmentName)
                                 return
                             })
                         }
                     })
                 } else {
+                    req.flash('uploadAssignmentError', 'The assignment is not accepting submissions anymore.')
                     res.redirect('/assignment?name=' + req.params.assignmentName)
                 }
             })
@@ -185,6 +271,11 @@ function AssignmentHandler (){
         // asynchronous
         process.nextTick(() => {
             Assignments.find({}, (err, assignments) => {
+                if (err) {
+                    res.redirect('/logout')
+                    return
+                }
+
                 res.render('manage_assignments.ejs', {
                     user: req.user,
                     assignments: assignments,
@@ -361,7 +452,12 @@ function AssignmentHandler (){
                         var notebooks = fs.readdirSync(problemsUnzipPath)
                                           .filter(file => file.endsWith('.ipynb'))
 
-                        assignment.notebooks = notebooks
+                        assignment.notebooks = notebooks.map((notebook) => {
+                            return {
+                                name: notebook,
+                                submissions: []
+                            }
+                        })
                         
                         assignment.save((err) => {
                             if (err) {

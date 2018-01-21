@@ -39,6 +39,9 @@ module.exports = {
         // asynchronous
         process.nextTick(function () {
             Users.find({}, function (err, users) {
+                if(err)
+                    res.render('/')
+                    
                 var usernameList = [];
                 for (var i = 0; i < users.length; i++) {
                     usernameList.push(users[i].username);
