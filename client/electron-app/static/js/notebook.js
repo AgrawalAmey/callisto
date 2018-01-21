@@ -5,7 +5,7 @@ $(function () {
         ipc.send('showAssignment', assignment);
     }
 
-    function submitNotebook(assignment, notebook) {
-        ipc.send('submitNotebook', assignment, notebook);
+    function submitNotebook(assignment, notebook, score, attemptsRemaining) {
+        ipc.send('submitNotebook', assignment, notebook, score, attemptsRemaining);
     }
 });

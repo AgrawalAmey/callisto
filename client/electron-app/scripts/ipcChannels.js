@@ -28,15 +28,15 @@ const setChannels = (renderer, session) => {
     });
 
     ipcMain.on('openNotebook', (event, assignement, notebook, score, attemptsRemaining) => {
-        renderer.renderNotebookIndex(assignement, notebook, score, attemptsRemaining);
+        renderer.renderNotebookIndex(assignement, notebook, score, attemptsRemaining, undefined);
     });
 
     ipcMain.on('showAssignment', (event, assignement) => {
         renderer.renderAssignmentIndex(remoteServerURL)
     });
 
-    ipcMain.on('submitNotebook', (event, assignement, notebook) => {
-        notebook.submitNotebook(assignement, notebook)
+    ipcMain.on('submitNotebook', (event, assignement, notebook, score, attemptsRemaining) => {
+        notebook.submitNotebook(assignement, notebook, score, attemptsRemaining)
     });
 }
 
