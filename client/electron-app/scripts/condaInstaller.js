@@ -8,8 +8,24 @@ function  CondaInstaller() {
     this.platform = os.platform()
 
     this.getInstallationPath = () => {
-        var userDataPath = app.getPath('userData')
-        return path.join(userDataPath, 'conda_env')
+        var homeDir = app.getPath('home')
+
+        switch (this.platform) {
+            case 'linux':
+                var basePath = path.join(homeDir, 'nnfl-app')
+                break;
+            case 'darwin':
+                var basePath = path.join(homeDir, 'nnfl-app')
+                break;
+            case 'win32':
+                var basePath = path.join('C:', 'programData', 'nnfl-app')
+                break;
+            default:
+                throw new Error("Unsupported operating system.")
+                break;
+        }
+        
+        return path.join(basePath, 'conda_env')
     }
 
     this.getInstallerPath = () => {
@@ -86,7 +102,8 @@ function  CondaInstaller() {
 
     this.isInstalled = () => {
         var installationPath = this.getInstallationPath()
-        
+        console.log(installationPath)
+
         if(this.platform == 'linux' || this.platform == 'darwin') {
             var pyFilePath = path.join(installationPath, 'bin','python')
         } else {

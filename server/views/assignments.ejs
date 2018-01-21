@@ -32,11 +32,11 @@
                             <div class="panel-body">
                                 <div class="table-responsive">
                                     <div class="col-lg-12">
-                                        <div class="col-lg-11">
+                                        <div class="col-lg-11" style="padding-left: 0">
                                             <h4>Evaluative Assignments</h4>
                                         </div>
                                         <% if (user.isAdmin) { %>
-                                            <div class="col-lg-1">
+                                            <div class="col-lg-1" style="padding-right: 0; text-align: right;">
                                                 <a data-toggle="modal" href="#addAssignmentModal"><i class="pe-7s-plus pe-2x"></i></a>
                                             </div>
                                         <% } %>
@@ -58,7 +58,6 @@
                                                         <th>Total submissions</th> 
                                                     <% } %>
                                                     <th>Solutions</th>
-                                                    <th>Feedback</th>
                                                     <% if (user.isAdmin) { %>
                                                         <th></th>
                                                         <th></th>
@@ -83,11 +82,6 @@
                                                             <td><%= assignments[i].whoSubmitted.length %></td> 
                                                         <% } %>
                                                         <% if (assignments[i].solutionsAvailable) { %>
-                                                            <td>Available</td>
-                                                        <% } else { %>
-                                                            <td>Not Available</td>
-                                                        <% } %>
-                                                        <% if (assignments[i].feedbackAvailable) { %>
                                                             <td>Available</td>
                                                         <% } else { %>
                                                             <td>Not Available</td>
@@ -154,73 +148,61 @@
                             <h4 class="modal-title">Add Assignment</h4>
                         </div>
                         <div class="modal-body">
-                            <form role="form" id="addAssignmentForm" novalidate="novalidate" method="post" action="/addAssignment">
-                                        <div class="form-group">
-                                            <label>Name</label>
-                                            <input type="text" class="form-control" name="name">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Start Time</label>
-                                            <div class="input-group date datetimepicker">
-                                                    <span class="input-group-addon">
-                                                        <span class="fa fa-calendar"></span>
-                                                    </span>
-                                                <input type="text" class="form-control" name="startTime">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>End Time</label>
-                                            <div class="input-group date datetimepicker">
-                                                    <span class="input-group-addon">
-                                                        <span class="fa fa-calendar"></span>
-                                                    </span>
-                                                <input type="text" class="form-control" name="endTime">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="checkbox checkbox-primary">
-                                                <input type="checkbox" id="cb0" name="acceptSubmission">
-                                                <label for="cb0">Accept Submissions</label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="checkbox checkbox-primary">
-                                                <input type="checkbox" id="cb1" onchange="AddUploadProblemChange()">
-                                                <label for="cb1">Upload Problems</label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group" id="AddProblemFile">     
-                                            <label class="btn btn-default">
-                                                Select problem file <input type="file" name="problems" id="addProblems">
-                                            </label>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="checkbox checkbox-primary">
-                                                <input type="checkbox" id="cb2" onchange="AddUploadSolutionChange()">
-                                                <label for="cb2">Upload Solutions</label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group"  id="AddSolutionFile"> 
-                                            <label class="btn btn-default">
-                                                Select solution file <input type="file" name="solutions" id="addSolutions">
-                                            </label>
-                                        </div>
-                                        <!-- show error message -->
-                                        <% if (typeof addAssignmentError !== 'undefined' && addAssignmentError.length > 0) { %>
-                                            <div class="form-group">                                
-                                                <label class="error"><%= addAssignmentError %></label>
-                                            </div>
-                                        <% } %>
-                                        <!-- show success message -->
-                                        <% if (typeof addAssignmentSuccess !== 'undefined' && addAssignmentSuccess.length > 0) { %>
-                                            <div class="form-group">                                
-                                                <label class="success"><%= addAssignmentSuccess %></label>
-                                            </div>
-                                        <% } %>                                    
-                                        <div>
-                                            <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit</strong></button>
-                                        </div>
-                                    </form>
+                            <form role="form" id="addAssignmentForm" novalidate="novalidate" enctype="multipart/form-data" method="post" action="/addAssignment">
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" name="name">
+                                </div>
+                                <div class="form-group">
+                                    <label>Start Time</label>
+                                    <div class="input-group date datetimepicker">
+                                            <span class="input-group-addon">
+                                                <span class="fa fa-calendar"></span>
+                                            </span>
+                                        <input type="text" class="form-control" name="startTime">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>End Time</label>
+                                    <div class="input-group date datetimepicker">
+                                            <span class="input-group-addon">
+                                                <span class="fa fa-calendar"></span>
+                                            </span>
+                                        <input type="text" class="form-control" name="endTime">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-primary">
+                                        <input type="checkbox" id="cb0" name="acceptSubmission">
+                                        <label for="cb0">Accept Submissions</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-primary">
+                                        <input type="checkbox" id="cb1" onchange="AddUploadProblemChange()">
+                                        <label for="cb1">Upload Problems</label>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="AddProblemFile">     
+                                    <label class="btn btn-default">
+                                        Select problem file <input type="file" name="problems" id="addProblems">
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-primary">
+                                        <input type="checkbox" id="cb2" onchange="AddUploadSolutionChange()">
+                                        <label for="cb2">Upload Solutions</label>
+                                    </div>
+                                </div>
+                                <div class="form-group"  id="AddSolutionFile"> 
+                                    <label class="btn btn-default">
+                                        Select solution file <input type="file" name="solutions" id="addSolutions">
+                                    </label>
+                                </div>                           
+                                <div>
+                                    <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit</strong></button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -236,77 +218,64 @@
                             <h4 class="modal-title" name="oldNameHeader">Edit </h4>
                         </div>
                         <div class="modal-body">
-                            <form role="form" id="editAssignmentForm" novalidate="novalidate" method="post" action="/editAssignment">
-                                        <div class="form-group">
-                                            <input type="hidden" class="form-control" name="oldName" readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Name</label>
-                                            <input type="text" class="form-control" name="name">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Start Time</label>
-                                            <div class="input-group date datetimepicker">
-                                                    <span class="input-group-addon">
-                                                        <span class="fa fa-calendar"></span>
-                                                    </span>
-                                                <input type="text" class="form-control" name="startTime">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>End Time</label>
-                                            <div class="input-group date datetimepicker">
-                                                    <span class="input-group-addon">
-                                                        <span class="fa fa-calendar"></span>
-                                                    </span>
-                                                <input type="text" class="form-control" name="endTime">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="checkbox checkbox-primary">
-                                                <input type="checkbox" id="cb3" name="acceptSubmission">
-                                                <label for="cb3">Accept Submissions</label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="checkbox checkbox-primary">
-                                                <input type="checkbox" id="cb4" onchange="EditUploadProblemChange()">
-                                                <label for="cb4">Upload Problems</label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group" id="EditProblemFile">     
-                                            <label class="btn btn-default">
-                                                Select problem file <input type="file" name="problems" id="editProblems">
-                                            </label>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="checkbox checkbox-primary">
-                                                <input type="checkbox" id="cb5" onchange="EditUploadSolutionChange()">
-                                                <label for="cb5">Upload Solutions</label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group"  id="EditSolutionFile"> 
-                                            <label class="btn btn-default">
-                                                Select solution file <input type="file" name="solutions" id="editSolutions">
-                                            </label>
-                                        </div>
-
-                                        <!-- show any errors -->
-                                        <% if (typeof editAssignmentError !== 'undefined' && editAssignmentError.length > 0) { %>
-                                        <div class="form-group">                                
-                                            <label class="error"><%= editAssignmentError %></label>
-                                        </div>
-                                        <% } %>
-                                        <!-- show any messages that come back with authentication -->
-                                        <% if (typeof editAssignmentSuccess !== 'undefined' && editAssignmentSuccess.length > 0) { %>
-                                        <div class="form-group">                                
-                                            <label class="success"><%= editAssignmentSuccess %></label>
-                                        </div>
-                                        <% } %>
-                                        <div>
-                                            <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit</strong></button>
-                                        </div>
-                                    </form>
+                            <form role="form" id="editAssignmentForm" enctype="multipart/form-data" novalidate="novalidate" method="post" action="/editAssignment">
+                                <div class="form-group">
+                                    <input type="hidden" class="form-control" name="oldName" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" name="name">
+                                </div>
+                                <div class="form-group">
+                                    <label>Start Time</label>
+                                    <div class="input-group date datetimepicker">
+                                            <span class="input-group-addon">
+                                                <span class="fa fa-calendar"></span>
+                                            </span>
+                                        <input type="text" class="form-control" name="startTime">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>End Time</label>
+                                    <div class="input-group date datetimepicker">
+                                            <span class="input-group-addon">
+                                                <span class="fa fa-calendar"></span>
+                                            </span>
+                                        <input type="text" class="form-control" name="endTime">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-primary">
+                                        <input type="checkbox" id="cb3" name="acceptSubmission">
+                                        <label for="cb3">Accept Submissions</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-primary">
+                                        <input type="checkbox" id="cb4" onchange="EditUploadProblemChange()">
+                                        <label for="cb4">Upload Problems</label>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="EditProblemFile">     
+                                    <label class="btn btn-default">
+                                        Select problem file <input type="file" name="problems" id="editProblems">
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-primary">
+                                        <input type="checkbox" id="cb5" onchange="EditUploadSolutionChange()">
+                                        <label for="cb5">Upload Solutions</label>
+                                    </div>
+                                </div>
+                                <div class="form-group"  id="EditSolutionFile"> 
+                                    <label class="btn btn-default">
+                                        Select solution file <input type="file" name="solutions" id="editSolutions">
+                                    </label>
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit</strong></button>
+                                </div>
+                            </form>
                         </div>
                     </div>
 
@@ -324,28 +293,22 @@
                         </div>
                         <div class="modal-body">
                             <form role="form" id="removeAssignmentForm" novalidate="novalidate" method="post" action="/removeAssignment">
-                                    <div class="form-group">
-                                        <input type="hidden" class="form-control" name="name" readonly>
-                                    </div>
-                                    <!-- show any errors -->
-                                    <% if (typeof removeAssignmentError !== 'undefined' && removeAssignmentError.length > 0) { %>
-                                    <div class="form-group">                                
-                                        <label class="error"><%= removeAssignmentError %></label>
-                                    </div>
-                                    <% } %>
-                                    <!-- show any messages that come back with authentication -->
-                                    <% if (typeof removeAssignmentSuccess !== 'undefined' && removeAssignmentSuccess.length > 0) { %>
-                                    <div class="form-group">                                
-                                        <label class="success"><%= removeAssignmentSuccess %></label>
-                                    </div>
-                                    <% } %>
-                                    <div>
-                                        <button class="btn btn-sm btn-default m-t-n-xs" type="submit"><strong>Yes</strong></button>
-                                    </div>
-                                    <div>
-                                        <button class="btn btn-sm btn-primary m-t-n-xs" data-dismiss="modal" type="button"><strong>No</strong></button>
-                                    </div>
-                                </form>
+                                <div class="form-group">
+                                    <input type="hidden" class="form-control" name="name" readonly>
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-default m-t-n-xs" 
+                                        style="display: inline-block; margin-right: 20px;" 
+                                        type="submit">
+                                        <strong>Yes</strong>
+                                    </button>
+                                    <button class="btn btn-sm btn-primary m-t-n-xs" 
+                                        style="display: inline-block;" data-dismiss="modal" 
+                                        type="button">
+                                        <strong>No</strong>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

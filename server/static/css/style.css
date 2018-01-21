@@ -3705,3 +3705,11 @@ ul.h-list li:hover a {
   color: green;
   font-weight: normal;
 }
+
+.modal-header {
+  padding: 16px;
+}
+
+.modal-tital {
+  padding-left: 15px;
+}
