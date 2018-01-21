@@ -6,21 +6,26 @@
     <title>Neural Networks and Fuzzy Logic</title>
     <link rel=stylesheet href=../static/css/client.css>
   </head>
-  <body>
-    <div class="col-lg-12">
-      <div class="col-lg-10">
-        <a id="backBtn" onclick="goTo('<%= assignment %>', '<%= notebook %>')"><i class="pe-7s-angle-left-2x"></i></a>
-      </div>
-      <div class="col-lg-1" style="padding-right: 0; text-align: right;">
-        <label>Atempts Remaining: <%= attemptsRemaining %></label>
-      </div>
-      <div class="col-lg-1" style="padding-right: 0; text-align: right;">
-        <label>Score: <%= score %></label>
+  <body class="fixed-navbar">
+    <div id="header" style="height:85px">
+      <div class="row hpanel" style="margin-bottom:0;">
+        <div class="col-md-2" style="padding-left: 30px">
+          <a id="backBtn" onclick="goTo('<%= assignment %>', '<%= notebook %>')">
+            <i style="padding-top:10px" class="pe-7s-angle-left pe-5x"></i>
+          </a>
+        </div>
+        <div class="col-md-6"></div>
+        <div class="col-md-4" style="padding-bottom: 15px;padding-top: 23px;padding-right: 30px; text-align: right;">
+          <label><b>Atempts Remaining:</b> <%= attemptsRemaining %></label><br>
+          <label><b>Score:</b> <%= score %></label>
+        </div>
       </div>
     </div>
-    <webview id="webview" src="<%= notebookURL %>">
-    </webview>
-    <div class="col-lg-12" style="padding-right: 0; text-align: right;">
+    <div id="wrapper" style="padding-top:29px;margin:0">
+      <webview id="webview" src="<%= notebookURL %>">
+      </webview>
+    </div>
+    <div class="col-lg-12" style="position:fixed; bottom:5%; left:90%">
       <button class="btn btn-sm btn-primary m-t-n-xs" style="display: inline-block;" data-dismiss="modal" type="button" id="notebookSubmit" onclick="submitNotebook('<%= assignment %>', '<%= notebook %>', '<%= score %>', '<%= attemptsRemaining %>')">
         <strong>Submit</strong>
       </button>
