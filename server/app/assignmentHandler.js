@@ -222,9 +222,9 @@ function AssignmentHandler (){
                                             if (assignment.notebooks[i].submissions[j].attempts >= config.maxSubmissionAttemps) {
                                                 res.status(400).send('Maximum attempt limit reached.')
                                             }
-                                            
+
                                             assignment.notebooks[i].submissions[j].attempts++
-                                            assignment.notebooks[i].submissions[j].score = score
+                                            assignment.notebooks[i].submissions[j].score = 1
                                         }
                                     }
 
