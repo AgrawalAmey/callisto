@@ -1,6 +1,6 @@
 var express = require('express');
 
-var assignments = require('./assignments')
+var assignmentHandler = require('./assignmentHandler')
 var users = require('./users')
 
 module.exports = function(app, passport) {
@@ -50,32 +50,32 @@ module.exports = function(app, passport) {
     // All assignments =====================
     // =====================================
 
-    app.get('/assignments', isLoggedIn, assignments.renderAssignmentsPage);
+    app.get('/assignments', isLoggedIn, assignmentHandler.renderAssignmentsPage);
  
     // =====================================
     // Details of specific assignment ======
     // =====================================
     
-    app.get('/assignment', isLoggedIn, assignments.renderAssignmentPage);
+    app.get('/assignment', isLoggedIn, assignmentHandler.renderAssignmentPage);
 
     // =====================================
     // Serve assignment file          ======
     // =====================================    
 
-    app.get('/assignment/problems/:assignmentName', isLoggedIn, assignments.serveProblems);
+    app.get('/assignment/problems/:assignmentName', isLoggedIn, assignmentHandler.serveProblems);
 
     // =====================================
     // Serve assignment solution      ======
     // =====================================    
 
-    app.get('/assignment/solutions/:assignmentName', isLoggedIn, assignments.serveSolutions);
+    app.get('/assignment/solutions/:assignmentName', isLoggedIn, assignmentHandler.serveSolutions);
 
 
     // =====================================
     // Assignment upload              ======
     // ===================================== 
 
-    app.post('/assignment/upload/:assignmentName', isLoggedIn, assignments.uploadSubmission);
+    app.post('/assignment/upload/:assignmentName', isLoggedIn, assignmentHandler.uploadSubmission);
 
     // =====================================
     // Manage users ========================
@@ -87,7 +87,7 @@ module.exports = function(app, passport) {
     // Manage services =====================
     // =====================================
 
-    app.get('/manageAssignments', isLoggedIn, isAdmin, assignments.manageAssignments);
+    app.get('/manageAssignments', isLoggedIn, isAdmin, assignmentHandler.manageAssignments);
 
     // =====================================
     // Account Settings ====================
@@ -121,11 +121,11 @@ module.exports = function(app, passport) {
     // Add/Edit/Remove service =============
     // =====================================
 
-    app.post('/addAssignment', isLoggedIn, isAdmin, assignments.addAssignment);
+    app.post('/addAssignment', isLoggedIn, isAdmin, assignmentHandler.addAssignment);
 
-    app.post('/editAssignment', isLoggedIn, isAdmin, assignments.editAssignment);
+    app.post('/editAssignment', isLoggedIn, isAdmin, assignmentHandler.editAssignment);
 
-    app.post('/removeAssignment', isLoggedIn, isAdmin, assignments.removeAssignment);
+    app.post('/removeAssignment', isLoggedIn, isAdmin, assignmentHandler.removeAssignment);
 
     // =====================================
     // LOGOUT ==============================

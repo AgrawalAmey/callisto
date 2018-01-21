@@ -14,14 +14,26 @@ function FileUploader(basePath) {
     this.solutionsFileName = 'solutions.zip'
     
     this.getProblemsPath = (assignmentName) => {
+        return path.join(this.problemsPath, assignmentName)
+    }
+
+    this.getSolutionsPath = (assignmentName) => {
+        return path.join(this.solutionsPath, assignmentName)
+    }
+
+    this.getSubmissonsPath = (assignmentName, username) => {
+        return path.join(this.submissionsPath, assignmentName)
+    }
+
+    this.getProblemsZipPath = (assignmentName) => {
         return path.join(this.problemsPath, assignmentName, this.problemsFileName)
     }
 
-    this.getSolutionPath = (assignmentName) => {
+    this.getSolutionsZipPath = (assignmentName) => {
         return path.join(this.solutionsPath, assignmentName, this.solutionsFileName)
     }
 
-    this.getSubmissPath = (assignmentName, username) => {
+    this.getSubmissonsZipPath = (assignmentName, username) => {
         return path.join(this.submissionsPath, assignmentName, username + '.zip')
     }
 
