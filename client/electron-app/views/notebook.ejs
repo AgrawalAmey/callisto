@@ -2,17 +2,36 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <% include ./partials/head.ejs %>
     <title>Neural Networks and Fuzzy Logic</title>
     <link rel=stylesheet href=../static/css/client.css>
   </head>
   <body>
+    <div class="col-lg-12">
+      <div class="col-lg-10">
+        <a href="#" id="backBtn" onclick="goTo('<%= assignment %>', '<%= notebook %>')"><i class="pe-7s-angle-left-2x"></i></a>
+      </div>
+      <div class="col-lg-1" style="padding-right: 0; text-align: right;">
+        <label>Atempts Remaining: <%= attemptsRemaining %></label>
+      </div>
+      <div class="col-lg-1" style="padding-right: 0; text-align: right;">
+        <label>Score: <%= score %></label>
+      </div>
+    </div>
     <webview id="webview" src="<%= notebookURL %>">
     </webview>
+    <div class="col-lg-12" style="padding-right: 0; text-align: right;">
+      <button class="btn btn-sm btn-primary m-t-n-xs" style="display: inline-block;" data-dismiss="modal" type="button" id="notebookSubmit" onclick="submitNotebook('<%= assignment %>', '<%= notebook %>')">
+        <strong>Submit</strong>
+      </button>
+    </div>
     <script>
     const webview = document.querySelector('webview')
       webview.addEventListener('console-message', (e) => {
         console.log('Guest page logged a message:', e)
       })
     </script>
+    <% include ./partials/js_imports.ejs %>
+    <script src="../static/js/notebook.js"></script>
   </body>
 </html>
