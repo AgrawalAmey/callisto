@@ -152,3 +152,54 @@ $("#removeAssignmentForm").validate({
         form.submit();
     }
 });
+
+function AddUploadPracticeProblemChange() {
+    if($('#cb6').is(":checked"))   
+        $("#AddPracticeProblemFile").show();
+    else
+        $("#AddPracticeProblemFile").hide();
+}
+
+AddUploadPracticeProblemChange();
+
+function AddUploadPracticeSolutionChange() {
+    if($('#cb7').is(":checked"))   
+        $("#AddPracticeSolutionFile").show();
+    else
+        $("#AddPracticeSolutionFile").hide();
+}
+
+AddUploadPracticeSolutionChange();
+
+$("#addPracticeAssignmentForm").validate({
+    rules: {
+        name: {
+            required: true
+        },
+        startTime: {
+            required: true,
+            date: true
+        },
+        endTime: {
+            required: true,
+            date: true
+        }
+    },
+    submitHandler: function(form) {
+        if($('#cb1').is(":checked")) {
+            var addFile = $('#addProblems').val();
+            if(addFile === '' || addFile == undefined) {
+                return; // to do: return error message
+            }
+        }
+
+        if($('#cb2').is(":checked")) {
+            var addFile = $('#addSolutions').val();
+            if(addFile === '' || addFile == undefined) {
+                return; // to do: return error message
+            }
+        }
+
+        form.submit();
+    }
+});
