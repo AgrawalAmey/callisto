@@ -76,6 +76,15 @@ function AssignmentHandler (){
                     }
                 }
 
+                scores = assignment.notebooks.map((notebook) => {
+                    score = notebook.scores.find(score => score.username == req.user.username)
+                    // If user has not submitted
+                    if (score == undefined){
+                        score = 0
+                    }
+                    return score
+                })
+
                 assignment.isActive = this.isActive(assignment)
                 assignment.showToStudents = this.showToStudents(assignment)
 
@@ -83,6 +92,7 @@ function AssignmentHandler (){
                     res.render('assignment.ejs', {
                         user: req.user,
                         assignment: assignment,
+                        scores: scores,
                         uploadAssignmentError: req.flash('uploadAssignmentError'),
                         uploadAssignmentSuccess: req.flash('uploadAssignmentSuccess'),
                     })
@@ -361,7 +371,12 @@ function AssignmentHandler (){
                         var notebooks = fs.readdirSync(problemsUnzipPath)
                                           .filter(file => file.endsWith('.ipynb'))
 
-                        assignment.notebooks = notebooks
+                        assignment.notebooks = notebooks.map((notebook) => {
+                            return {
+                                name: notebook, 
+                                scores: []
+                            }
+                        })
                         
                         assignment.save((err) => {
                             if (err) {
