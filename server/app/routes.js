@@ -75,7 +75,7 @@ module.exports = function(app, passport) {
     // Assignment upload              ======
     // ===================================== 
 
-    app.post('/assignment/upload/:assignmentName', isLoggedIn, assignmentHandler.uploadSubmission);
+    app.post('/assignment/upload/:assignmentName/:notebook', isLoggedIn, assignmentHandler.uploadSubmission);
 
     // =====================================
     // Manage users ========================

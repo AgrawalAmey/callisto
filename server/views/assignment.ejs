@@ -49,6 +49,12 @@
                                                 <b>Score:</b> <%= scores.reduce((a, b) => a + b, 0) %>
                                             </h5>
                                         <% } %>
+                                        <% if (!user.isAdmin) { %>
+                                            <h5>
+                                                <b>Attempts Remaining:</b>
+                                                <%= attemptsRemaining %>
+                                            </h5>
+                                        <% } %>
                                     </div>
                                 </div>
                             </div>
@@ -79,7 +85,7 @@
                                                     <tr>
                                                         <td>
                                                             <a class="btn-sm btn-primary m-t-n-xs" 
-                                                                onclick="openNotebook('<%= assignment.name %>', '<%= assignment.notebooks[i].name %>')">
+                                                                onclick="openNotebook('<%= assignment.name %>', '<%= assignment.notebooks[i].name %>', '<%= scores[i] %>', '<%= attemptsRemaining %>')">
                                                                 <%=  assignment.notebooks[i].name.slice(0, -6) %>
                                                             </a>
                                                         </td>
@@ -91,7 +97,7 @@
                                                             </td>
                                                         <% } %>
                                                         <% if (user.isAdmin) { %>
-                                                            <td><b><%= assignment.notebooks[i].scores.length %></b></td>
+                                                            <td><b><%= assignment.notebooks[i].submissions.length %></b></td>
                                                         <% } else { %>
                                                             <td><b><%= scores[i] %></b></td>
                                                         <% } %>
