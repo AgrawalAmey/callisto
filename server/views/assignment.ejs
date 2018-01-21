@@ -97,7 +97,7 @@
                                                             <div class="panel-body">
                                 <div class="table-responsive">
                                     <h4>Assignment Notebooks</h4>
-                                    <% if (notebooks.length == 0) { %>
+                                    <% if (assignment.notebooks.length == 0) { %>
                                         <tr>
                                             No notebooks available.
                                         </tr>
@@ -107,22 +107,21 @@
                                                 <tr>
                                                     <th>Name</th>
                                                     <th>Score</th>
-                                                    <% if (assignment.isAvailable) { %>
-                                                        <th>s</th> 
+                                                    <% if (assignment.solutionsAvailable) { %>
+                                                        <th>Solution</th> 
                                                     <% } %>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% for (var  i=0; i<notebooks.length; i++) { %>
+                                                <% for (var  i=0; i<assignment.notebooks.length; i++) { %>
                                                     <tr>
                                                         <td>
-                                                            <a onclick="openNotebook('<%= assignment.name %>', '<%= notebooks[i] %>')"><%= notebooks[i] %></a>
+                                                            <a onclick="openNotebook('<%= assignment.name %>', '<%= assignment.notebooks[i].name %>')"><%= assignment.notebooks[i].name %></a>
                                                         </td>
-                                                        <td><%= notebooks[i].score %></td>
-                                                        <!--td><%= assignment.endTime %></td-->
+                                                        <td><%= assignment.notebooks[i].scores.find(score => score.username == user.username).value %></td>
                                                         <% if (assignment.solutionsAvailable) { %>
                                                         <td>
-                                                            <a href="#"><%= solutions[i] %></a>
+                                                            <a href="#">Solution</a>
                                                         </td>
                                                         <% } %>
                                                     </tr>
