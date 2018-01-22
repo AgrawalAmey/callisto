@@ -5,8 +5,8 @@ assignments/
 passwords.csv
 */.DS_Store
 .DS_Store
-client/electron-app/node_modules
+client/node_modules
 .vscode/
-client/electron-app/conda_installers/
-client/electron-app/release-builds/
-client/electron-app/nbgrader_src/
+client/conda_installers/
+client/release-builds/
+client/nbgrader_src/
