@@ -6,30 +6,56 @@
     <title>Neural Networks and Fuzzy Logic</title>
     <link rel=stylesheet href=../static/css/client.css>
   </head>
-  <body>
-    <div class="col-lg-12">
-      <div class="col-lg-10">
-        <a href="#" id="backBtn" onclick="goTo('<%= assignment %>', '<%= notebook %>')"><i class="pe-7s-angle-left-2x"></i></a>
-      </div>
-      <div class="col-lg-1" style="padding-right: 0; text-align: right;">
-        <label>Atempts Remaining: <%= attemptsRemaining %></label>
-      </div>
-      <div class="col-lg-1" style="padding-right: 0; text-align: right;">
-        <label>Score: <%= score %></label>
+  <body class="fixed-navbar">
+    <div id="header" style="height:85px">
+      <div class="row hpanel" style="margin-bottom:0;">
+        <div class="col-md-2" style="padding-left: 30px">
+          <a id="backBtn" onclick="goTo('<%= assignment %>', '<%= notebook %>')">
+            <i style="padding-top:10px" class="pe-7s-angle-left pe-5x"></i>
+          </a>
+        </div>
+        <div class="col-md-6"></div>
+        <div class="col-md-4" style="padding-bottom: 15px;padding-top: 23px;padding-right: 30px; text-align: right;">
+          <label><b>Atempts Remaining:</b> <%= attemptsRemaining %></label><br>
+          <label><b>Score:</b> <%= score %></label>
+        </div>
       </div>
     </div>
-    <webview id="webview" src="<%= notebookURL %>">
-    </webview>
-    <div class="col-lg-12" style="padding-right: 0; text-align: right;">
-      <button class="btn btn-sm btn-primary m-t-n-xs" style="display: inline-block;" data-dismiss="modal" type="button" id="notebookSubmit" onclick="submitNotebook('<%= assignment %>', '<%= notebook %>')">
+    <div id="wrapper" style="padding-top:29px;margin:0">
+      <webview id="webview" src="<%= notebookURL %>">
+      </webview>
+    </div>
+    <div class="col-lg-12" style="position:fixed; bottom:5%; left:90%">
+      <button class="btn btn-sm btn-primary m-t-n-xs" style="display: inline-block;" data-dismiss="modal" type="button" id="notebookSubmit" onclick="submitNotebook('<%= assignment %>', '<%= notebook %>', '<%= score %>', '<%= attemptsRemaining %>')">
         <strong>Submit</strong>
       </button>
     </div>
+    <% if (typeof modalError !== 'undefined' && modalError.length > 0) { %>
+      <div class="modal fade" id="errorModal" role="dialog">
+        <div class="modal-dialog">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">                                
+                  <label class="error"><%= modalError %></label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% } %>
     <script>
     const webview = document.querySelector('webview')
       webview.addEventListener('console-message', (e) => {
         console.log('Guest page logged a message:', e)
       })
+    <% if (typeof modalError !== 'undefined' && modalError.length > 0) { %>
+      $('#modalError').modal('show');
+    <% } %>
     </script>
     <% include ./partials/js_imports.ejs %>
     <script src="../static/js/notebook.js"></script>

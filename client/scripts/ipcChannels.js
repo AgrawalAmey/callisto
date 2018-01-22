@@ -27,16 +27,16 @@ const setChannels = (renderer, session) => {
         })
     });
 
-    ipcMain.on('openNotebook', (event, assignement, notebook, score, attemptsRemaining) => {
-        renderer.renderNotebookIndex(assignement, notebook, score, attemptsRemaining);
+    ipcMain.on('openNotebook', (event, assignment, notebook, score, attemptsRemaining) => {
+        renderer.renderNotebookIndex(assignment, notebook, score, attemptsRemaining, undefined);
     });
 
-    ipcMain.on('showAssignment', (event, assignement) => {
-        renderer.renderAssignmentIndex(remoteServerURL)
+    ipcMain.on('showAssignment', (event, assignment) => {
+        renderer.renderAssignmentIndex(assignment)
     });
 
-    ipcMain.on('submitNotebook', (event, assignement, notebook) => {
-        notebook.submitNotebook(assignement, notebook)
+    ipcMain.on('submitNotebook', (event, assignment, notebook, score, attemptsRemaining) => {
+        notebook.submitNotebook(assignment, notebook, score, attemptsRemaining)
     });
 }
 

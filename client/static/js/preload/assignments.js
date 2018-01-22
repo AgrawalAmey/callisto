@@ -14,8 +14,8 @@ function Assignments() {
         // return notebooksList
     }
 
-    this.openNotebook = (assignement, notebook, score, attemptsRemaining) => {
-        ipcRenderer.send('openNotebook', assignement, notebook, score, attemptsRemaining);
+    this.openNotebook = (assignment, notebook, score, attemptsRemaining) => {
+        ipcRenderer.send('openNotebook', assignment, notebook, score, attemptsRemaining);
     }
 }
 

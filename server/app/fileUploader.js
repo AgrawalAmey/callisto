@@ -65,8 +65,9 @@ function FileUploader(basePath) {
                 dest = self.getSubmissionsPath(req.user.username, req.params.assignmentName)
             }
 
-            mkdirp(dest)
-            callback(null, dest)
+            mkdirp(dest, () => {
+                callback(null, dest)
+            })
         },
         filename: function (req, file, callback) {
             switch (file.fieldname) {
