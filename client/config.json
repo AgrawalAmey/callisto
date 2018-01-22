@@ -2,5 +2,5 @@
   "pyServerAddr": "localhost:17350",
   "remoteServerAddr": "localhost:18350",
   "jupyterAddr": "localhost:19350",
-  "encryptionKey": "musicmakers"
+  "windowsInstallationTimeOut": 900000
 }
