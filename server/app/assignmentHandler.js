@@ -185,6 +185,7 @@ function AssignmentHandler (){
             Assignments.findOne({ 'name': req.params.assignmentName }, (err, assignment) => {
                
                 if(err){
+                    console.log(err)
                     res.status(500).send('Oops! Something went wrong.')
                     return
                 }
@@ -199,6 +200,7 @@ function AssignmentHandler (){
                 if (assignment.isActive) {
                     fileUploader.upload(req, res, (err) => {
                         if (err) {
+                            console.log(err)
                             res.status(500).send('Oops! Something went wrong.')
                             return
                         } else {
@@ -242,6 +244,7 @@ function AssignmentHandler (){
 
                             assignment.save((err, editedUser) => {
                                 if (err) {
+                                    console.log(err)
                                     res.status(500).send('Oops! Something went wrong.')
                                 } else {
                                     res.json({score: score, attemptsRemaining: attemptsRemaining})
@@ -433,10 +436,10 @@ function AssignmentHandler (){
         // asynchronous
         process.nextTick(() => {
             var problemsZipPath = fileUploader.getProblemsZipPath(assignment.name)
-            var problemsUnzipPath = fileUploader.getProblemsPath(assignment.name) + '/problems'
+            var problemsUnzipPath = fileUploader.getProblemsPath(assignment.name)
 
             var solutionsZipPath = fileUploader.getSolutionsZipPath(assignment.name)
-            var solutionsUnzipPath = fileUploader.getSolutionsPath(assignment.name) + '/solutions'
+            var solutionsUnzipPath = fileUploader.getSolutionsPath(assignment.name)
 
             if (fs.existsSync(solutionsZipPath)) {
                 fs.createReadStream(solutionsZipPath)

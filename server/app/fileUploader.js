@@ -6,12 +6,12 @@ var path = require('path')
 function FileUploader(basePath) {
     self = this
 
-    this.problemsBasePath = 'assignments/problems'
-    this.solutionsBasePath = 'assignments/solutions'
-    this.submissionsBasePath = 'assignments/submissions'
+    this.problemsBasePath = 'assignments/release'
+    this.solutionsBasePath = 'assignments/source'
+    this.submissionsBasePath = 'assignments/submitted'
 
-    this.problemsFileName = 'problems.zip'
-    this.solutionsFileName = 'solutions.zip'
+    this.problemsFileName = 'release.zip'
+    this.solutionsFileName = 'source.zip'
     
     this.getProblemsPath = (assignmentName) => {
         return path.join(this.problemsBasePath, assignmentName)
@@ -22,7 +22,7 @@ function FileUploader(basePath) {
     }
 
     this.getSubmissionsPath = (username, assignmentName) => {
-        return path.join(this.submissionsBasePath, assignmentName, username)
+        return path.join(this.submissionsBasePath, username, assignmentName)
     }
 
     this.getProblemsZipPath = (assignmentName) => {
@@ -34,7 +34,7 @@ function FileUploader(basePath) {
     }
 
     this.getSubmissonsNoetbookPath = (username, assignmentName, notebook) => {
-        return path.join(this.getSubmissionsPath(username, assignmentName), notebook + '.ipynb')
+        return path.join(this.getSubmissionsPath(username, assignmentName), notebook)
     }
 
 
@@ -57,6 +57,7 @@ function FileUploader(basePath) {
 
     this.storage = multer.diskStorage({
         destination: function (req, file, callback) {
+            console.log(file)
             if (file.fieldname == 'problems') {
                 dest = self.getProblemsPath(req.body.name)
             } else if (file.fieldname == 'solutions') {
@@ -65,9 +66,8 @@ function FileUploader(basePath) {
                 dest = self.getSubmissionsPath(req.user.username, req.params.assignmentName)
             }
 
-            mkdirp(dest, () => {
-                callback(null, dest)
-            })
+            mkdirp.sync(dest)
+            callback(null, dest)
         },
         filename: function (req, file, callback) {
             switch (file.fieldname) {
