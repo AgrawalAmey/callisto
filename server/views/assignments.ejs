@@ -146,7 +146,7 @@
                                         </div>
                                         <% if (user.isAdmin) { %>
                                             <div class="col-lg-1" style="padding-right: 0; text-align: right;">
-                                                <a data-toggle="modal" href="#addPracticeAssignmentModal"><i class="pe-7s-plus pe-2x"></i></a>
+                                                <a data-toggle="modal" href="#addAssignmentModal"><i class="pe-7s-plus pe-2x"></i></a>
                                             </div>
                                         <% } %>
                                     </div>
@@ -216,7 +216,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Add Evaluative Assignment</h4>
+                            <h4 class="modal-title">Add Assignment</h4>
                         </div>
                         <div class="modal-body">
                             <form role="form" id="addAssignmentForm" novalidate="novalidate" enctype="multipart/form-data" method="post" action="/addAssignment">
@@ -244,8 +244,8 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="checkbox checkbox-primary">
-                                        <input type="checkbox" id="addAssignmentIsEval" name="isEvaluative" checked readonly>
-                                        <label for="isEvaluative">Evaluative Assignment</label>
+                                        <input type="checkbox" id="addAssignmentIsEval" name="isEvaluative">
+                                        <label for="addAssignmentIsEval">Evaluative Assignment</label>
                                     </div>
                                 </div>
                                 <!--div class="form-group">
@@ -319,6 +319,12 @@
                                                 <span class="fa fa-calendar"></span>
                                             </span>
                                         <input type="text" class="form-control" name="endTime">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-primary">
+                                        <input type="checkbox" id="editAssignmentIsEvaluative" name="isEvaluative">
+                                        <label for="editAssignmentIsEvaluative">Evaluative Assignment</label>
                                     </div>
                                 </div>
                                 <!--div class="form-group">
@@ -398,7 +404,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Add Practice Assignment</h4>
+                            <h4 class="modal-title">Add Assignment</h4>
                         </div>
                         <div class="modal-body">
                             <form role="form" id="addPracticeAssignmentForm" novalidate="novalidate" enctype="multipart/form-data" method="post" action="/addAssignment">

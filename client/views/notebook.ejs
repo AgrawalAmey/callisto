@@ -22,7 +22,7 @@
       </div>
     </div>
     <div id="wrapper" style="padding-top:29px;margin:0">
-      <webview id="webview" src="<%= notebookURL %>">
+      <webview id="webview" src="<%= notebookURL %>" preload="../static/js/preload/notebookPreload.js">
       </webview>
     </div>
     <div class="col-lg-12" style="position:fixed; bottom:5%; left:90%">

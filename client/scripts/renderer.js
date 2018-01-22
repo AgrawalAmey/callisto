@@ -77,6 +77,14 @@ function Renderer(mainWindow){
         var jupyterAddr = require('../config').jupyterAddr
         var notebookURL = "http://" + jupyterAddr + "/notebooks/" + assignment + "/" + notebook;
 
+        // request.get('http://' + jupyterAddr, function(err, response, body) {
+        //     if(err) {
+
+        //     } else {
+                
+        //     }
+        // });
+
         ejse.data('modalError', modalError);
         ejse.data('assignment', assignment);
         ejse.data('notebook', notebook);
