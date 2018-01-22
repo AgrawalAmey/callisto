@@ -50,6 +50,20 @@ function createWindow () {
         mainWindow = null;
         session.logout()
     })
+
+    // To ensure that only one instance of works at time
+    var shouldQuit = app.makeSingleInstance(function (commandLine, workingDirectory) {
+        // Someone tried to run a second instance, we should focus our window.
+        if (myWindow) {
+            if (myWindow.isMinimized()) myWindow.restore();
+            myWindow.focus();
+        }
+    });
+
+    if (shouldQuit) {
+        app.quit();
+        return;
+    }
 }
 
 // This method will be called when Electron has finished

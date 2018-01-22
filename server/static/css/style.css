@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
 /* MARGINS & PADDINGS */
 .p-xxs {
   padding: 5px !important;
@@ -3704,12 +3703,4 @@ ul.h-list li:hover a {
 .success {
   color: green;
   font-weight: normal;
-}
-
-.modal-header {
-  padding: 16px;
-}
-
-.modal-tital {
-  padding-left: 15px;
 }
