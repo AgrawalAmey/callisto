@@ -1,4 +1,5 @@
 {
+  "appName": "NNFL-App",
   "pyServerAddr": "localhost:17350",
   "remoteServerAddr": "localhost:18350",
   "jupyterAddr": "localhost:19350",

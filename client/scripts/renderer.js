@@ -1,10 +1,15 @@
 // Load vender scripts
-const request = require('request');
-const path = require('path');
+const { app } = require('electron');
+const crypto = require('crypto');
 const ejse = require('ejs-electron');
+const fs = require('fs');
+const path = require('path');
+const request = require('request');
 
 // Load custom scripts
 const condaInstaller = require('./condaInstaller')
+const config = require('../config')
+const { exec, execSync } = require('child_process')
 const remoteServerAddrHandler = require('./remoteServerAddrHandler')
 
 function Renderer(mainWindow){
@@ -74,17 +79,57 @@ function Renderer(mainWindow){
         assignment = assignment.replace(/ /g, "%20")
         notebook = notebook.replace(/ /g, "%20")
 
-        var jupyterAddr = require('../config').jupyterAddr
+        var jupyterAddr = config.jupyterAddr
         var notebookURL = "http://" + jupyterAddr + "/notebooks/" + assignment + "/" + notebook;
 
-        // request.get('http://' + jupyterAddr, function(err, response, body) {
-        //     if(err) {
+        tokenFile = path.join(app.getPath('temp'), config.appName, 'tokenFile.txt');
 
-        //     } else {
-                
-        //     }
-        // });
+        fs.readFile(tokenFile, (err, data) => {
+            if (err) {
+                var token = crypto.randomBytes(20).toString('hex');
+                fs.writeFile(tokenFile, token, (err) => {
+                    if (err) {
+                        throw err;
+                    } else {
+                        checkAndStartJupyter(token, assignment, notebook, score, attemptsRemaining, modalError, notebookURL)
+                    }
+                });
+            } else {
+                var token = data;
+                checkAndStartJupyter(token, assignment, notebook, score, attemptsRemaining, modalError, notebookURL)
+            }
+        });
+    }
 
+    checkAndStartJupyter = (token, assignment, notebook, score, attemptsRemaining, modalError, notebookURL) => {
+        var jupyterAddr = config.jupyterAddr;
+        var opts = {
+            uri: 'http://' + jupyterAddr,
+            qs: {
+                token: token
+            }
+        }
+
+        request.get(opts, (err, response, body) => {
+            if (err) {
+                var userPath = path.join(app.getPath('userData'), 'assignments');
+                var notebookCmd = "jupyter notebook --NotebookApp.token='" + token + "' --notebook-dir='" + userPath + "' --no-browser"
+                exec(notebookCmd, (error, stdout, stderr) => {
+                    if(error) {
+                        throw error;
+                    } else {
+                        console.log('stdout:', stdout);
+                        console.log('stderr:', stderr);
+                        loadNotebookURL(assignment, notebook, score, attemptsRemaining, modalError, notebookURL);
+                    }
+                });
+            } else {
+                loadNotebookURL(assignment, notebook, score, attemptsRemaining, modalError, notebookURL);
+            }
+        });
+    }
+
+    loadNotebookURL = (assignment, notebook, score, attemptsRemaining, modalError, notebookURL) => {
         ejse.data('modalError', modalError);
         ejse.data('assignment', assignment);
         ejse.data('notebook', notebook);
