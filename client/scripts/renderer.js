@@ -76,11 +76,11 @@ function Renderer(mainWindow){
     }
 
     this.renderNotebookIndex = (assignment, notebook, score, attemptsRemaining, modalError) => {
-        assignment = assignment.replace(/ /g, "%20")
+        var assignmentName = assignment.name.replace(/ /g, "%20")
         notebook = notebook.replace(/ /g, "%20")
 
         var jupyterAddr = require('../config').jupyterAddr
-        var notebookURL = "http://" + jupyterAddr + "/notebooks/" + assignment + "/" + notebook;
+        var notebookURL = "http://" + jupyterAddr + "/notebooks/" + assignmentName + "/" + notebook;
 
         // request.get('http://' + jupyterAddr, function(err, response, body) {
         //     if(err) {
@@ -91,6 +91,7 @@ function Renderer(mainWindow){
         // });
 
         ejse.data('modalError', modalError);
+        ejse.data('assignmentName', assignmentName);
         ejse.data('assignment', assignment);
         ejse.data('notebook', notebook);
         ejse.data('score', score);

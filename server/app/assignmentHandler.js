@@ -33,6 +33,7 @@ function AssignmentHandler (){
         assignment.startTime = req.body.startTime
         assignment.endTime = req.body.endTime
         assignment.isEvaluative = req.body.isEvaluative || false
+        assignment.isEvaluated = req.body.isEvaluated || false
         assignment.solutionsAvailable = req.body.solutionsAvailable || false
         assignment.acceptSubmission = req.body.acceptSubmission || false
 
@@ -81,28 +82,24 @@ function AssignmentHandler (){
                     return
                 }
 
-                assignment.isSubmitted = false
-                for (i = 0; i < assignment.whoSubmitted.length; i++) {
-                    if (assignment.whoSubmitted[i] == req.user.username) {
-                        assignment.isSubmitted = true
-                        break
-                    }
-                }
-
                 var scores = []
-                var attemptsRemaining = config.maxSubmissionAttemps
+                var attemptsRemaining = []
+                var isSubmitted = []
 
                 assignment.notebooks.forEach((notebook) => {
                     submission = notebook.submissions.find(submission => submission.username == req.user.username)
                     // If user has not submitted
                     if (!submission) {
                         score = 0
+                        attemptsRemaining = config.maxSubmissionAttempts
                     } else {
                         score = submission.score
-                        attemptsRemaining -= submission.attempts
+                        attemptsRemaining = config.maxSubmissionAttempts - submission.attempts
                     }
                     
                     scores.push(score)
+                    attemptsRemaining.push(attemptsRemaining)
+                    isSubmitted.push(attemptsRemaining != config.maxSubmissionAttempts)
                 })
             
                 assignment.isActive = this.isActive(assignment)
@@ -113,7 +110,8 @@ function AssignmentHandler (){
                         user: req.user,
                         assignment: assignment,
                         scores: scores,
-                        attemptsRemaining: attemptsRemaining
+                        attemptsRemaining: attemptsRemaining,
+                        isSubmitted: isSubmitted
                     })
                 } else {
                     res.redirect('/assignments')
@@ -238,7 +236,7 @@ function AssignmentHandler (){
 
                             
                             attempts = ++assignment.notebooks[notebookIndex].submissions[submissionIndex].attempts
-                            attemptsRemaining = config.maxSubmissionAttemps - attempts
+                            attemptsRemaining = config.maxSubmissionAttempts - attempts
 
                             if (attemptsRemaining <0){
                                 res.status(400).send('Maximum submission limit reached.')

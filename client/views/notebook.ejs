@@ -10,14 +10,22 @@
     <div id="header" style="height:85px">
       <div class="row hpanel" style="margin-bottom:0;">
         <div class="col-md-2" style="padding-left: 30px">
-          <a id="backBtn" onclick="goTo('<%= assignment %>', '<%= notebook %>')">
+          <a id="backBtn" onclick="goTo('<%= assignmentName %>', '<%= notebook %>')">
             <i style="padding-top:10px" class="pe-7s-angle-left pe-5x"></i>
           </a>
         </div>
         <div class="col-md-6"></div>
         <div class="col-md-4" style="padding-bottom: 15px;padding-top: 23px;padding-right: 30px; text-align: right;">
-          <label><b>Atempts Remaining:</b> <%= attemptsRemaining %></label><br>
-          <label><b>Score:</b> <%= score %></label>
+          <% if (isSubmitted[i]) { %>
+              <lable><b>Submitted:</b><i class="fa fa-check-square" aria-hidden="true"></i></lable>
+          <% } else { %>
+              <lable><b>Submitted:</b><i class="fa fa-window-close" aria-hidden="true"></i></lable>
+          <% } %>
+          <% if (assignment.isEvaluated) { %>
+            <label><b>Score:</b> <%= score %></label>
+          <% } else { %>
+            <label><b>Atempts Remaining:</b> <%= attemptsRemaining %></label><br>
+          <% } %>
         </div>
       </div>
     </div>
@@ -25,11 +33,13 @@
       <webview id="webview" src="<%= notebookURL %>" preload="../static/js/preload/notebookPreload.js">
       </webview>
     </div>
+    <% if (assignment.isActive) { %>
     <div class="col-lg-12" style="position:fixed; bottom:5%; left:90%">
-      <button class="btn btn-sm btn-primary m-t-n-xs" style="display: inline-block;" data-dismiss="modal" type="button" id="notebookSubmit" onclick="submitNotebook('<%= assignment %>', '<%= notebook %>', '<%= score %>', '<%= attemptsRemaining %>')">
+      <button class="btn btn-sm btn-primary m-t-n-xs" style="display: inline-block;" data-dismiss="modal" type="button" id="notebookSubmit" onclick="submitNotebook('<%= assignmentName %>', '<%= notebook %>', '<%= score %>', '<%= attemptsRemaining %>')">
         <strong>Submit</strong>
       </button>
     </div>
+    <% } %>
     <% if (typeof modalError !== 'undefined' && modalError.length > 0) { %>
       <div class="modal fade" id="errorModal" role="dialog">
         <div class="modal-dialog">
