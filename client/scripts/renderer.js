@@ -85,7 +85,7 @@ function Renderer(mainWindow){
         notebook.name = notebook.name.replace(/ /g, "%20")
 
         var jupyterAddr = require('../config').jupyterAddr
-        var notebookURL = "http://" + jupyterAddr + "/notebooks/" + assignment.name + "/" + notebook.name;
+        var notebookURL = "http://" + jupyterAddr + "/notebooks/submitted/user/" + assignment.name + "/" + notebook.name;
 
         tokenFile = path.join(app.getPath('temp'), 'tokenFile.txt');
 
@@ -120,7 +120,7 @@ function Renderer(mainWindow){
 
         request(opts, (err, response, body) => {
             if (err) {
-                var userDataPath = path.join(app.getPath('userData'), 'assignments', 'submitted', 'user')
+                var userDataPath = path.join(app.getPath('userData'), 'assignments')
                 var jupyterPort = jupyterAddr.split(":")[1]
                 var jupyterPath = path.join(condaInstaller.getInstallationPath(), 'bin', 'jupyter')
                 var notebookCmd = jupyterPath + " notebook --NotebookApp.token='" + token + "' --notebook-dir='" + userDataPath + "' --no-browser --port=" + jupyterPort;
