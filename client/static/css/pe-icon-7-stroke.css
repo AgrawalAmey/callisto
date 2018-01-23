@@ -1,6 +1,6 @@
 @font-face {
 	font-family: 'Pe-icon-7-stroke';
-	src:url('../fonts/Pe-icon-7-stroke.woff?-2irksn') format('woff');
+	src:url('nnfl://fonts/Pe-icon-7-stroke.woff') format('woff');
 	font-weight: normal;
 	font-style: normal;
 }

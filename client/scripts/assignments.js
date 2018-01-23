@@ -1,6 +1,7 @@
 // Load vender scripts
 const { app } = require('electron');
 const fs = require('fs')
+const mkdirp = require('mkdirp')
 const ncp = require('ncp').ncp;
 const path = require('path')
 const unzip = require('unzip')
@@ -64,6 +65,7 @@ function Assignments() {
             if (resp.statusCode == 200) {
                 r.pipe(unzip.Extract({ path: problemsDir }))
                     .on('close', () => {
+                        mkdirp.sync(submissionsDir)
                         ncp(problemsDir, submissionsDir, (err) => {
                             callback(err)
                         })
@@ -72,7 +74,13 @@ function Assignments() {
                         callback(err)
                     })
             } else {
-                console.log(resp.body)
+                var body = ''
+                resp.on('data', function (chunk) {
+                    body += chunk
+                })
+                resp.on('end', function () {
+                    callback(new Error(body))
+                })
             }
         })
     }
@@ -94,18 +102,27 @@ function Assignments() {
 
         request = sessionHandler.getRequestHandler()
 
-        request(options)
-            .on('response', (resp) => {
-                console.log(resp)
-                console.log(resp.statusCode) // 200
-            })
-            .pipe(unzip.Extract({ path: solutionsDir }))
-            .on('close', () => {
-                callback()
-            })
-            .on('error', (err) => {
-                callback(err)
-            })
+        var r = request(options)
+
+        r.on('response', (resp) => {
+            if (resp.statusCode == 200) {
+                r.pipe(unzip.Extract({ path: solutionsDir }))
+                    .on('close', () => {
+                        callback()
+                    })
+                    .on('error', (err) => {
+                        callback(err)
+                    })
+            } else {
+                var body = ''
+                resp.on('data', function (chunk) {
+                    body += chunk
+                })
+                resp.on('end', function () {
+                    callback(new Error(body))
+                })
+            }
+        })
     }
 }
 

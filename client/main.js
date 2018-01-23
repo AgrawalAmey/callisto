@@ -1,5 +1,6 @@
 // Load vender libraries
 const electron = require('electron')
+const { protocol } = require('electron')
 const ejse = require('ejs-electron')
 const path = require('path')
 const request = require('request')
@@ -21,6 +22,14 @@ const BrowserWindow = electron.BrowserWindow
 let mainWindow;
 
 function createWindow () {
+
+    protocol.registerFileProtocol('nnfl', (request, callback) => {
+        const url = request.url.replace(/^.*\/\//, '')
+        callback({ path: path.normalize(`${__dirname}/static/${url}`) })
+    }, (error) => {
+        if (error) console.error('Failed to register protocol')
+    })
+
     // Create the browser window.
     mainWindow = new BrowserWindow({
         width: 800, 
@@ -87,4 +96,3 @@ app.on('activate', function () {
         createWindow();
     }
 });
-
