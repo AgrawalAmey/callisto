@@ -20,6 +20,7 @@ var assignmentSchema = mongoose.Schema({
     solutionsAvailable: Boolean,
     isEvaluative: Boolean,
     whoSubmitted: [String],
+    isEvaluated: Boolean,
     notebooks: [{
         name: String,
         submissions: [{
