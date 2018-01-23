@@ -5,6 +5,7 @@ const path = require('path');
 
 // Custom scripts
 const cipher = require('./cipher.js')
+const config = require('../config')
 
 function Creds() {
 

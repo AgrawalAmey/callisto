@@ -114,6 +114,10 @@ function Assignments() {
                         callback(err)
                     })
             } else {
+                if (resp.statusCode == 404) {
+                    callback()
+                    return
+                }
                 var body = ''
                 resp.on('data', function (chunk) {
                     body += chunk

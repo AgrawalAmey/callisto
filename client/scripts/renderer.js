@@ -1,10 +1,15 @@
 // Load vender scripts
-const request = require('request');
-const path = require('path');
+const { app } = require('electron');
+const crypto = require('crypto');
 const ejse = require('ejs-electron');
+const fs = require('fs');
+const path = require('path');
+const request = require('request');
 
 // Load custom scripts
 const condaInstaller = require('./condaInstaller')
+const config = require('../config')
+const { exec, execSync } = require('child_process')
 const remoteServerAddrHandler = require('./remoteServerAddrHandler')
 
 function Renderer(mainWindow){
@@ -79,17 +84,77 @@ function Renderer(mainWindow){
         var assignmentName = assignment.name.replace(/ /g, "%20")
         notebook = notebook.replace(/ /g, "%20")
 
+<<<<<<< HEAD
         var jupyterAddr = require('../config').jupyterAddr
         var notebookURL = "http://" + jupyterAddr + "/notebooks/" + assignmentName + "/" + notebook;
+=======
+        var jupyterAddr = config.jupyterAddr
+        var notebookURL = "http://" + jupyterAddr + "/notebooks/" + assignment + "/" + notebook;
+>>>>>>> e8515ac56c1936defbbff029aa42c526285c7b9e
 
-        // request.get('http://' + jupyterAddr, function(err, response, body) {
-        //     if(err) {
+        tokenFile = path.join(app.getPath('temp'), 'tokenFile.txt');
 
-        //     } else {
-                
-        //     }
-        // });
+        fs.readFile(tokenFile, (err, data) => {
+            if (err) {
+                var token = crypto.randomBytes(20).toString('hex');
+                fs.writeFile(tokenFile, token, (err) => {
+                    if (err) {
+                        throw err;
+                    } else {
+                        checkAndStartJupyter(token, assignment, notebook, score, attemptsRemaining, modalError, notebookURL)
+                    }
+                });
+            } else {
+                var token = data.toString();
+                checkAndStartJupyter(token, assignment, notebook, score, attemptsRemaining, modalError, notebookURL)
+            }
+        });
+    }
 
+    checkAndStartJupyter = (token, assignment, notebook, score, attemptsRemaining, modalError, notebookURL) => {
+        var jupyterAddr = config.jupyterAddr;
+        notebookURL = notebookURL + '?token=' + token;
+        var opts = {
+            url: 'http://' + jupyterAddr,
+            qs: {
+                token: token
+            }
+        }
+
+        let child;
+
+        request(opts, (err, response, body) => {
+            if (err) {
+                console.log(err);
+                var userDataPath = path.join(app.getPath('userData'), 'assignments', 'submitted', 'user')
+                var jupyterPort = jupyterAddr.split(":")[1]
+                var notebookCmd = path.join(condaInstaller.getInstallationPath(), 'bin', 'jupyter') + " notebook --NotebookApp.token='" + token + "' --notebook-dir='" + userDataPath + "' --no-browser --port=" + jupyterPort;
+                console.log(notebookCmd);
+                child = exec(notebookCmd);
+                wrapper(assignment, notebook, score, attemptsRemaining, modalError, notebookURL, child);
+            } else {
+                loadNotebookURL(assignment, notebook, score, attemptsRemaining, modalError, notebookURL);
+            }
+        });
+    }
+
+    wrapper = (assignment, notebook, score, attemptsRemaining, modalError, notebookURL, child) => {
+        var buffer = '';
+
+        stdoutHandler = (data, cb) => {
+            buffer = buffer + data;
+            console.log(buffer)
+            if(buffer.includes('The Jupyter Notebook is running at')) {
+                loadNotebookURL(assignment, notebook, score, attemptsRemaining, modalError, notebookURL);
+                buffer = '';
+                child.stdout.removeListener('data', stdoutHandler);
+            }
+        }
+
+        child.stderr.on('data', stdoutHandler);
+    }
+
+    loadNotebookURL = (assignment, notebook, score, attemptsRemaining, modalError, notebookURL) => {
         ejse.data('modalError', modalError);
         ejse.data('assignmentName', assignmentName);
         ejse.data('assignment', assignment);
