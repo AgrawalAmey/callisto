@@ -23,12 +23,11 @@ let mainWindow;
 
 function createWindow () {
 
-    protocol.registerFileProtocol('nnfl', (request, callback) => {
-        const url = request.url.replace(/^.*\/\//, '')
-        callback({ path: path.normalize(`${__dirname}/static/${url}`) })
-    }, (error) => {
-        if (error) console.error('Failed to register protocol')
-    })
+    var shouldQuit = makeSingleInstance()
+    if (shouldQuit) return app.quit()
+
+    // Register nnfl protocol to serve static files locally
+    registerNNFLProtocol()
 
     // Create the browser window.
     mainWindow = new BrowserWindow({
@@ -56,23 +55,28 @@ function createWindow () {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
-        mainWindow = null;
         session.logout()
     })
+}
 
-    // To ensure that only one instance of works at time
-    var shouldQuit = app.makeSingleInstance(function (commandLine, workingDirectory) {
-        // Someone tried to run a second instance, we should focus our window.
-        if (myWindow) {
-            if (myWindow.isMinimized()) myWindow.restore();
-            myWindow.focus();
+function makeSingleInstance() {
+    if (process.mas) return false
+
+    return app.makeSingleInstance(function () {
+        if (mainWindow) {
+            if (mainWindow.isMinimized()) mainWindow.restore()
+            mainWindow.focus()
         }
-    });
+    })
+}
 
-    if (shouldQuit) {
-        app.quit();
-        return;
-    }
+function registerNNFLProtocol() {
+    protocol.registerFileProtocol('nnfl', (request, callback) => {
+        const url = request.url.replace(/^.*\/\//, '')
+        callback({ path: path.normalize(`${__dirname}/static/${url}`) })
+    }, (error) => {
+        if (error) console.error('Failed to register protocol')
+    })
 }
 
 // This method will be called when Electron has finished

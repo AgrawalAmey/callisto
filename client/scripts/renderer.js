@@ -80,17 +80,12 @@ function Renderer(mainWindow){
         this.mainWindow.loadURL(path.join('file://', __dirname, '../views', 'assignmentDownloader.ejs'));
     }
 
-    this.renderNotebookIndex = (assignment, notebook, score, attemptsRemaining, modalError) => {
-        var assignmentName = assignment.name.replace(/ /g, "%20")
-        notebook = notebook.replace(/ /g, "%20")
+    this.renderNotebookIndex = (assignment, notebook, modalError) => {
+        assignment.name = assignment.name.replace(/ /g, "%20")
+        notebook.name = notebook.name.replace(/ /g, "%20")
 
-<<<<<<< HEAD
         var jupyterAddr = require('../config').jupyterAddr
-        var notebookURL = "http://" + jupyterAddr + "/notebooks/" + assignmentName + "/" + notebook;
-=======
-        var jupyterAddr = config.jupyterAddr
-        var notebookURL = "http://" + jupyterAddr + "/notebooks/" + assignment + "/" + notebook;
->>>>>>> e8515ac56c1936defbbff029aa42c526285c7b9e
+        var notebookURL = "http://" + jupyterAddr + "/notebooks/" + assignment.name + "/" + notebook.name;
 
         tokenFile = path.join(app.getPath('temp'), 'tokenFile.txt');
 
@@ -101,17 +96,17 @@ function Renderer(mainWindow){
                     if (err) {
                         throw err;
                     } else {
-                        checkAndStartJupyter(token, assignment, notebook, score, attemptsRemaining, modalError, notebookURL)
+                        checkAndStartJupyter(token, assignment, notebook, modalError, notebookURL)
                     }
                 });
             } else {
                 var token = data.toString();
-                checkAndStartJupyter(token, assignment, notebook, score, attemptsRemaining, modalError, notebookURL)
+                checkAndStartJupyter(token, assignment, notebook, modalError, notebookURL)
             }
         });
     }
 
-    checkAndStartJupyter = (token, assignment, notebook, score, attemptsRemaining, modalError, notebookURL) => {
+    checkAndStartJupyter = (token, assignment, notebook, modalError, notebookURL) => {
         var jupyterAddr = config.jupyterAddr;
         notebookURL = notebookURL + '?token=' + token;
         var opts = {
@@ -125,27 +120,25 @@ function Renderer(mainWindow){
 
         request(opts, (err, response, body) => {
             if (err) {
-                console.log(err);
                 var userDataPath = path.join(app.getPath('userData'), 'assignments', 'submitted', 'user')
                 var jupyterPort = jupyterAddr.split(":")[1]
-                var notebookCmd = path.join(condaInstaller.getInstallationPath(), 'bin', 'jupyter') + " notebook --NotebookApp.token='" + token + "' --notebook-dir='" + userDataPath + "' --no-browser --port=" + jupyterPort;
-                console.log(notebookCmd);
+                var jupyterPath = path.join(condaInstaller.getInstallationPath(), 'bin', 'jupyter')
+                var notebookCmd = jupyterPath + " notebook --NotebookApp.token='" + token + "' --notebook-dir='" + userDataPath + "' --no-browser --port=" + jupyterPort;
                 child = exec(notebookCmd);
-                wrapper(assignment, notebook, score, attemptsRemaining, modalError, notebookURL, child);
+                wrapper(assignment, notebook, modalError, notebookURL, child);
             } else {
-                loadNotebookURL(assignment, notebook, score, attemptsRemaining, modalError, notebookURL);
+                loadNotebookURL(assignment, notebook, modalError, notebookURL);
             }
         });
     }
 
-    wrapper = (assignment, notebook, score, attemptsRemaining, modalError, notebookURL, child) => {
+    wrapper = (assignment, notebook, modalError, notebookURL, child) => {
         var buffer = '';
 
         stdoutHandler = (data, cb) => {
             buffer = buffer + data;
-            console.log(buffer)
             if(buffer.includes('The Jupyter Notebook is running at')) {
-                loadNotebookURL(assignment, notebook, score, attemptsRemaining, modalError, notebookURL);
+                loadNotebookURL(assignment, notebook, modalError, notebookURL);
                 buffer = '';
                 child.stdout.removeListener('data', stdoutHandler);
             }
@@ -154,22 +147,18 @@ function Renderer(mainWindow){
         child.stderr.on('data', stdoutHandler);
     }
 
-    loadNotebookURL = (assignment, notebook, score, attemptsRemaining, modalError, notebookURL) => {
+    loadNotebookURL = (assignment, notebook, modalError, notebookURL) => {
         ejse.data('modalError', modalError);
-        ejse.data('assignmentName', assignmentName);
         ejse.data('assignment', assignment);
         ejse.data('notebook', notebook);
-        ejse.data('score', score);
-        ejse.data('attemptsRemaining', attemptsRemaining);
         ejse.data('notebookURL', notebookURL);
         this.mainWindow.loadURL(path.join('file://', __dirname, '../views', 'notebook.ejs'));
     }
 
     this.renderAssignmentIndex = (assignment) => {
-        assignment = assignment.replace(/ /g, "%20")
         var config = require('../config');
         var remoteServerAddr = config.remoteServerAddr;
-        var remoteServerURL = "http://" + remoteServerAddr + '/assignment?name=' + assignment;
+        var remoteServerURL = "http://" + remoteServerAddr + '/assignment?name=' + assignment.name
 
         this.renderWebview(remoteServerURL);
     }

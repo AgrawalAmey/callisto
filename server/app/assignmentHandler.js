@@ -82,12 +82,11 @@ function AssignmentHandler (){
                     return
                 }
 
-                var scores = []
-                var attemptsRemaining = []
-                var isSubmitted = []
+                var totalScore = 0
 
-                assignment.notebooks.forEach((notebook) => {
-                    submission = notebook.submissions.find(submission => submission.username == req.user.username)
+                for (let i = 0; i < assignment.notebooks.length; i++) {
+                    submission = assignment.notebooks[i].submissions.find(submission => submission.username == req.user.username)
+                                        
                     // If user has not submitted
                     if (!submission) {
                         score = 0
@@ -96,12 +95,17 @@ function AssignmentHandler (){
                         score = submission.score
                         attemptsRemaining = config.maxSubmissionAttempts - submission.attempts
                     }
-                    
-                    scores.push(score)
-                    attemptsRemaining.push(attemptsRemaining)
-                    isSubmitted.push(attemptsRemaining != config.maxSubmissionAttempts)
-                })
-            
+
+                    totalScore += score
+                    assignment.notebooks[i] = {
+                        name: assignment.notebooks[i].name, 
+                        score: score,
+                        attemptsRemaining: attemptsRemaining,
+                        isSubmitted: attemptsRemaining != config.maxSubmissionAttempts,
+                        numSubmissions: assignment.notebooks[i].submissions.length
+                    }
+                }
+
                 assignment.isActive = this.isActive(assignment)
                 assignment.showToStudents = this.showToStudents(assignment)
 
@@ -109,9 +113,7 @@ function AssignmentHandler (){
                     res.render('assignment.ejs', {
                         user: req.user,
                         assignment: assignment,
-                        scores: scores,
-                        attemptsRemaining: attemptsRemaining,
-                        isSubmitted: isSubmitted
+                        totalScore: totalScore
                     })
                 } else {
                     res.redirect('/assignments')

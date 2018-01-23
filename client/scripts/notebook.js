@@ -9,18 +9,16 @@ const renderer = require('./renderer')
 const sessionHandler = require('./sessionHandler.js')
 
 function Notebook() {
-    this.submitNotebook = (assignment, notebook, score, attemptsRemaining) => {
+    this.submitNotebook = (assignment, notebook) => {
         var assignmentDir = assignments.getPath(assignment)
         var remoteServerAddr = require('../config').remoteServerAddr
-        assignment = assignment.replace(/ /g, "%20")
-        notebook = notebook.replace(/ /g, "%20")
         request = sessionHandler.getRequestHandler()
 
         var filePath = path.join(assignmentDir, notebook)
 
         var options = { 
             method: 'POST',
-            url: 'http://' + remoteServerAddr + '/assignment/upload/' + assignment + '/' + notebook,
+            url: 'http://' + remoteServerAddr + '/assignment/upload/' + assignment.name + '/' + notebook.name,
             headers: {
                 'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' 
             },
@@ -38,9 +36,9 @@ function Notebook() {
 
         request(options, function (error, response, body) {
             if (error) {
-                renderer.renderNotebookIndex(assignment, notebook, score, attemptsRemaining, 'Oops! Something went wrong! Please try again')
+                renderer.renderNotebookIndex(assignment, notebook, 'Oops! Something went wrong! Please try again')
             } else {
-                renderer.renderNotebookIndex(assignment, notebook, body.score, body.attemptsRemaining, undefined)
+                renderer.renderNotebookIndex(assignment, notebook, undefined)
             }
         });
     }

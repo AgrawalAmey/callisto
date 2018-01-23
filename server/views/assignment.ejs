@@ -47,10 +47,10 @@
                                         <% } else { %>
                                             <h5>
                                                 <b>Notebooks submitted:</b>
-                                                <%= isSubmitted.filter(x => x).length %>/<%= isSubmitted.length %>
+                                                <%= assignment.notebooks.filter(x => x.isSubmitted).length %>/<%= assignment.notebooks.length %>
                                             </h5>
                                             <% if (assignment.isEvaluated) { %>
-                                                <h5><b>Score:</b> <%= scores.reduce((a, b) => a + b, 0) %></h5>
+                                                <h5><b>Score:</b> <%= totalScore %></h5>
                                             <% } %>
                                         <% } %>
                                     </div>
@@ -88,7 +88,7 @@
                                                     <tr>
                                                         <td>
                                                             <a class="btn-sm btn-primary m-t-n-xs" 
-                                                                onclick="assignments.openNotebook('<%= assignment %>', '<%= assignment.notebooks[i].name %>', '<%= scores[i] %>', '<%= attemptsRemaining %>')">
+                                                                onclick="assignments.openNotebook('<%= JSON.stringify(assignment) %>', '<%= JSON.stringify(assignment.notebooks[i]) %>')">
                                                                 <%=  assignment.notebooks[i].name.slice(0, -6) %>
                                                             </a>
                                                         </td>
@@ -100,17 +100,17 @@
                                                             </td>
                                                         <% } %>
                                                         <% if (user.isAdmin) { %>
-                                                            <td><b><%= assignment.notebooks[i].submissions.length %></b></td>
+                                                            <td><b><%= assignment.notebooks[i].numSubmissions %></b></td>
                                                         <% } else { %>
-                                                            <% if (isSubmitted[i]) { %>
+                                                            <% if (assignment.notebooks[i].isSubmitted) { %>
                                                                 <td><i class="fa fa-check-square" aria-hidden="true"></i></td>
                                                             <% } else { %>
                                                                 <td><i class="fa fa-window-close" aria-hidden="true"></i></td>
                                                             <% } %>
                                                             <% if (assignment.isEvaluated) { %>
-                                                                <td><b><%= scores[i] %></b></td>                        
+                                                                <td><b><%= assignment.notebooks[i].score %></b></td>                        
                                                             <% } else { %>
-                                                                <td><b>attemptsRemaining[i]</b></td>
+                                                                <td><b><%= assignment.notebooks[i].attemptsRemaining %></b></td>
                                                             <% } %>
                                                         <% } %>
                                                     </tr>
