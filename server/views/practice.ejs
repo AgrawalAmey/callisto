@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ./partials/head.ejs %>
+    <title>Neural Nets & Fuzzy Logic | Assignments</title>
+</head>
+
+<body class="fixed-navbar fixed-sidebar">
+    <% if (user.isAdmin) { %>
+            <% include ./partials/admin_header.ejs %> 
+    <% } else { %>
+        <% include ./partials/user_header.ejs %>
+    <% } %>
+    <% if (user.isAdmin) { %>
+            <% include ./partials/admin_nav.ejs %> 
+    <% } else { %>
+        <% include ./partials/user_nav.ejs %>
+    <% } %>
+    <!-- Main Wrapper -->
+    <div id=wrapper>
+        <div class="small-header transition animated fadeIn">
+            <div class=hpanel>
+                <div class=panel-body>
+                    <h2 class="font-light m-b-xs">Practice</h2></div>
+            </div>
+        </div>
+        <div class="content animate-panel">
+            <div>
+
+                <div class=row>
+                    <div class="col-lg-12">
+                        <div class="hpanel">
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <div class="col-lg-12" style="padding: 0">
+                                        <div class="col-lg-11" style="padding-left: 0">
+                                            <h4>Practice Notebooks</h4>
+                                        </div>
+                                        <div class="col-lg-1" style="padding-right: 0; text-align: right;">
+                                            <a data-toggle="modal" href="#addNotebookModal"><i class="pe-7s-plus pe-2x"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>      
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer-->
+        <footer class=footer>&copy; Team NNFL</footer>
+    </div>
+    <% include ./partials/js_imports.ejs %>
+    <script type="text/javascript" src="nnfl://js/practice.js"></script>
+</body>
+
+</html>

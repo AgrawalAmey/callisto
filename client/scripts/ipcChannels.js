@@ -4,6 +4,7 @@ const {app, ipcMain} = require('electron');
 // Load custom scripts
 const assignments = require('./assignments')
 const notebook = require('./notebook')
+const practice = require('./practice')
 
 // Config
 const config = require('../config')
@@ -46,6 +47,12 @@ const setChannels = (renderer, session) => {
 
     ipcMain.on('submitNotebook', (event, assignment, notebook, score, attemptsRemaining) => {
         notebook.submitNotebook(assignment, notebook, score, attemptsRemaining)
+    });
+
+    ipcMain.on('practiceNBList', (event) => {
+        practice.NBList((list) => {
+            ipcMain.send('practiceNBList-reply', list);
+        });
     });
 }
 

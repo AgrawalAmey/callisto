@@ -78,6 +78,18 @@ module.exports = function(app, passport) {
     app.post('/assignment/upload/:assignmentName/:notebook', isLoggedIn, assignmentHandler.uploadSubmission);
 
     // =====================================
+    // Render Practice Page ================
+    // =====================================
+
+    app.get('/practice', isLoggedIn, (req, res) => {
+        process.nextTick(() => {
+            res.render('practice.ejs', {
+                user: req.user
+            })
+        })
+    });
+
+    // =====================================
     // Manage users ========================
     // =====================================
 
