@@ -51,12 +51,13 @@ module.exports = function(app, passport) {
     // =====================================
 
     app.get('/assignments', isLoggedIn, assignmentHandler.renderAssignmentsPage);
- 
+
     // =====================================
     // Details of specific assignment ======
     // =====================================
-    
+
     app.get('/assignment', isLoggedIn, assignmentHandler.renderAssignmentPage);
+
 
     // =====================================
     // Serve assignment file          ======
@@ -69,7 +70,6 @@ module.exports = function(app, passport) {
     // =====================================    
 
     app.get('/assignment/solutions/:assignmentName', isLoggedIn, assignmentHandler.serveSolutions);
-
 
     // =====================================
     // Assignment upload              ======

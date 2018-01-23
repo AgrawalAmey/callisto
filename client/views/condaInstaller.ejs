@@ -11,13 +11,14 @@
 	            <div class="col-md-12">
 	                <div class="text-center m-b-md">
 	                    <h1>Neural Nets & Fuzzy Logic</h1>
-	                    <small>Please enter Server details to proceed</small>
 	                </div>
 	                <div class="hpanel" style="margin-top: 50px">
 						<!-- show any messages that come back with authentication -->
 						<% if (typeof condaInstallError !== 'undefined' && condaInstallError.length > 0) { %>
 							<div>                                
-								<label class="error" for="remoteServerAddr"><%= condaInstallError %></label>
+								<h4 class="error" style="text-align: center;">
+									<%= condaInstallError %>
+								</h4>
 							</div>
 						<% } else { %>
 							<div class="text-center m-b-md">
@@ -32,8 +33,8 @@
 								<h4> This might take a while. </h4>
 							</div>
 						<% } %>
-	            </div>
-	        </div>
+	            	</div>
+	        	</div>
 	        <div class="row">
 	            <div class="col-md-12 text-center">
 	                &copy; Team NNFL

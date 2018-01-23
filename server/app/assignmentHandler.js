@@ -129,10 +129,15 @@ function AssignmentHandler (){
     this.serveProblems = (req, res) => {
         // asynchronous
         process.nextTick(() => {
+            
             Assignments.findOne({ 'name': req.params.assignmentName }, (err, assignment) => {
+                if (err) {
+                    res.status(500).send('Oops! Something went wrong.')
+                    return
+                }
 
-                if (err || !assignment) {
-                    res.redirect('/assignments')
+                if (!assignment) {
+                    res.status(400).send('Invalid assignment name.')
                     return
                 }
 
@@ -140,9 +145,9 @@ function AssignmentHandler (){
                 assignment.showToStudents = this.showToStudents(assignment)
 
                 if (assignment.showToStudents || req.user.isAdmin) {
-                    res.download(fileUploader.getProblemsPath(assignment.name))
+                    res.download(fileUploader.getProblemsZipPath(assignment.name))
                 } else {
-                    res.redirect('/assignments')
+                    res.status(401).send('Problems not available for students yet.')
                 }
             })
         })
@@ -157,8 +162,13 @@ function AssignmentHandler (){
         process.nextTick(() => {
             Assignments.findOne({ 'name': req.params.assignmentName }, (err, assignment) => {
 
-                if (err || !assignment) {
-                    res.redirect('/assignments')
+                if (err) {
+                    res.status(500).send('Oops! Something went wrong.')
+                    return
+                }
+
+                if (!assignment) {
+                    res.status(400).send('Invalid assignment name.')
                     return
                 }
 
@@ -166,9 +176,9 @@ function AssignmentHandler (){
                 assignment.showToStudents = this.showToStudents(assignment)
 
                 if ((assignment.showToStudents && assignment.solutionsAvailable) || req.user.isAdmin) {
-                    res.download(fileUploader.getSolutionsPath(assignment.name))
+                    res.download(fileUploader.getSolutionsZipPath(assignment.name))
                 } else {
-                    res.redirect('/assignments')
+                    res.status(401).send('Solutions not available for students yet.')
                 }
             })
         })
@@ -185,7 +195,6 @@ function AssignmentHandler (){
             Assignments.findOne({ 'name': req.params.assignmentName }, (err, assignment) => {
                
                 if(err){
-                    console.log(err)
                     res.status(500).send('Oops! Something went wrong.')
                     return
                 }
