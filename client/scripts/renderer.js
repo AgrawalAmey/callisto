@@ -122,32 +122,34 @@ function Renderer(mainWindow){
             if (err) {
                 console.log(err);
                 var userDataPath = path.join(app.getPath('userData'), 'assignments', 'submitted', 'user')
-                // var userPath = path.join(app.getPath('userData'), 'assignments');
                 var jupyterPort = jupyterAddr.split(":")[1]
                 var notebookCmd = path.join(condaInstaller.getInstallationPath(), 'bin', 'jupyter') + " notebook --NotebookApp.token='" + token + "' --notebook-dir='" + userDataPath + "' --no-browser --port=" + jupyterPort;
-                // console.log(notebookCmd);
+                console.log(notebookCmd);
                 child = exec(notebookCmd);
-                var execute = true;
-                child.stdout.on('data', stdoutHandler);
+                wrapper(assignment, notebook, score, attemptsRemaining, modalError, notebookURL, child);
             } else {
                 loadNotebookURL(assignment, notebook, score, attemptsRemaining, modalError, notebookURL);
             }
         });
     }
 
-    var buffer = '';
+    wrapper = (assignment, notebook, score, attemptsRemaining, modalError, notebookURL, child) => {
+        var buffer = '';
 
-    stdoutHandler = (data) => {
-        buffer = buffer + data;
-        if(buffer.includes('The Jupyter Notebook is running at')) {
-            loadNotebookURL(assignment, notebook, score, attemptsRemaining, modalError, notebookURL);
-            buffer = '';
-            child.stdout.removeListener('data', stdoutHandler);
+        stdoutHandler = (data, cb) => {
+            buffer = buffer + data;
+            console.log(buffer)
+            if(buffer.includes('The Jupyter Notebook is running at')) {
+                loadNotebookURL(assignment, notebook, score, attemptsRemaining, modalError, notebookURL);
+                buffer = '';
+                child.stdout.removeListener('data', stdoutHandler);
+            }
         }
+
+        child.stderr.on('data', stdoutHandler);
     }
 
     loadNotebookURL = (assignment, notebook, score, attemptsRemaining, modalError, notebookURL) => {
-        console.log('vhvchjvs');
         ejse.data('modalError', modalError);
         ejse.data('assignment', assignment);
         ejse.data('notebook', notebook);

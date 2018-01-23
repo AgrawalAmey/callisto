@@ -144,8 +144,16 @@ function AssignmentHandler (){
                 assignment.isActive = this.isActive(assignment)
                 assignment.showToStudents = this.showToStudents(assignment)
 
+                var filePath = fileUploader.getProblemsZipPath(assignment.name)
+
                 if (assignment.showToStudents || req.user.isAdmin) {
-                    res.download(fileUploader.getProblemsZipPath(assignment.name))
+                    fs.access(filePath, (err) => {
+                        if(err) {
+                            res.status(404).send('Problems not available yet.')
+                        } else {
+                            res.download(filePath)
+                        }
+                    })
                 } else {
                     res.status(401).send('Problems not available for students yet.')
                 }
@@ -175,8 +183,16 @@ function AssignmentHandler (){
                 assignment.isActive = this.isActive(assignment)
                 assignment.showToStudents = this.showToStudents(assignment)
 
+                var filePath = fileUploader.getSolutionsZipPath(assignment.name)
+
                 if ((assignment.showToStudents && assignment.solutionsAvailable) || req.user.isAdmin) {
-                    res.download(fileUploader.getSolutionsZipPath(assignment.name))
+                    fs.access(filePath, (err) => {
+                        if(err) {
+                            res.status(404).send('Solutions not available yet.')
+                        } else {
+                            res.download(filePath)
+                        }
+                    })
                 } else {
                     res.status(401).send('Solutions not available for students yet.')
                 }

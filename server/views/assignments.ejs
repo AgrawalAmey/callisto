@@ -68,9 +68,7 @@
                                                     <% if ((assignments[i].isEvaluative) && (assignments[i].showToStudents || user.isAdmin)) { %>
                                                     <tr>
                                                         <td>
-                                                            <!-- onclick="assignments.download('<%= assignments[i].name %>', '/assignment?name=<%= assignments[i].name %>')"  -->
-                                                            <a 
-                                                                href="/assignment?name=<%= assignments[i].name %>" class="btn-sm btn-primary m-t-n-xs"><%= assignments[i].name %></a>
+                                                            <a href="#" onclick="assignments.download('<%= assignments[i].name %>', '/assignment?name=<%= assignments[i].name %>')" class="btn-sm btn-primary m-t-n-xs"><%= assignments[i].name %></a>
                                                         </td>
                                                         <td><%= assignments[i].startTime %></td>
                                                         <td><%= assignments[i].endTime %></td>
