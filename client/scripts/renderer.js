@@ -87,7 +87,7 @@ function Renderer(mainWindow){
         var jupyterAddr = config.jupyterAddr
         var notebookURL = "http://" + jupyterAddr + "/notebooks/" + assignment + "/" + notebook;
 
-        tokenFile = path.join(app.getPath('temp'), config.appName, 'tokenFile.txt');
+        tokenFile = path.join(app.getPath('temp'), 'tokenFile.txt');
 
         fs.readFile(tokenFile, (err, data) => {
             if (err) {
@@ -100,7 +100,7 @@ function Renderer(mainWindow){
                     }
                 });
             } else {
-                var token = data;
+                var token = data.toString();
                 checkAndStartJupyter(token, assignment, notebook, score, attemptsRemaining, modalError, notebookURL)
             }
         });
@@ -108,33 +108,46 @@ function Renderer(mainWindow){
 
     checkAndStartJupyter = (token, assignment, notebook, score, attemptsRemaining, modalError, notebookURL) => {
         var jupyterAddr = config.jupyterAddr;
+        notebookURL = notebookURL + '?token=' + token;
         var opts = {
-            uri: 'http://' + jupyterAddr,
+            url: 'http://' + jupyterAddr,
             qs: {
                 token: token
             }
         }
 
-        request.get(opts, (err, response, body) => {
+        let child;
+
+        request(opts, (err, response, body) => {
             if (err) {
-                var userPath = path.join(app.getPath('userData'), 'assignments');
-                var notebookCmd = "jupyter notebook --NotebookApp.token='" + token + "' --notebook-dir='" + userPath + "' --no-browser"
-                exec(notebookCmd, (error, stdout, stderr) => {
-                    if(error) {
-                        throw error;
-                    } else {
-                        console.log('stdout:', stdout);
-                        console.log('stderr:', stderr);
-                        loadNotebookURL(assignment, notebook, score, attemptsRemaining, modalError, notebookURL);
-                    }
-                });
+                console.log(err);
+                var userDataPath = path.join(app.getPath('userData'), 'assignments', 'submitted', 'user')
+                // var userPath = path.join(app.getPath('userData'), 'assignments');
+                var jupyterPort = jupyterAddr.split(":")[1]
+                var notebookCmd = path.join(condaInstaller.getInstallationPath(), 'bin', 'jupyter') + " notebook --NotebookApp.token='" + token + "' --notebook-dir='" + userDataPath + "' --no-browser --port=" + jupyterPort;
+                // console.log(notebookCmd);
+                child = exec(notebookCmd);
+                var execute = true;
+                child.stdout.on('data', stdoutHandler);
             } else {
                 loadNotebookURL(assignment, notebook, score, attemptsRemaining, modalError, notebookURL);
             }
         });
     }
 
+    var buffer = '';
+
+    stdoutHandler = (data) => {
+        buffer = buffer + data;
+        if(buffer.includes('The Jupyter Notebook is running at')) {
+            loadNotebookURL(assignment, notebook, score, attemptsRemaining, modalError, notebookURL);
+            buffer = '';
+            child.stdout.removeListener('data', stdoutHandler);
+        }
+    }
+
     loadNotebookURL = (assignment, notebook, score, attemptsRemaining, modalError, notebookURL) => {
+        console.log('vhvchjvs');
         ejse.data('modalError', modalError);
         ejse.data('assignment', assignment);
         ejse.data('notebook', notebook);
