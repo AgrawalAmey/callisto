@@ -15,6 +15,7 @@
   "dependencies": {
     "download-file": "^0.1.5",
     "ejs-electron": "^2.0.1",
+    "electron-pdf-window": "^1.0.12",
     "ncp": "^2.0.0",
     "request": "^2.83.0",
     "unzip": "^0.1.11"

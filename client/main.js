@@ -1,6 +1,6 @@
 // Load vender libraries
 const electron = require('electron')
-const { protocol } = require('electron')
+const { Menu, protocol } = require('electron')
 const ejse = require('ejs-electron')
 const path = require('path')
 const request = require('request')
@@ -11,6 +11,7 @@ const ipcChannels = require('./scripts/ipcChannels')
 const Renderer = require('./scripts/renderer')
 const remoteServerAddrHandler = require('./scripts/remoteServerAddrHandler')
 const Session = require('./scripts/session')
+const menuTemplate = require('./scripts/menuTemplate')
 
 // Module to control application life.
 const app = electron.app
@@ -28,6 +29,9 @@ function createWindow () {
 
     // Register nnfl protocol to serve static files locally
     registerNNFLProtocol()
+
+    const menu = Menu.buildFromTemplate(menuTemplate)
+    Menu.setApplicationMenu(menu)
 
     // Create the browser window.
     mainWindow = new BrowserWindow({
@@ -56,6 +60,7 @@ function createWindow () {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         session.logout()
+        app.quit()
     })
 }
 
@@ -84,6 +89,10 @@ function registerNNFLProtocol() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow);
 
+app.on('ready', function () {
+
+})
+
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
     // On OS X it is common for applications and their menu bar
@@ -91,12 +100,4 @@ app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
         app.quit();
     }
-});
-
-app.on('activate', function () {
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (mainWindow === null) {
-        createWindow();
-    }
-});
+})
