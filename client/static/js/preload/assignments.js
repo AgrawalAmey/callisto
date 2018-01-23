@@ -2,16 +2,8 @@ const { ipcRenderer } = require('electron')
 
 function Assignments() {
     // To save creds
-    this.getNotebooksList = (assignmentName, assignmentURL) => {
-
-        ipcRenderer.send('getNotebooksList', 
-                         assignmentName, 
-                         assignmentURL)
-        ipcRenderer.on('getNotebooksList-reply', function(event, arg) {
-            console.log(arg); // prints "pong"
-        });
-
-        // return notebooksList
+    this.download = (assignmentName, callbackURL) => {
+        ipcRenderer.send('downloadAssignment', assignmentName, callbackURL)
     }
 
     this.openNotebook = (assignment, notebook, score, attemptsRemaining) => {

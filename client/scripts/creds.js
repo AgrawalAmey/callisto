@@ -19,7 +19,6 @@ function Creds() {
 
     this.login = (username, password) => {
         var credsPath = this.getCredsPath()
-
         var encryptedCreds = {
             "username": cipher.encrypt(username),
             "password": cipher.encrypt(password)

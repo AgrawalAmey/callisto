@@ -5,6 +5,9 @@ const {app, ipcMain} = require('electron');
 const assignments = require('./assignments')
 const notebook = require('./notebook')
 
+// Config
+const config = require('../config')
+
 const setChannels = (renderer, session) => {
     // On submission of server address form
     ipcMain.on('serverBtn-click', function (event, remoteServerAddr) {
@@ -21,9 +24,15 @@ const setChannels = (renderer, session) => {
         session.login(creds.username, creds.password)
     });
 
-    ipcMain.on('getNotebooksList', (event, assignmentName, assignmentURL) => {
-        assignments.getNotebooksList(assignmentName, assignmentURL, (notebooksList) => {
-            event.sender.send('getNotebooksList-reply', notebooksList)
+    ipcMain.on('downloadAssignment', (event, assignmentName, callbackURL) => {
+        renderer.renderAssignmentDownloader()
+        assignments.downloadAssignment(assignmentName, (err) => {
+            if(err){
+                console.log(err)
+                renderer.renderAssignmentDownloader(err.message)
+                return
+            }
+            renderer.renderWebview('http://' + config.remoteServerAddr + callbackURL)
         })
     });
 

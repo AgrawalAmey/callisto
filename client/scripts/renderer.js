@@ -50,7 +50,7 @@ function Renderer(mainWindow){
             // Save address
             remoteServerAddrHandler.saveRemoteServerAddr(remoteServerAddr);
             // Render webview
-            self.renderWebviewIndex(remoteServerURL)
+            self.renderWebview(remoteServerURL)
         });
     }
 
@@ -60,7 +60,7 @@ function Renderer(mainWindow){
         this.mainWindow.loadURL(path.join('file://', __dirname, '../views', 'remoteAddr.ejs'));
     }
 
-    this.renderWebviewIndex = (remoteServerURL) => {
+    this.renderWebview = (remoteServerURL) => {
         ejse.data('remoteServerAddr', remoteServerURL);
         this.mainWindow.loadURL(path.join('file://', __dirname, '../views', 'webview.ejs'));
     }
@@ -68,6 +68,11 @@ function Renderer(mainWindow){
     this.renderCondaInstaller = (message) => {
         ejse.data('condaInstallError', message)
         this.mainWindow.loadURL(path.join('file://', __dirname, '../views', 'condaInstaller.ejs'));
+    }
+
+    this.renderAssignmentDownloader = (message) => {
+        ejse.data('assignmentDownloadError', message)
+        this.mainWindow.loadURL(path.join('file://', __dirname, '../views', 'assignmentDownloader.ejs'));
     }
 
     this.renderNotebookIndex = (assignment, notebook, score, attemptsRemaining, modalError) => {
@@ -92,7 +97,7 @@ function Renderer(mainWindow){
         var remoteServerAddr = config.remoteServerAddr;
         var remoteServerURL = "http://" + remoteServerAddr + '/assignment?name=' + assignment;
 
-        this.renderWebviewIndex(remoteServerURL);
+        this.renderWebview(remoteServerURL);
     }
 }
 
