@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <% include ./partials/head.ejs %>
+    <title>Neural Networks and Fuzzy Logic</title>
+    <link rel=stylesheet href=../static/css/client.css>
+  </head>
+  <body class="fixed-navbar">
+    <div id="header" style="height:85px">
+      <div class="row hpanel" style="margin-bottom:0;">
+        <div class="col-md-12" style="padding-left: 30px">
+          <a id="backBtn" onclick="goBack()">
+            <i style="padding-top:10px" class="pe-7s-angle-left pe-5x"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper" style="padding-top:29px;margin:0">
+      <webview id="webview" src="<%= practiceNBURL %>" preload="../static/js/preload/practiceNBPreload.js">
+      </webview>
+    </div>
+    <script>
+    const webview = document.querySelector('webview')
+      webview.addEventListener('console-message', (e) => {
+        console.log('Guest page logged a message:', e)
+      })
+    </script>
+    <% include ./partials/js_imports.ejs %>
+    <script src="../static/js/practiceNB.js"></script>
+  </body>
+</html>
