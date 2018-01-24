@@ -135,16 +135,16 @@ function Renderer(mainWindow){
     wrapper = (assignment, notebook, modalError, notebookURL, child) => {
         var buffer = '';
 
-        stdoutHandler = (data, cb) => {
+        stderrHandler = (data, cb) => {
             buffer = buffer + data;
             if(buffer.includes('The Jupyter Notebook is running at')) {
                 loadNotebookURL(assignment, notebook, modalError, notebookURL);
                 buffer = '';
-                child.stdout.removeListener('data', stdoutHandler);
+                child.stderr.removeListener('data', stderrHandler);
             }
         }
 
-        child.stderr.on('data', stdoutHandler);
+        child.stderr.on('data', stderrHandler);
     }
 
     loadNotebookURL = (assignment, notebook, modalError, notebookURL) => {
@@ -161,6 +161,84 @@ function Renderer(mainWindow){
         var remoteServerURL = "http://" + remoteServerAddr + '/assignment?name=' + assignment.name
 
         this.renderWebview(remoteServerURL);
+    }
+
+    this.renderPracticeIndex = () => {
+        var remoteServerAddr = config.remoteServerAddr;
+        var remoteServerURL = "http://" + remoteServerAddr + '/practice';
+
+        this.renderWebview(remoteServerURL);
+    }
+
+    this.renderPracticeNBIndex = (notebook) => {
+        notebook = notebook.replace(/ /g, "%20")
+
+        var jupyterAddr = require('../config').jupyterAddr
+        var practiceNBURL = "http://" + jupyterAddr + "/notebooks/practice/" + notebook
+
+        tokenFile = path.join(app.getPath('temp'), 'tokenFile.txt');
+
+        fs.readFile(tokenFile, (err, data) => {
+            if (err) {
+                var token = crypto.randomBytes(20).toString('hex');
+                fs.writeFile(tokenFile, token, (err) => {
+                    if (err) {
+                        throw err;
+                    } else {
+                        checkAndStartJupyterPractice(notebook, token)
+                    }
+                });
+            } else {
+                var token = data.toString();
+                checkAndStartJupyterPractice(notebook, token)
+            }
+        });
+    }
+
+    checkAndStartJupyterPractice = (notebook, token) => {
+        var jupyterAddr = config.jupyterAddr;
+        var practiceNBURL = "http://" + jupyterAddr + "/notebooks/practice/" + notebook + '?token=' + token;
+        var opts = {
+            url: 'http://' + jupyterAddr,
+            qs: {
+                token: token
+            }
+        }
+
+        let childPractice;
+
+        request(opts, (err, response, body) => {
+            if (err) {
+                var userDataPath = path.join(app.getPath('userData'), 'assignments')
+                var jupyterPort = jupyterAddr.split(":")[1]
+                var jupyterPath = path.join(condaInstaller.getInstallationPath(), 'bin', 'jupyter')
+                var notebookCmd = jupyterPath + " notebook --NotebookApp.token='" + token + "' --notebook-dir='" + userDataPath + "' --no-browser --port=" + jupyterPort;
+                childPractice = exec(notebookCmd);
+                wrapperPractice(practiceNBURL, childPractice);
+            } else {
+                loadPracticeNBURL(practiceNBURL, childPractice);
+            }
+        });
+    }
+
+    wrapperPractice = (practiceNBURL, childPractice) => {
+        var buffer = '';
+
+        stderrHandlerPractice = (data, cb) => {
+            buffer = buffer + data;
+            if(buffer.includes('The Jupyter Notebook is running at')) {
+                loadPracticeNBURL(practiceNBURL);
+                buffer = '';
+                childPractice.stderr.removeListener('data', stderrHandlerPractice);
+            }
+        }
+
+        childPractice.stderr.on('data', stderrHandlerPractice);
+    }
+
+    loadPracticeNBURL = (practiceNBURL) => {
+        ejse.data('practiceNBURL', practiceNBURL);
+        this.mainWindow.loadURL(path.join('file://', __dirname, '../views', 'practiceNB.ejs'));
     }
 }
 

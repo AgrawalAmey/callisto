@@ -54,6 +54,14 @@ const setChannels = (renderer, session) => {
             ipcMain.send('practiceNBList-reply', list);
         });
     });
+
+    ipcMain.on('showPractice', (event) => {
+        renderer.renderPracticeIndex()
+    });
+
+    ipcMain.on('showPracticeNB', (event, notebook) => {
+        renderer.renderPracticeNBIndex(notebook);
+    });
 }
 
 module.exports = { setChannels }

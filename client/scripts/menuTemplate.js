@@ -1,3 +1,5 @@
+const electron = require('electron')
+
 let template = [{
     label: 'Edit',
     submenu: [{
@@ -79,7 +81,7 @@ if (process.platform === 'darwin') {
             label: 'Quit',
             accelerator: 'Command+Q',
             click: function () {
-                app.quit()
+                electron.app.quit()
             }
         }]
     })

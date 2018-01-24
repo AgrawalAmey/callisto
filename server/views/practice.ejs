@@ -2,7 +2,7 @@
 <html>
 <head>
     <% include ./partials/head.ejs %>
-    <title>Neural Nets & Fuzzy Logic | Assignments</title>
+    <title>Neural Nets & Fuzzy Logic | Practice</title>
 </head>
 
 <body class="fixed-navbar fixed-sidebar">
@@ -17,7 +17,7 @@
         <% include ./partials/user_nav.ejs %>
     <% } %>
     <!-- Main Wrapper -->
-    <div id=wrapper>
+    <div id="wrapper">
         <div class="small-header transition animated fadeIn">
             <div class=hpanel>
                 <div class=panel-body>
@@ -26,7 +26,6 @@
         </div>
         <div class="content animate-panel">
             <div>
-
                 <div class=row>
                     <div class="col-lg-12">
                         <div class="hpanel">
@@ -43,6 +42,29 @@
                                 </div>
                             </div>      
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="addNotebookModal" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Create Notebook</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" id="addNotebookForm" novalidate="novalidate">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control" name="name" id="newNBName">.ipnynb
+                            </div>                          
+                            <div>
+                                <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Create</strong></button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
