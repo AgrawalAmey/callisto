@@ -96,12 +96,6 @@ module.exports = function(app, passport) {
     app.get('/manageUsers', isLoggedIn, isAdmin, users.manageUsers);
 
     // =====================================
-    // Manage services =====================
-    // =====================================
-
-    app.get('/manageAssignments', isLoggedIn, isAdmin, assignmentHandler.manageAssignments);
-
-    // =====================================
     // Account Settings ====================
     // =====================================
 

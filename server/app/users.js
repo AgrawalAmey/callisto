@@ -42,19 +42,11 @@ module.exports = {
                 if(err)
                     res.render('/')
                     
-                var usernameList = [];
-                for (var i = 0; i < users.length; i++) {
-                    usernameList.push(users[i].username);
-                }
-                res.render('manage_users.ejs', {
+                res.render('manageUsers.ejs', {
                     user: req.user,
-                    usernameList: usernameList,
-                    addUserError: req.flash('addUserError'),
-                    editUserError: req.flash('editUserError'),
-                    removeUserError: req.flash('removeUserError'),
-                    addUserSuccess: req.flash('addUserSuccess'),
-                    editUserSuccess: req.flash('editUserSuccess'),
-                    removeUserSuccess: req.flash('removeUserSuccess'),
+                    users: users,
+                    alterUserSuccess: req.flash('alterUserSuccess'),
+                    alterUserError: req.flash('alterUserError')
                 })
             })
         })
@@ -71,7 +63,7 @@ module.exports = {
 
             // check to see if password is not empty
             if (req.body.password == undefined || req.body.password == '') {
-                req.flash('addUserError', 'Please enter password.');
+                req.flash('alterUserError', 'Please enter password.');
                 res.redirect('/manageUsers');
                 return;
             }
@@ -83,14 +75,14 @@ module.exports = {
     
                 // if there are any errors, return the error
                 if (err){
-                    req.flash('addUserError', 'Oops! Something went wrong.');
+                    req.flash('alterUserError', 'Oops! Something went wrong.');
                     res.redirect('/manageUsers');
                     return;    
                 }
     
                 // check to see if there's already a user with that email
                 if (existingUser) {
-                    req.flash('addUserError', 'That username is already taken.');
+                    req.flash('alterUserError', 'That username is already taken.');
                     res.redirect('/manageUsers');
                     return;    
                 }
@@ -105,11 +97,11 @@ module.exports = {
     
                 newUser.save(function(err) {
                     if (err) {
-                        req.flash('addUserError', 'Oops! Something went wrong.');
+                        req.flash('alterUserError', 'Oops! Something went wrong.');
                         res.redirect('/manageUsers');
                         return;   
                     }
-                    req.flash('addUserSuccess', 'User added successfully.');
+                    req.flash('alterUserSuccess', 'User added successfully.');
                     res.redirect('/manageUsers');
                     return; 
                 });
@@ -127,7 +119,7 @@ module.exports = {
     
             // check to see if password is not empty
             if (req.body.password == undefined || req.body.password == '') {
-                req.flash('addUserError', 'Please enter password.');
+                req.flash('alterUserError', 'Please enter password.');
                 res.redirect('/manageUsers');
                 return;
             }
@@ -138,7 +130,7 @@ module.exports = {
     
                 // if there are any errors, return the error
                 if (err) {
-                    req.flash('editUserError', 'Oops! Something went wrong.');
+                    req.flash('alterUserError', 'Oops! Something went wrong.');
                     res.redirect(successRedirect);
                     return;    
                 }
@@ -148,11 +140,11 @@ module.exports = {
                     
                 existingUser.save(function(err, editedUser) {
                     if (err) {
-                        req.flash('editUserError', 'Oops! Something went wrong.');
+                        req.flash('alterUserError', 'Oops! Something went wrong.');
                         res.redirect(successRedirect);
                         return;    
                     }
-                    req.flash('editUserSuccess', 'Information edited successfully.');
+                    req.flash('alterUserSuccess', 'Information edited successfully.');
                     res.redirect(successRedirect);
                     return;    
                 });
@@ -170,7 +162,7 @@ module.exports = {
         process.nextTick(function() {
     
             if(req.body.username == 'admin') {
-                req.flash('removeUserError', 'Cannot remove admin.');
+                req.flash('alterUserError', 'Cannot remove admin.');
                 res.redirect('/manageUsers');
                 return;                  
             }
@@ -180,11 +172,11 @@ module.exports = {
     
                 // if there are any errors, return the error
                 if (err){
-                    req.flash('removeUserError', 'Oops! Something went wrong.');
+                    req.flash('alterUserError', 'Oops! Something went wrong.');
                     res.redirect('/manageUsers');
                     return;                
                 }
-                req.flash('removeUserSuccess', 'User removed successfully.');
+                req.flash('alterUserSuccess', 'User removed successfully.');
                 res.redirect('/manageUsers');
                 return;
             });
