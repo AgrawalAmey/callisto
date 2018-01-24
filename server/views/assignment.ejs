@@ -29,6 +29,11 @@
                 <div class=row>
                     <div class="col-lg-12">
                         <div class="hpanel">
+                            <% if (typeof assignment.readme !== 'undefined' && assignment.readme.length > 0) { %>
+                                <div class="panel-body" style="margin-top: 20px">
+                                    <%- assignment.readme %>
+                                </div>
+                            <% } %>
                             <div class="panel-body">
                                 <div class=row>
                                     <div class="col-lg-6">
@@ -56,10 +61,24 @@
                                     </div>
                                 </div>
                             </div>
-                            <% if (typeof assignment.readme !== 'undefined' && assignment.readme.length > 0) { %>
-                            <div class="panel-body" style="margin-top: 20px">
-                                <%- assignment.readme %>
-                            </div>
+                            <% if (assignment.isActive && assignment.allowZipSubmission && !user.isAdmin) { %>
+                                <div class="panel-body" style="margin-top: 20px">
+                                    <h4>Upload Solutions Zip</h4>
+                                    <form role="form" id="zipUploadForm" enctype="multipart/form-data" 
+                                    novalidate="novalidate" method="post" action="/zipUpload">
+                                    </form>
+                                    <div class="form-group">
+                                        <label class="btn btn-default">
+                                            Select solution file
+                                            <input type="file" name="solutionsZip" id="solutionsZips">
+                                        </label>
+                                        <div>
+                                            <button class="btn btn-sm btn-primary m-t-n-xs" type="submit">
+                                                <strong>Submit</strong>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             <% } %>
                             <div class="panel-body" style="margin-top: 20px">
                                 <div class="table-responsive">
@@ -134,6 +153,7 @@
         <!-- Footer-->
         <footer class=footer>&copy; Team NNFL</footer>
         <% include ./partials/js_imports.ejs %>
+        <script type="text/javascript" src="nnfl://js/assignment.js"></script>
         <script type="text/javascript">
             getAssignmentName = () => {
                 return "<%= assignment.name %>"

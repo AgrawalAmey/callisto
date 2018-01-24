@@ -34,6 +34,7 @@ function AssignmentHandler (){
         assignment.name = req.body.name
         assignment.startTime = req.body.startTime
         assignment.endTime = req.body.endTime
+        assignment.allowZipSubmission = req.body.allowZipSubmission || false
         assignment.isEvaluative = req.body.isEvaluative || false
         assignment.isEvaluated = req.body.isEvaluated || false
         assignment.solutionsAvailable = req.body.solutionsAvailable || false
@@ -288,6 +289,92 @@ function AssignmentHandler (){
         })
     }
 
+    // =====================================
+    // Zip submission upload          ======
+    // ===================================== 
+
+    this.uploadZipSubmission = (req, res) => {
+        // asynchronous
+        process.nextTick(() => {
+            Assignments.findOne({ 'name': req.params.assignmentName }, (err, assignment) => {
+
+                if (err) {
+                    res.status(500).send('Oops! Something went wrong.')
+                    return
+                }
+
+                if (!assignment) {
+                    res.status(400).send('Invalid assignment name.')
+                    return
+                }
+
+                assignment.isActive = this.isActive(assignment)
+
+                if (assignment.isActive) {
+                    fileUploader.upload(req, res, (err) => {
+                        if (err) {
+                            console.log(err)
+                            res.status(500).send('Oops! Something went wrong.')
+                            return
+                        } else {
+                            var notebookIndex = assignment.notebooks.findIndex((notebook) => {
+                                return notebook.name == req.params.notebook
+                            })
+
+                            if (notebookIndex < 0) {
+                                res.status(400).send('Invalid notebook name.')
+                                return
+                            }
+
+                            var submissionIndex = assignment.notebooks[notebookIndex].submissions.findIndex((submission) => {
+                                return submission.username == req.user.username
+                            })
+
+                            if (submissionIndex < 0) {
+                                submissionIndex = assignment.notebooks[notebookIndex].submissions.length
+
+                                assignment.notebooks[notebookIndex].submissions.push({
+                                    username: req.user.username,
+                                    attempts: 0,
+                                    score: 0
+                                })
+                            }
+
+
+                            attempts = ++assignment.notebooks[notebookIndex].submissions[submissionIndex].attempts
+                            attemptsRemaining = config.maxSubmissionAttempts - attempts
+
+                            if (attemptsRemaining < 0) {
+                                res.status(400).send('Maximum submission limit reached.')
+                            }
+
+                            var score = 1
+                            assignment.notebooks[notebookIndex].submissions[submissionIndex].score = score
+
+                            if (!assignment.whoSubmitted.includes(req.user.username)) {
+                                assignment.whoSubmitted.push(req.user.username)
+                            }
+
+                            assignment.save((err, editedUser) => {
+                                if (err) {
+                                    console.log(err)
+                                    res.status(500).send('Oops! Something went wrong.')
+                                } else {
+                                    res.json({ score: score, attemptsRemaining: attemptsRemaining })
+                                }
+
+                                return
+                            })
+                        }
+                    })
+                } else {
+                    res.status(500).send('Assignment is no longer accepting submissions.')
+                }
+            })
+        })
+    }
+
+
 
     // =========================================================================
     // Manage Assignments ======================================================
@@ -485,7 +572,6 @@ function AssignmentHandler (){
                             var text = fs.readFileSync(path.join(problemsUnzipPath, readme[0]), 'utf8')
                             try {
                                 assignment.readme = converter.makeHtml(text)
-                                console.log(1)
                             } catch(err) {
                                 console.log(err)
                             }

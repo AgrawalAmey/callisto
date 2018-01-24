@@ -19,6 +19,11 @@ var assignmentSchema = mongoose.Schema({
     readme: String,
     solutionsAvailable: Boolean,
     isEvaluative: Boolean,
+    allowZipSubmission: Boolean,
+    zipSubmissions: [{
+        username: String,
+        score: Number
+    }],
     whoSubmitted: [String],
     isEvaluated: Boolean,
     notebooks: [{

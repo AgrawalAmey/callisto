@@ -21,7 +21,8 @@ $('#editAssignmentModal').on('show.bs.modal', function(e) {
     $(e.currentTarget).find('input[name="name"]').val(assignments[i].name);
 	$(e.currentTarget).find('input[name="startTime"]').val(assignments[i].startTime);
 	$(e.currentTarget).find('input[name="endTime"]').val(assignments[i].endTime); 
-    $(e.currentTarget).find('input[name="isEvaluative"]').prop('checked', assignments[i].isEvaluative); 
+    $(e.currentTarget).find('input[name="isEvaluative"]').prop('checked', assignments[i].isEvaluative)
+    $(e.currentTarget).find('input[name="allowZipSubmission"]').prop('checked', assignments[i].allowZipSubmission)
 });
 
 $('#removeAssignmentModal').on('show.bs.modal', function(e) {

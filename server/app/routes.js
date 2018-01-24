@@ -78,6 +78,13 @@ module.exports = function(app, passport) {
     app.post('/assignment/upload/:assignmentName/:notebook', isLoggedIn, assignmentHandler.uploadSubmission);
 
     // =====================================
+    // Assignment zip upload          ======
+    // ===================================== 
+
+    app.post('/assignment/uploadZip/:assignmentName/', isLoggedIn, assignmentHandler.uploadZipSubmission);
+
+
+    // =====================================
     // Render Practice Page ================
     // =====================================
 

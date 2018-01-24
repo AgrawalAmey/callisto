@@ -1,8 +1,8 @@
-$("#form_1").validate({
+$("#zipUploadForm").validate({
 	rules: {
-		file: {
+		solutionsZip: {
 			required: true,
 			extension: 'zip'
 		}
 	}
-});
+})
