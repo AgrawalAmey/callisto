@@ -16,7 +16,7 @@ var assignmentSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    // acceptSubmission: Boolean,
+    readme: String,
     solutionsAvailable: Boolean,
     isEvaluative: Boolean,
     whoSubmitted: [String],

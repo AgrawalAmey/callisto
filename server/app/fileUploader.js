@@ -57,7 +57,6 @@ function FileUploader(basePath) {
 
     this.storage = multer.diskStorage({
         destination: function (req, file, callback) {
-            console.log(file)
             if (file.fieldname == 'problems') {
                 dest = self.getProblemsPath(req.body.name)
             } else if (file.fieldname == 'solutions') {
