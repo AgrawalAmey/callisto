@@ -56,6 +56,11 @@
                                     </div>
                                 </div>
                             </div>
+                            <% if (typeof assignment.readme !== 'undefined' && assignment.readme.length > 0) { %>
+                            <div class="panel-body" style="margin-top: 20px">
+                                <%- assignment.readme %>
+                            </div>
+                            <% } %>
                             <div class="panel-body" style="margin-top: 20px">
                                 <div class="table-responsive">
                                     <h4>Assignment Notebooks</h4>

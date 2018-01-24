@@ -1,5 +1,7 @@
 var config = require('../config')
 var fs = require('fs')
+var path = require('path')
+var showdown = require('showdown')
 var unzip = require('unzip')
 
 var Assignments = require('./models/assignment')
@@ -474,9 +476,22 @@ function AssignmentHandler (){
                 fs.createReadStream(problemsZipPath)
                     .pipe(unzip.Extract({ path: problemsUnzipPath }))
                     .on('close', () => {
-                        var notebooks = fs.readdirSync(problemsUnzipPath)
-                                          .filter(file => file.endsWith('.ipynb'))
+                        var problemsDirFiles = fs.readdirSync(problemsUnzipPath)
+                        
+                        var readme = problemsDirFiles.filter(file => file.toLowerCase() == 'readme.md')
 
+                        if (readme.length > 0) {
+                            converter = new showdown.Converter()
+                            var text = fs.readFileSync(path.join(problemsUnzipPath, readme[0]), 'utf8')
+                            try {
+                                assignment.readme = converter.makeHtml(text)
+                                console.log(1)
+                            } catch(err) {
+                                console.log(err)
+                            }
+                        }
+                        var notebooks = problemsDirFiles.filter(file => file.endsWith('.ipynb'))
+                        
                         assignment.notebooks = notebooks.map((notebook) => {
                             return {
                                 name: notebook,
@@ -493,6 +508,11 @@ function AssignmentHandler (){
             }
         })
     }
+
+    // =========================================================================
+    // Update notebook database ================================================
+    // ========================================================================= 
+
 }
 
 module.exports = new AssignmentHandler()
