@@ -5,10 +5,9 @@ const path = require('path')
 
 // Load custom scripts
 const assignments = require('./assignments')
-const renderer = require('./renderer')
 const sessionHandler = require('./sessionHandler')
 
-function Notebook() {
+function NotebookHandler(renderer) {
     this.submitNotebook = (assignment, notebook) => {
         assignment = JSON.parse(assignment)
         notebook = JSON.parse(notebook)
@@ -19,9 +18,6 @@ function Notebook() {
         request = sessionHandler.getRequestHandler()
 
         var filePath = path.join(assignmentDir, notebook.name)
-
-        console.log(assignmentDir)
-        console.log(filePath)
 
         var options = { 
             method: 'POST',
@@ -45,12 +41,17 @@ function Notebook() {
             if (error) {
                 renderer.renderNotebookIndex(assignment, notebook, 'Oops! Something went wrong! Please try again')
             } else {
-                notebook.score = body.score
-                notebook.attemptsRemaining = body.attemptsRemaining
-                renderer.renderNotebookIndex(assignment, notebook, undefined)
+                if (response.statusCode === 400) {
+                    renderer.renderNotebookIndex(assignment, notebook, body)
+                } else {
+                    body = JSON.parse(body)
+                    notebook.score = body.score
+                    notebook.attemptsRemaining = body.attemptsRemaining
+                    renderer.renderNotebookIndex(assignment, notebook, undefined)
+                }
             }
         });
     }
 }
 
-module.exports = new Notebook()
+module.exports = NotebookHandler

@@ -148,7 +148,11 @@ function Renderer(mainWindow){
     }
 
     loadNotebookURL = (assignment, notebook, modalError, notebookURL) => {
-        ejse.data('modalError', modalError);
+        if (modalError) {
+            ejse.data('modalError', modalError);
+        } else {
+            ejse.data('modalError', null);
+        }
         ejse.data('assignment', assignment);
         ejse.data('notebook', notebook);
         ejse.data('notebookURL', notebookURL);
