@@ -42,15 +42,15 @@
                                         <input type="password" placeholder="Password" class="form-control" name="password">
                                     </div>
                                     <!-- show error message -->
-                                    <% if (typeof addUserError !== 'undefined' && addUserError.length > 0) { %>
+                                    <% if (typeof alterUserError !== 'undefined' && alterUserError.length > 0) { %>
                                         <div class="form-group">                                
-                                            <label class="error" for="password"><%= addUserError %></label>
+                                            <label class="error" for="password"><%= alterUserError %></label>
                                         </div>
                                     <% } %>
                                     <!-- show success message -->
-                                    <% if (typeof addUserSuccess !== 'undefined' && addUserSuccess.length > 0) { %>
+                                    <% if (typeof alterUserSuccess !== 'undefined' && alterUserSuccess.length > 0) { %>
                                         <div class="form-group">                                
-                                            <label class="success" for="password"><%= addUserSuccess %></label>
+                                            <label class="success" for="password"><%= alterUserSuccess %></label>
                                         </div>
                                     <% } %>  
                                     <div>
@@ -74,14 +74,9 @@
                 name: {
                     required: true
                 },
-                mobile_number: {
-                    required: true,
-                    number: true,
-                    maxlength: 10,
-                    minlength: 10
-                },
                 password: {
                     required: true,
+                    minlength: 8
                 }
             },
             submitHandler: function(form) {

@@ -7,7 +7,7 @@ $('#editUserModal').on('show.bs.modal', function (e) {
 
     //populate the textboxes
     $(e.currentTarget).find('h4[name="nameHeader"]').html("Edit " + users[i].name)
-    $(e.currentTarget).find('input[name="usernmae"]').val(users[i].username);
+    $(e.currentTarget).find('input[name="username"]').val(users[i].username);
     $(e.currentTarget).find('input[name="name"]').val(users[i].name);
 });
 

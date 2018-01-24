@@ -22,7 +22,7 @@
               <lable><b>Submitted:</b><i style="padding-left: 8px" class="fa fa-window-close" aria-hidden="true"></i></lable><br>
           <% } %>
           <% if (assignment.isEvaluated) { %>
-            <label><b>Score:</b> <%= score %></label><br>
+            <label><b>Score:</b> <%= notebook.score %></label><br>
           <% } else { %>
             <label><b>Attempts Remaining:</b> <%= notebook.attemptsRemaining %></label>
           <% } %>

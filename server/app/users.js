@@ -60,15 +60,20 @@ module.exports = {
             
         // asynchronous
         process.nextTick(function() {
-
             // check to see if password is not empty
             if (req.body.password == undefined || req.body.password == '') {
                 req.flash('alterUserError', 'Please enter password.');
                 res.redirect('/manageUsers');
                 return;
             }
+            
+            // check to see if username is not empty
+            if (req.body.username == undefined || req.body.username == '') {
+                req.flash('alterUserError', 'Please enter username.');
+                res.redirect('/manageUsers');
+                return;
+            }
 
-    
             //  Whether we're signing up or connecting an account, we'll need
             //  to know if the email address is in use.
             Users.findOne({'username': req.body.username}, function(err, existingUser) {
@@ -116,7 +121,6 @@ module.exports = {
     editUser: function(req, res, successRedirect) {
         // asynchronous
         process.nextTick(function() {
-    
             // check to see if password is not empty
             if (req.body.password == undefined || req.body.password == '') {
                 req.flash('alterUserError', 'Please enter password.');
@@ -124,6 +128,13 @@ module.exports = {
                 return;
             }
             
+            // check to see if username is not empty
+            if (req.body.username == undefined || req.body.username == '') {
+                req.flash('alterUserError', 'Please enter username.');
+                res.redirect('/manageUsers');
+                return;
+            }
+
             //  Whether we're signing up or connecting an account, we'll need
             //  to know if the email address is in use.
             Users.findOne({'username': req.body.username}, function(err, existingUser) {
@@ -161,6 +172,13 @@ module.exports = {
         // asynchronous
         process.nextTick(function() {
     
+            // check to see if username is not empty
+            if (req.body.username == undefined || req.body.username == '') {
+                req.flash('alterUserError', 'Please enter username.');
+                res.redirect('/manageUsers');
+                return;
+            }
+
             if(req.body.username == 'admin') {
                 req.flash('alterUserError', 'Cannot remove admin.');
                 res.redirect('/manageUsers');

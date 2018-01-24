@@ -100,10 +100,10 @@ module.exports = function(app, passport) {
     // =====================================
 
     app.get('/accountSettings', isLoggedIn, function(req, res) {
-        res.render('account_setting.ejs', {
+        res.render('accountSetting.ejs', {
             user: req.user,
-            editUserError: req.flash('editUserError'),
-            editUserSuccess: req.flash('editUserSuccess')
+            alterUserError: req.flash('alterUserError'),
+            alterUserSuccess: req.flash('alterUserSuccess')
         });
     });
 
