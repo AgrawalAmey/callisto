@@ -54,8 +54,8 @@ function AssignmentHandler (){
                 }
 
                 for (i = 0; i < assignments.length; i++) {
-                    assignments[i] = assignments[i].toObject()
-                    assignments[i].isSubmitted = req.user._id in assignments[i].whoSubmitted
+                    assignments[i] = assignments[i].toObject();
+                    assignments[i].isSubmitted = req.user.username in assignments[i].whoSubmitted
                     assignments[i].isActive = this.isActive(assignments[i])
                     assignments[i].showToStudents = this.showToStudents(assignments[i])
                     delete assignments[i]._id
@@ -80,6 +80,8 @@ function AssignmentHandler (){
         // asynchronous
         process.nextTick(() => {
             Assignments.findOne({ 'name': req.query.name }, (err, assignment) => {
+
+                assignment = assignment.toObject();
 
                 if (err || !assignment) {
                     res.redirect('/assignments')
@@ -262,6 +264,7 @@ function AssignmentHandler (){
 
                             if (attemptsRemaining <0){
                                 res.status(400).send('Maximum submission limit reached.')
+                                return
                             }
 
                             var score = 1

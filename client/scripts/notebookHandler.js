@@ -5,16 +5,19 @@ const path = require('path')
 
 // Load custom scripts
 const assignments = require('./assignments')
-const renderer = require('./renderer')
-const sessionHandler = require('./sessionHandler.js')
+const sessionHandler = require('./sessionHandler')
 
-function Notebook() {
+function NotebookHandler(renderer) {
     this.submitNotebook = (assignment, notebook) => {
-        var assignmentDir = assignments.getPath(assignment)
+        assignment = JSON.parse(assignment)
+        notebook = JSON.parse(notebook)
+        assignment.name = assignment.name.replace("%20", " ");
+        notebook.name = notebook.name.replace("%20", " ");
+        var assignmentDir = assignments.getProblemsDir(assignment.name)
         var remoteServerAddr = require('../config').remoteServerAddr
         request = sessionHandler.getRequestHandler()
 
-        var filePath = path.join(assignmentDir, notebook)
+        var filePath = path.join(assignmentDir, notebook.name)
 
         var options = { 
             method: 'POST',
@@ -38,10 +41,17 @@ function Notebook() {
             if (error) {
                 renderer.renderNotebookIndex(assignment, notebook, 'Oops! Something went wrong! Please try again')
             } else {
-                renderer.renderNotebookIndex(assignment, notebook, undefined)
+                if (response.statusCode === 400) {
+                    renderer.renderNotebookIndex(assignment, notebook, body)
+                } else {
+                    body = JSON.parse(body)
+                    notebook.score = body.score
+                    notebook.attemptsRemaining = body.attemptsRemaining
+                    renderer.renderNotebookIndex(assignment, notebook, undefined)
+                }
             }
         });
     }
 }
 
-module.exports = new Notebook()
+module.exports = NotebookHandler

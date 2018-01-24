@@ -33,7 +33,7 @@
       <webview id="webview" src="<%= notebookURL %>" preload="../static/js/preload/notebookPreload.js">
       </webview>
     </div>
-    <% if (assignment.isActive) { %>
+    <% if (assignment.isActive && notebook.attemptsRemaining > 0) { %>
     <div class="col-lg-12" style="position:fixed; bottom:5%; left:90%">
       <button class="btn btn-sm btn-primary m-t-n-xs" style="display: inline-block;"
               type="button" id="notebookSubmit"  data-dismiss="modal"
@@ -42,7 +42,7 @@
       </button>
     </div>
     <% } %>
-    <% if (typeof modalError !== 'undefined' && modalError.length > 0) { %>
+    <% if (typeof modalError !== 'undefined' && modalError !== null && modalError.length > 0) { %>
       <div class="modal fade" id="errorModal" role="dialog">
         <div class="modal-dialog">
 
@@ -60,16 +60,16 @@
         </div>
       </div>
       <% } %>
+    <% include ./partials/js_imports.ejs %>
     <script>
     const webview = document.querySelector('webview')
       webview.addEventListener('console-message', (e) => {
         console.log('Guest page logged a message:', e)
       })
-    <% if (typeof modalError !== 'undefined' && modalError.length > 0) { %>
-      $('#modalError').modal('show');
+    <% if (typeof modalError !== 'undefined' && modalError !== null && modalError.length > 0) { %>
+      $('#errorModal').modal('show');
     <% } %>
     </script>
-    <% include ./partials/js_imports.ejs %>
     <script src="../static/js/notebook.js"></script>
   </body>
 </html>

@@ -3,13 +3,15 @@ const {app, ipcMain} = require('electron');
 
 // Load custom scripts
 const assignments = require('./assignments')
-const notebook = require('./notebook')
+const NotebookHandler = require('./notebookHandler')
 const practice = require('./practice')
 
 // Config
 const config = require('../config')
 
 const setChannels = (renderer, session) => {
+    this.notebookHandler = new NotebookHandler(renderer)
+
     // On submission of server address form
     ipcMain.on('serverBtn-click', function (event, remoteServerAddr) {
         renderer.checkRemoteServerAddressAndRender(remoteServerAddr)
@@ -46,7 +48,7 @@ const setChannels = (renderer, session) => {
     });
 
     ipcMain.on('submitNotebook', (event, assignment, notebook) => {
-        notebook.submitNotebook(assignment, notebook)
+        this.notebookHandler.submitNotebook(assignment, notebook)
     });
 
     ipcMain.on('practiceNBList', (event) => {
