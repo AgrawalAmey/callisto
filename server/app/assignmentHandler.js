@@ -297,35 +297,6 @@ function AssignmentHandler (){
         })
     }
 
-
-    // =========================================================================
-    // Manage Assignments ======================================================
-    // ========================================================================= 
-
-    this.manageAssignments = (req, res) => {
-
-        // asynchronous
-        process.nextTick(() => {
-            Assignments.find({}, (err, assignments) => {
-                if (err) {
-                    res.redirect('/logout')
-                    return
-                }
-
-                res.render('manage_assignments.ejs', {
-                    user: req.user,
-                    assignments: assignments,
-                    addAssignmentError: req.flash('addAssignmentError'),
-                    editAssignmentError: req.flash('editAssignmentError'),
-                    removeAssignmentError: req.flash('removeAssignmentError'),
-                    addAssignmentSuccess: req.flash('addAssignmentSuccess'),
-                    editAssignmentSuccess: req.flash('editAssignmentSuccess'),
-                    removeAssignmentSuccess: req.flash('removeAssignmentSuccess'),
-                })
-            })
-        })
-    }
-
     // =========================================================================
     // Add Assignment =============================================================
     // =========================================================================
@@ -522,6 +493,9 @@ function AssignmentHandler (){
     // Update notebook database ================================================
     // ========================================================================= 
 
+    // this.evaluate = (assignment) => {
+        
+    // }
 }
 
 module.exports = new AssignmentHandler()

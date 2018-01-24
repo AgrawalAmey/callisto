@@ -1,12 +1,3 @@
-// $('#addAssignmentModal').on('show.bs.modal', function(e) {
-
-//     //get data-id attribute of the clicked element
-//     var bookId = $(e.relatedTarget).data('id');
-
-//     //populate the textbox
-//     $(e.currentTarget).find('input[name="bookId"]').val(bookId);
-// });
-
 $('#editAssignmentModal').on('show.bs.modal', function(e) {
 
     //get data-id attribute of the clicked element
@@ -16,7 +7,7 @@ $('#editAssignmentModal').on('show.bs.modal', function(e) {
 
     //populate the textboxes
 
-    $(e.currentTarget).find('h4[name="oldNameHeader"]').append(assignments[i].name);
+    $(e.currentTarget).find('h4[name="oldNameHeader"]').html("Edit " + assignments[i].name);
     $(e.currentTarget).find('input[name="oldName"]').val(assignments[i].name);
     $(e.currentTarget).find('input[name="name"]').val(assignments[i].name);
 	$(e.currentTarget).find('input[name="startTime"]').val(assignments[i].startTime);
@@ -33,7 +24,7 @@ $('#removeAssignmentModal').on('show.bs.modal', function(e) {
 
     //populate the textboxes
 
-    $(e.currentTarget).find('h4[name="nameHeader"]').append(assignments[i].name);
+    $(e.currentTarget).find('h4[name="nameHeader"]').html("Are you sure you want to remove " + assignments[i].name);
     $(e.currentTarget).find('input[name="name"]').val(assignments[i].name);  
 });
 

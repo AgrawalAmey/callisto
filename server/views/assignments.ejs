@@ -155,9 +155,9 @@
                                                             <td><%= assignments[i].endTime %></td>
                                                         <% } %>
                                                         <% if (assignments[i].solutionsAvailable) { %>
-                                                            <td>Available</td>
+                                                            <td><i class="fa fa-check-square" aria-hidden="true"></i></td>
                                                         <% } else { %>
-                                                            <td>Not Available</td>
+                                                            <td><i class="fa fa-window-close" aria-hidden="true"></i></td>
                                                         <% } %>
                                                         <% if (user.isAdmin) { %>
                                                             <td>
@@ -259,7 +259,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title" name="oldNameHeader">Edit </h4>
+                            <h4 class="modal-title" name="oldNameHeader"></h4>
                         </div>
                         <div class="modal-body">
                             <form role="form" id="editAssignmentForm" enctype="multipart/form-data" novalidate="novalidate" method="post" action="/editAssignment">
@@ -333,7 +333,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title" name="nameHeader">Are you sure you want to remove </h4>
+                            <h4 class="modal-title" name="nameHeader"></h4>
                         </div>
                         <div class="modal-body">
                             <form role="form" id="removeAssignmentForm" novalidate="novalidate" method="post" action="/removeAssignment">
@@ -483,19 +483,7 @@
         <% } %>
 
         function getAssignments() {
-            s = "<%= JSON.stringify(assignments) %>"
-            s = s.replace(/\\n/g, "\\n")  
-               .replace(/\\'/g, "\\'")
-               .replace(/\\"/g, '\\"')
-               .replace(/\\&/g, "\\&")
-               .replace(/\\r/g, "\\r")
-               .replace(/\\t/g, "\\t")
-               .replace(/\\b/g, "\\b")
-               .replace(/\\f/g, "\\f")
-               .replace(/&#34;/g, '"');
-            // remove non-printable and other non-valid JSON chars
-            s = s.replace(/[\u0000-\u0019]+/g,""); 
-            return JSON.parse(s);
+            return JSON.parse('<%- JSON.stringify(assignments) %>')
         }
     </script>
     <% if (user.isAdmin) { %>
