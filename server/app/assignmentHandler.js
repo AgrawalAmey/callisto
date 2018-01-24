@@ -54,9 +54,11 @@ function AssignmentHandler (){
                 }
 
                 for (i = 0; i < assignments.length; i++) {
+                    assignments[i] = assignments[i].toObject()
                     assignments[i].isSubmitted = req.user._id in assignments[i].whoSubmitted
                     assignments[i].isActive = this.isActive(assignments[i])
                     assignments[i].showToStudents = this.showToStudents(assignments[i])
+                    delete assignments[i]._id
                 }
 
                 res.render('assignments.ejs', {
@@ -83,6 +85,8 @@ function AssignmentHandler (){
                     res.redirect('/assignments')
                     return
                 }
+
+                assignment = assignment.toObject()
 
                 var totalScore = 0
 
@@ -143,12 +147,11 @@ function AssignmentHandler (){
                     return
                 }
 
-                assignment.isActive = this.isActive(assignment)
-                assignment.showToStudents = this.showToStudents(assignment)
+                showToStudents = this.showToStudents(assignment)
 
                 var filePath = fileUploader.getProblemsZipPath(assignment.name)
 
-                if (assignment.showToStudents || req.user.isAdmin) {
+                if (showToStudents || req.user.isAdmin) {
                     fs.access(filePath, (err) => {
                         if(err) {
                             res.status(404).send('Problems not available yet.')
@@ -182,12 +185,11 @@ function AssignmentHandler (){
                     return
                 }
 
-                assignment.isActive = this.isActive(assignment)
-                assignment.showToStudents = this.showToStudents(assignment)
+                showToStudents = this.showToStudents(assignment)
 
                 var filePath = fileUploader.getSolutionsZipPath(assignment.name)
 
-                if ((assignment.showToStudents && assignment.solutionsAvailable) || req.user.isAdmin) {
+                if ((showToStudents && assignment.solutionsAvailable) || req.user.isAdmin) {
                     fs.access(filePath, (err) => {
                         if(err) {
                             res.status(404).send('Solutions not available yet.')
@@ -222,9 +224,9 @@ function AssignmentHandler (){
                     return
                 }
 
-                assignment.isActive = this.isActive(assignment)
+                isActive = this.isActive(assignment)
 
-                if (assignment.isActive) {
+                if (isActive) {
                     fileUploader.upload(req, res, (err) => {
                         if (err) {
                             console.log(err)

@@ -92,6 +92,7 @@
                                                 <% for (var  i=0; i<assignment.notebooks.length; i++) { %>
                                                     <tr>
                                                         <td>
+                                                            <% delete assignment.readme %>
                                                             <a class="btn-sm btn-primary m-t-n-xs" 
                                                                 onclick="assignments.openNotebook('<%= JSON.stringify(assignment) %>', '<%= JSON.stringify(assignment.notebooks[i]) %>')">
                                                                 <%=  assignment.notebooks[i].name.slice(0, -6) %>

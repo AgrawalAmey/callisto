@@ -483,7 +483,7 @@
         <% } %>
 
         function getAssignments() {
-            return JSON.parse('<%- JSON.stringify(assignments) %>')
+            return JSON.parse('<%- JSON.stringify(assignments.map((x) => {delete x.readme; return x})) %>')
         }
     </script>
     <% if (user.isAdmin) { %>
