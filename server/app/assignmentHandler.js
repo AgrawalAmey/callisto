@@ -54,6 +54,7 @@ function AssignmentHandler (){
                 }
 
                 for (i = 0; i < assignments.length; i++) {
+                    assignments[i] = assignments[i].toObject();
                     assignments[i].isSubmitted = req.user._id in assignments[i].whoSubmitted
                     assignments[i].isActive = this.isActive(assignments[i])
                     assignments[i].showToStudents = this.showToStudents(assignments[i])
@@ -78,6 +79,8 @@ function AssignmentHandler (){
         // asynchronous
         process.nextTick(() => {
             Assignments.findOne({ 'name': req.query.name }, (err, assignment) => {
+
+                assignment = assignment.toObject();
 
                 if (err || !assignment) {
                     res.redirect('/assignments')
@@ -108,8 +111,8 @@ function AssignmentHandler (){
                     }
                 }
 
-                assignment.isActive = this.isActive(assignment)
-                assignment.showToStudents = this.showToStudents(assignment)
+                assignment['isActive'] = this.isActive(assignment)
+                assignment['showToStudents'] = this.showToStudents(assignment)
 
                 if (assignment.showToStudents || req.user.isAdmin) {
                     res.render('assignment.ejs', {
@@ -142,6 +145,8 @@ function AssignmentHandler (){
                     res.status(400).send('Invalid assignment name.')
                     return
                 }
+
+                assignment = assignment.toObject();
 
                 assignment.isActive = this.isActive(assignment)
                 assignment.showToStudents = this.showToStudents(assignment)
@@ -182,6 +187,8 @@ function AssignmentHandler (){
                     return
                 }
 
+                assignment = assignment.toObject();
+
                 assignment.isActive = this.isActive(assignment)
                 assignment.showToStudents = this.showToStudents(assignment)
 
@@ -221,6 +228,8 @@ function AssignmentHandler (){
                     res.status(400).send('Invalid assignment name.')
                     return
                 }
+
+                // assignment = assignment.toObject();
 
                 assignment.isActive = this.isActive(assignment)
 

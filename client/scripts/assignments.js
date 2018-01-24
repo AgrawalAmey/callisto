@@ -114,7 +114,7 @@ function Assignments() {
                         callback(err)
                     })
             } else {
-                if (resp.statusCode == 404) {
+                if (resp.statusCode === 404 || resp.statusCode === 401) {
                     callback()
                     return
                 }

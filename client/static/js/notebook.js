@@ -7,7 +7,7 @@ function goTo(assignment) {
 
 function submitNotebook(assignment, notebook) {
 	webviewElem.send('saveNotebook');
-    // ipc.send('submitNotebook', assignment, notebook);
+    ipc.send('submitNotebook', assignment, notebook);
 }
 
 // When everything is ready, trigger the events without problems

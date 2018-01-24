@@ -1,7 +1,7 @@
 const {ipcRenderer} = require('electron');
 
 ipcRenderer.on('saveNotebook', function(event) {
-	var elem = document.getElementById('#save-notebook');
+	var elem = document.getElementById('save-notbook');
 	elem.childNodes[0].click();
 });
 
