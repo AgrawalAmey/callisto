@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ./partials/head.ejs %>
+    <meta charset="UTF-8">
+    <title>Neural Networks and Fuzzy Logic</title>
+  </head>
+  <body class="blank">
+	    <div class="login-container">
+	        <div class="row">
+	            <div class="col-md-12">
+	                <div class="text-center m-b-md">
+	                    <h1>Neural Nets & Fuzzy Logic</h1>
+	                    <small>Please enter Server details to proceed</small>
+	                </div>
+	                <div class="hpanel">
+	                    <div class="panel-body">
+	                        <form role="form" id="serverForm" novalidate="novalidate" action="">
+	                            <div class="form-group">
+	                                <label class="control-label" for="remoteServerAddr">Remote Server Address</label>
+	                                <input type="text" placeholder="" title="Please enter the remote server address"  value="<%= remoteServerAddrPlaceholder %>" name="remoteServerAddr" id="remoteServerAddr" class="form-control">
+	                            </div>
+	                            <!-- show any messages that come back with authentication -->
+	                            <% if (typeof message !== 'undefined' && message.length > 0) { %>
+	                            <div class="form-group">                                
+	                                <label id="remote-connect-error" class="error" for="remoteServerAddr"><%= message %></label>
+	                            </div>
+	                            <% } %>
+	                            <button class="btn btn-success btn-block" id="serverBtn">Connect</button>
+	                        </form>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="col-md-12 text-center">
+	                &copy; Team NNFL
+	            </div>
+	        </div>
+	    </div>
+	    
+	    <% include ./partials/js_imports.ejs %>
+		<script src="../static/js/remoteAddr.js"></script>
+	</body>
+</html>

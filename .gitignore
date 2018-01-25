@@ -1,5 +1,13 @@
-node_modules/
+server/node_modules/
 mongo-express/
 docs/
 assignments/
 passwords.csv
+*/.DS_Store
+.DS_Store
+client/node_modules
+.vscode/
+client/conda_installers/
+client/release-builds/
+client/nbgrader_src/
+client/static/docs

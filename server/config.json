@@ -1,0 +1,5 @@
+{
+    "port": 18350,
+    "maxSubmissionAttempts": 5,
+    "condaEnvPath": ""
+}

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ./partials/head.ejs %>
+    <title>Neural Nets & Fuzzy Logic | Manage USers</title>
+</head>
+
+<body class="fixed-navbar fixed-sidebar">
+    <% include ./partials/admin_header.ejs %>
+    <% include ./partials/admin_nav.ejs %>
+    <!-- Main Wrapper -->
+    <div id=wrapper>
+        <div class="small-header transition animated fadeIn">
+            <div class=hpanel>
+                <div class=panel-body>
+                    <h2 class="font-light m-b-xs">Manage Users</h2></div>
+            </div>
+        </div>
+        <div class="content animate-panel">
+            <div>
+                <div class=row>
+                    <div class="col-lg-12">
+                        <div class="hpanel">
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <div class="col-lg-12" style="padding: 0">
+                                        <div class="col-lg-11" style="padding-left: 0">
+                                            <h4>Users</h4>
+                                        </div>
+                                        <div class="col-lg-1" style="padding-right: 0; text-align: right;">
+                                            <a data-toggle="modal" href="#addUserModal">
+                                                <i class="pe-7s-plus pe-2x"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <table cellpadding="1" cellspacing="1" class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Username</th>
+                                                <th>Name</th>
+                                                <th>Admin</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% for (var  i=0; i<users.length; i++) { %>
+                                                <tr>
+                                                    <td>
+                                                        <%= users[i].username %>
+                                                    </td>
+                                                    <td>
+                                                        <%= users[i].name %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (users[i].isAdmin) { %>
+                                                            <i class="fa fa-check-square" aria-hidden="true"></i>
+                                                        <% } else { %>
+                                                            <i class="fa fa-window-close" aria-hidden="true"></i>
+                                                        <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <a data-toggle="modal" data-id="<%= i %>" href="#editUserModal">
+                                                            <i class="pe-7s-pen pe-lg"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a data-toggle="modal" data-id="<%= i %>" href="#removeUserModal">
+                                                            <i class="pe-7s-trash pe-lg"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                <% } %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="addUserModal" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Add User</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form role="form" id="addUserForm" novalidate="novalidate" method="post" action="/addUser">
+                                    <div class="form-group">
+                                        <label>Username</label>
+                                        <input type="text" class="form-control" name="username">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" name="name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input type="password" placeholder="Password" class="form-control" name="password">
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-sm btn-primary m-t-n-xs" type="submit">
+                                            <strong>Submit</strong>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="modal fade" id="editUserModal" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title" name="nameHeader"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <form role="form" id="editUserForm" novalidate="novalidate" method="post" action="/editUser">
+                                    <div class="form-group">
+                                        <input type="hidden" class="form-control" name="username" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" name="name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input type="password" placeholder="Password" class="form-control" name="password">
+                                    </div>
+                                    <div>
+                                    <button class="btn btn-sm btn-primary m-t-n-xs" type="submit">
+                                        <strong>Submit</strong>
+                                    </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+            
+                    </div>
+                </div>
+            
+                <div class="modal fade" id="removeUserModal" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title" name="nameHeader"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <form role="form" id="removeUserForm" novalidate="novalidate" method="post" action="/removeUser">
+                                    <div class="form-group">
+                                        <input type="hidden" class="form-control" name="username" readonly>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-sm btn-default m-t-n-xs" style="display: inline-block; margin-right: 20px;" type="submit">
+                                            <strong>Yes</strong>
+                                        </button>
+                                        <button class="btn btn-sm btn-primary m-t-n-xs" style="display: inline-block;" data-dismiss="modal" type="button">
+                                            <strong>No</strong>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <% if (typeof alterUserSuccess !== 'undefined' && alterUserSuccess.length > 0) { %>
+                    <div class="modal fade" id="alterUserSuccessModal" role="dialog">
+                        <div class="modal-dialog">
+            
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label class="success">
+                                            <%= alterUserSuccess %>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+                <% if (typeof alterUserError !== 'undefined' && alterUserError.length > 0) { %>
+                    <div class="modal fade" id="alterUserErrorModal" role="dialog">
+                        <div class="modal-dialog">
+    
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label class="error">
+                                            <%= alterUserError %>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+        <!-- Footer-->
+        <footer class=footer>&copy; 2018 Team NNFL</footer>
+    </div>
+
+    <% include ./partials/js_imports.ejs %>
+    <script src="nnfl://js/manageUsers.js"></script>
+    <script>
+    <% if (typeof alterUserSuccess !== 'undefined' && alterUserSuccess.length > 0) { %>
+        $('#alterUserSuccessModal').modal('show');
+    <% } %>
+
+    <% if (typeof alterUserError !== 'undefined' && alterUserError.length > 0) { %>
+        $('#alterUserErrorModal').modal('show');
+    <% } %>
+
+    function getUsers () {
+        return JSON.parse('<%- JSON.stringify(users) %>')
+    }
+    </script>
+</body>
+
+</html>

@@ -30,71 +30,104 @@
                     <div class="col-lg-12">
                         <div class="hpanel">
                             <div class="panel-body">
-                                <h5>Start Time: <%= assignment.startTime %></h5>
-                                <h5>End Time: <%= assignment.endTime %></h5>
-                                <% if (user.isAdmin) { %>
-                                    <h5>Total submissions: <%= assignment.whoSubmitted.length %></h5> 
-                                <% } else if (assignment.isSubmitted) { %>
-                                    <h5>Submitted: Yes</h5>
-                                <% } else { %>
-                                    <h5>Submitted: No</h5>
-                                <% } %>
-                                <h4 style="margin-top: 30px;">Download Problems</h4>
-                                <h6>Clicking the download button will download the problem set in the form of a ZIP archive.</h6>
-                                <h6>The archive contains problems in the form of Jupyter notebooks.</h6>
-                                <h6>You are required to run the notebooks locally and fill in your solution.</h6>
-                                <h6>Click on the DOCS tab on the left if you need to access any documentation.</h6>
-                                <h4>
-                                    <a target="_blank" href="/assignment/release/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Problems</a>
-                                </h4>
-                                <br>  
-                                <% if (assignment.solutionsAvailable) { %>
-                                    <h4>Download Solutions</h4>
-                                    <h6>Download solutions for this assignment.</h6>
-                                    <h4> 
-                                        <a target="_blank" href="/assignment/solutions/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Solutions</a>
-                                    </h4>
-                                <% } %>
-                                <% if (assignment.feedbackAvailable && !user.isAdmin) { %>
-                                    <br>
-                                    <h4>Download Feedback</h4>
-                                    <h6>Download graded assignment.</h6>
-                                    <h4>
-                                        <a target="_blank" href="/assignment/feedback/<%= assignment.name %>" class="btn-sm btn-primary m-t-n-xs" role="button">Download Feedback</a>
-                                    </h4>
-                                <% } %>
-                                <% if (assignment.isActive) { %>
-                                    <br>
-                                    <h4>Submit Solutions</h4>
-                                    <h6>Once you are done with the assignments, save your notebook(s) and upload a single ZIP archive of your submission.</h6>
-                                    <h6>Please make sure you upload a ZIP archive of your submission. Any other formats will not be accepted.</h6>
-                                    <h6>You can submit as many times as you want within the stipulated time.</h6>
-                                    <h6>The most recent submission will overwrite any previous ones.</h6>
-                                    <br>
-                                    <form id="form_1" novalidate="novalidate"  role="form" method="post" enctype="multipart/form-data" action="/assignment/upload/<%= assignment.name %>">
-                                        <div class="form-group">                                
-                                            <label class="btn btn-default">
-                                                Selct file <input type="file" name="file">
-                                            </label>
-                                        </div>
-                                        <!-- show error message -->
-                                        <% if (typeof uploadAssignmentError !== 'undefined' && uploadAssignmentError.length > 0) { %>
-                                            <div class="form-group">                                
-                                                <label class="error" for="file"><%= uploadAssignmentError %></label>
-                                            </div>
+                                <div class=row>
+                                    <div class="col-lg-6">
+                                        <h5>
+                                            <b>Start Time:</b> <%= assignment.startTime %>
+                                        </h5>
+                                        <h5>
+                                            <b>End Time:</b> <%= assignment.endTime %>
+                                        </h5>
+                                    </div>
+                                    <div class="col-lg-6" style="text-align: right">
+                                        <% if (user.isAdmin) { %>
+                                            <h5>
+                                                <b>Total submissions:</b> <%= assignment.whoSubmitted.length %>
+                                            </h5>
+                                        <% } else { %>
+                                            <h5>
+                                                <b>Notebooks submitted:</b>
+                                                <%= assignment.notebooks.filter(x => x.isSubmitted).length %>/<%= assignment.notebooks.length %>
+                                            </h5>
+                                            <% if (assignment.isEvaluated) { %>
+                                                <h5><b>Score:</b> <%= totalScore %></h5>
+                                            <% } %>
                                         <% } %>
-                                        <!-- show success message -->
-                                        <% if (typeof uploadAssignmentSuccess !== 'undefined' && uploadAssignmentSuccess.length > 0) { %>
-                                            <div class="form-group">                                
-                                                <label class="success" for="file"><%= uploadAssignmentSuccess %></label>
-                                            </div>
-                                        <% } %>                                    
-                                        <div>
-                                            <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Submit Solutions</strong></button>
-                                        </div>
-                                    </form>
-                                <% } %>
-                            </div>      
+                                    </div>
+                                </div>
+                            </div>
+                            <% if (typeof assignment.readme !== 'undefined' && assignment.readme.length > 0) { %>
+                            <div class="panel-body" style="margin-top: 20px">
+                                <%- assignment.readme %>
+                            </div>
+                            <% } %>
+                            <div class="panel-body" style="margin-top: 20px">
+                                <div class="table-responsive">
+                                    <h4>Assignment Notebooks</h4>
+                                    <% if (assignment.notebooks.length == 0) { %>
+                                        <tr>
+                                            No notebooks available.
+                                        </tr>
+                                    <% } else { %>
+                                        <table cellpadding="1" cellspacing="1" class="table table-striped" style="margin-top: 25px;font-size: 15px;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <% if (assignment.solutionsAvailable) { %>
+                                                        <th>Solution</th>
+                                                    <% } %>
+                                                    <% if (user.isAdmin) { %>
+                                                        <th> Submissions </th>
+                                                    <% } else { %>
+                                                        <th> Submitted </th>
+                                                        <% if (assignment.isEvaluated) { %>
+                                                            <th> Score </th>
+                                                        <% } else { %>
+                                                            <th> Attempts Remaining </th>
+                                                        <% } %>
+                                                    <% } %>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% for (var  i=0; i<assignment.notebooks.length; i++) { %>
+                                                    <tr>
+                                                        <td>
+                                                            <% delete assignment.readme %>
+                                                            <a class="btn-sm btn-primary m-t-n-xs" 
+                                                                onclick="assignments.openNotebook('<%= JSON.stringify(assignment) %>', '<%= JSON.stringify(assignment.notebooks[i]) %>', 'problems')">
+                                                                <%=  assignment.notebooks[i].name.slice(0, -6) %>
+                                                            </a>
+                                                        </td>
+                                                        <% if (assignment.solutionsAvailable) { %>
+                                                            <td>
+                                                                <a class="btn-sm btn-success m-t-n-xs"
+                                                                 onclick="assignments.openNotebook('<%= JSON.stringify(assignment) %>', '<%= JSON.stringify(assignment.notebooks[i]) %>', 'solutions')">
+                                                                    Solution
+                                                                </a>
+                                                            </td>
+                                                        <% } %>
+                                                        <% if (user.isAdmin) { %>
+                                                            <td><b><%= assignment.notebooks[i].numSubmissions %></b></td>
+                                                        <% } else { %>
+                                                            <% if (assignment.notebooks[i].isSubmitted) { %>
+                                                                <td><i class="fa fa-check-square" aria-hidden="true"></i></td>
+                                                            <% } else { %>
+                                                                <td><i class="fa fa-window-close" aria-hidden="true"></i></td>
+                                                            <% } %>
+                                                            <% if (assignment.isEvaluated) { %>
+                                                                <td><b><%= assignment.notebooks[i].score %></b></td>                        
+                                                            <% } else { %>
+                                                                <td><b><%= assignment.notebooks[i].attemptsRemaining %></b></td>
+                                                            <% } %>
+                                                        <% } %>
+                                                    </tr>
+                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    <% } %>    
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -103,15 +136,14 @@
         <!-- Footer-->
         <footer class=footer>&copy; Team NNFL</footer>
         <% include ./partials/js_imports.ejs %>
-        <script>
-            $("#form_1").validate({
-                rules: {
-                  file: {
-                    required: true,
-                    extension: 'zip'
-                  }
-                }
-              });              
+        <script type="text/javascript">
+            getAssignmentName = () => {
+                return "<%= assignment.name %>"
+            }
+
+            solutionsAvailable = () => {
+                return <%= assignment.solutionsAvailable %>
+            }
         </script>
     </div>
 </body>

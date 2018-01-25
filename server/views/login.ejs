@@ -44,7 +44,6 @@
     </div>
     
     <% include ./partials/js_imports.ejs %>
-    
     <script>
         $(function(){
             $("#loginForm").validate({
@@ -57,6 +56,10 @@
                     }
                 },
                 submitHandler: function(form) {
+                    username = $("#username").val()                    
+                    password = $("#password").val()
+                    session.login(username, password)
+
                     form.submit();
                 }
             });

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ./partials/head.ejs %>
+        <meta charset="UTF-8">
+        <title>Neural Networks and Fuzzy Logic</title>
+</head>
+
+<body class="blank">
+    <div class="login-container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-center m-b-md">
+                    <h1>Neural Nets & Fuzzy Logic</h1>
+                </div>
+                
+                <div class="hpanel" style="margin-top: 50px">
+                        <% if (typeof assignmentDownloadError !== 'undefined' && assignmentDownloadError.length > 0) { %>
+                            <div>
+                                <h4 class="error" style="text-align: center;">
+                                    <%= assignmentDownloadError %>
+                                </h4>
+                            </div>
+                        <% } else { %>
+                            <div class="text-center m-b-md">
+                                <div class="row">
+                                    <div class="col-md-3"></div>
+                                    <div class="col-md-6">
+                                        <img src="../static/img/loader.gif" alt="loader">
+                                    </div>
+                                    <div class="col-md-3"></div>
+                                </div>
+                                <h4 style="font-weight: 600"> Downloading assignment. </h4>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        &copy; Team NNFL
+                    </div>
+                </div>
+        </div>
+    </div>
+    <% include ./partials/js_imports.ejs %>
+</body>
+
+</html>

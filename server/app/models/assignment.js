@@ -5,14 +5,30 @@ var ShortId = require('mongoose-minid');
 var assignmentSchema = mongoose.Schema({
     name : {
         type: String,
-        unique: true
+        unique: true,
+        required: true
     },
-    startTime: String,
-    endTime : String,
-    acceptSubmission: Boolean,
+    startTime: {
+        type: String,
+        required: true
+    },
+    endTime: {
+        type: String,
+        required: true
+    },
+    readme: String,
     solutionsAvailable: Boolean,
-    feedbackAvailable: Boolean,
-    whoSubmitted: [String] 
+    isEvaluative: Boolean,
+    whoSubmitted: [String],
+    isEvaluated: Boolean,
+    notebooks: [{
+        name: String,
+        submissions: [{
+            username: String,
+            score: Number,
+            attempts: Number
+        }]
+    }]
 });
 
 // create the model for assignments and expose it to our app

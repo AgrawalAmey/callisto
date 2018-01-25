@@ -2,7 +2,7 @@
 
 var express  = require('express');
 var app      = express();
-var port     = process.env.PORT || 5050;
+var port     = require('./config').port;
 var mongoose = require('mongoose');
 var passport = require('passport');
 var flash    = require('connect-flash');
