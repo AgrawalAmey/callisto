@@ -37,7 +37,15 @@ function Renderer(mainWindow){
 
     this.checkRemoteServerAddressAndRender = (remoteServerAddr) => {
 
-        var remoteServerURL = "http://" + remoteServerAddr + "/login";
+        var remoteServerURL = "http://" + remoteServerAddr + "/login"
+
+        var options = {
+            url: remoteServerURL,
+            timeout: 500,
+            headers: {
+                'cache-control': 'no-cache'
+            }
+        }
 
         // For the first time case
         if (remoteServerAddr == '') {
@@ -45,7 +53,7 @@ function Renderer(mainWindow){
             return;
         }
 
-        request.get(remoteServerURL, function (err, body, res) {
+        request(options, (err, body, res) => {
             if (err) {
                 console.log(err);
                 // Render retry page
@@ -113,10 +121,12 @@ function Renderer(mainWindow){
             url: 'http://' + jupyterAddr,
             qs: {
                 token: token
+            },
+            timeout: 500,
+            headers: {
+                'cache-control': 'no-cache'
             }
         }
-
-        let child;
 
         request(opts, (err, response, body) => {
             if (err) {
@@ -124,7 +134,7 @@ function Renderer(mainWindow){
                 var jupyterPort = jupyterAddr.split(":")[1]
                 var jupyterPath = path.join(condaInstaller.getInstallationPath(), 'bin', 'jupyter')
                 var notebookCmd = jupyterPath + " notebook --NotebookApp.token='" + token + "' --notebook-dir='" + userDataPath + "' --no-browser --port=" + jupyterPort;
-                child = exec(notebookCmd);
+                var child = exec(notebookCmd);
                 wrapper(assignment, notebook, modalError, notebookURL, child);
             } else {
                 loadNotebookURL(assignment, notebook, modalError, notebookURL);
@@ -206,10 +216,12 @@ function Renderer(mainWindow){
             url: 'http://' + jupyterAddr,
             qs: {
                 token: token
+            },
+            timeout: 500,
+            headers: {
+                'cache-control': 'no-cache'
             }
         }
-
-        let childPractice;
 
         request(opts, (err, response, body) => {
             if (err) {
@@ -217,7 +229,7 @@ function Renderer(mainWindow){
                 var jupyterPort = jupyterAddr.split(":")[1]
                 var jupyterPath = path.join(condaInstaller.getInstallationPath(), 'bin', 'jupyter')
                 var notebookCmd = jupyterPath + " notebook --NotebookApp.token='" + token + "' --notebook-dir='" + userDataPath + "' --no-browser --port=" + jupyterPort;
-                childPractice = exec(notebookCmd);
+                var childPractice = exec(notebookCmd);
                 wrapperPractice(practiceNBURL, childPractice);
             } else {
                 loadPracticeNBURL(practiceNBURL, childPractice);

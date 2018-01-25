@@ -9,11 +9,5 @@
     <webview id="webview" src="<%= remoteServerAddr %>" 
       preload="../static/js/preload.js" nodeintegration>
     </webview>
-    <script>
-    const webview = document.querySelector('webview')
-      webview.addEventListener('console-message', (e) => {
-        console.log('Guest page logged a message:', e)
-      })
-    </script>
   </body>
 </html>

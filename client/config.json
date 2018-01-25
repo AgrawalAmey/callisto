@@ -1,6 +1,5 @@
 {
   "appName": "NNFL-App",
-  "pyServerAddr": "localhost:17350",
   "remoteServerAddr": "172.18.19.65:18350",
   "jupyterAddr": "localhost:19350",
   "windowsInstallationTimeOut": 900000,
