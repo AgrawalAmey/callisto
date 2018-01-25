@@ -1,10 +1,11 @@
 // Load vender scripts
 const { app } = require('electron');
-const crypto = require('crypto');
-const ejse = require('ejs-electron');
-const fs = require('fs');
-const path = require('path');
-const request = require('request');
+const crypto = require('crypto')
+const ejse = require('ejs-electron')
+const fs = require('fs')
+const os = require('os')
+const path = require('path')
+const request = require('request')
 
 // Load custom scripts
 const condaInstaller = require('./condaInstaller')
@@ -15,6 +16,7 @@ const remoteServerAddrHandler = require('./remoteServerAddrHandler')
 function Renderer(mainWindow){
     self = this
 
+    this.platform = os.platform()
     this.mainWindow = mainWindow
     
     this.render = () => {
@@ -132,8 +134,12 @@ function Renderer(mainWindow){
             if (err) {
                 var userDataPath = path.join(app.getPath('userData'), 'assignments')
                 var jupyterPort = jupyterAddr.split(":")[1]
-                var jupyterPath = path.join(condaInstaller.getInstallationPath(), 'bin', 'jupyter')
-                var notebookCmd = jupyterPath + " notebook --NotebookApp.token='" + token + "' --notebook-dir='" + userDataPath + "' --no-browser --port=" + jupyterPort;
+                if (this.platform == 'win32') {
+                    var jupyterPath = path.join(condaInstaller.getInstallationPath(), 'Scripts', 'jupyter-notebook.exe')
+                } else {
+                    var jupyterPath = path.join(condaInstaller.getInstallationPath(), 'bin', 'jupyter') + ' notebook'
+                }
+                var notebookCmd = jupyterPath + " --NotebookApp.token=\"" + token + "\" --notebook-dir=\"" + userDataPath + "\" --no-browser --port=" + jupyterPort;
                 var child = exec(notebookCmd);
                 wrapper(assignment, notebook, modalError, notebookURL, child);
             } else {
@@ -227,8 +233,12 @@ function Renderer(mainWindow){
             if (err) {
                 var userDataPath = path.join(app.getPath('userData'), 'assignments')
                 var jupyterPort = jupyterAddr.split(":")[1]
-                var jupyterPath = path.join(condaInstaller.getInstallationPath(), 'bin', 'jupyter')
-                var notebookCmd = jupyterPath + " notebook --NotebookApp.token='" + token + "' --notebook-dir='" + userDataPath + "' --no-browser --port=" + jupyterPort;
+                if (this.platform == 'win32') {
+                    var jupyterPath = path.join(condaInstaller.getInstallationPath(), 'Scripts', 'jupyter-notebook.exe')
+                } else {
+                    var jupyterPath = path.join(condaInstaller.getInstallationPath(), 'bin', 'jupyter') + ' notebook'
+                }
+                var notebookCmd = jupyterPath + " --NotebookApp.token=\"" + token + "\" --notebook-dir=\"" + userDataPath + "\" --no-browser --port=" + jupyterPort;
                 var childPractice = exec(notebookCmd);
                 wrapperPractice(practiceNBURL, childPractice);
             } else {
