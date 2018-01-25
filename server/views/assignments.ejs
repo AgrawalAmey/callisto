@@ -81,9 +81,9 @@
                                                             <td><%= assignments[i].whoSubmitted.length %></td> 
                                                         <% } %>
                                                         <% if (assignments[i].solutionsAvailable) { %>
-                                                            <td>Available</td>
+                                                            <td><i class="fa fa-check-square" aria-hidden="true"></i></td>
                                                         <% } else { %>
-                                                            <td>Not Available</td>
+                                                            <td><i class="fa fa-window-close" aria-hidden="true"></i></td>
                                                         <% } %>
                                                         <% if (user.isAdmin) { %>
                                                             <td>
@@ -223,6 +223,12 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="checkbox checkbox-primary">
+                                        <input type="checkbox" id="addAssignmentSolAvail" name="solutionsAvailable">
+                                        <label for="solutionsAvailable">Make Solutions Public</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-primary">
                                         <input type="checkbox" id="cb1" onchange="AddUploadProblemChange()">
                                         <label for="cb1">Upload Problems</label>
                                     </div>
@@ -292,6 +298,12 @@
                                     <div class="checkbox checkbox-primary">
                                         <input type="checkbox" id="editAssignmentIsEvaluative" name="isEvaluative">
                                         <label for="editAssignmentIsEvaluative">Evaluative Assignment</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-primary">
+                                        <input type="checkbox" id="editAssignmentSolAvail" name="solutionsAvailable">
+                                        <label for="solutionsAvailable">Make Solutions Public</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -395,6 +407,12 @@
                                     <div class="checkbox checkbox-primary">
                                         <input type="checkbox" id="addPracticeAssignmentIsEval" name="isEvaluative" readonly>
                                         <label for="isEvaluative">Evaluative Assignment</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-primary">
+                                        <input type="checkbox" id="addPracticeAssignmentSolAvail" name="solutionsAvailable">
+                                        <label for="solutionsAvailable">Make Solutions Public</label>
                                     </div>
                                 </div>
                                 <div class="form-group">

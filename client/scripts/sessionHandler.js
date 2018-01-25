@@ -15,6 +15,7 @@ function SessionHandler() {
                     'cache-control': 'no-cache',
                     'content-type': 'application/x-www-form-urlencoded'
                 },
+            timeout: 500,
             form: { username: username, password: password },
         };
 

@@ -37,7 +37,6 @@ function AssignmentHandler (){
         assignment.isEvaluative = req.body.isEvaluative || false
         assignment.isEvaluated = req.body.isEvaluated || false
         assignment.solutionsAvailable = req.body.solutionsAvailable || false
-        assignment.acceptSubmission = req.body.acceptSubmission || false
 
         return assignment
     }

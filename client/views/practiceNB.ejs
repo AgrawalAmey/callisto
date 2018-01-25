@@ -20,12 +20,6 @@
       <webview id="webview" src="<%= practiceNBURL %>" preload="../static/js/preload/practiceNBPreload.js">
       </webview>
     </div>
-    <script>
-    const webview = document.querySelector('webview')
-      webview.addEventListener('console-message', (e) => {
-        console.log('Guest page logged a message:', e)
-      })
-    </script>
     <% include ./partials/js_imports.ejs %>
     <script src="../static/js/practiceNB.js"></script>
   </body>

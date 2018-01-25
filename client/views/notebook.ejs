@@ -62,10 +62,6 @@
       <% } %>
     <% include ./partials/js_imports.ejs %>
     <script>
-    const webview = document.querySelector('webview')
-      webview.addEventListener('console-message', (e) => {
-        console.log('Guest page logged a message:', e)
-      })
     <% if (typeof modalError !== 'undefined' && modalError !== null && modalError.length > 0) { %>
       $('#errorModal').modal('show');
     <% } %>

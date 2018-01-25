@@ -144,8 +144,12 @@ function  CondaInstaller() {
     this.installNbgrader = (callback) => {
         var installationPath = this.getInstallationPath()
         var nbgraderPackagesPath = this.getNbgraderPackagesPath()
-
-        var pipPath = path.join(installationPath, 'bin', 'pip')
+    
+        if (this.platform == 'win32') {
+            var pipPath = path.join(installationPath, 'Scripts', 'pip.exe')
+        } else {
+            var pipPath = path.join(installationPath, 'bin', 'pip')
+        }
 
         var options = {
             windowsHide: true,
