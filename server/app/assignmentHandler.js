@@ -88,8 +88,6 @@ function AssignmentHandler (){
                     return
                 }
 
-                assignment = assignment.toObject()
-
                 var totalScore = 0
 
                 for (let i = 0; i < assignment.notebooks.length; i++) {

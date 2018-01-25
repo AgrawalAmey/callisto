@@ -1,5 +1,6 @@
 var request = require("request")
 
+var config = require("../config")
 
 function SessionHandler() {
     this.login = (username, password) => {
@@ -8,7 +9,7 @@ function SessionHandler() {
 
         var options = {
             method: 'POST',
-            url: 'http://localhost:18350/login',
+            url: 'http://' + config.remoteServerAddr +'/login',
             headers:
                 {
                     'cache-control': 'no-cache',
