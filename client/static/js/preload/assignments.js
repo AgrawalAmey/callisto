@@ -6,8 +6,8 @@ function Assignments() {
         ipcRenderer.send('downloadAssignment', assignmentName, callbackURL)
     }
 
-    this.openNotebook = (assignment, notebook) => {
-        ipcRenderer.send('openNotebook', JSON.parse(assignment), JSON.parse(notebook));
+    this.openNotebook = (assignment, notebook, type) => {
+        ipcRenderer.send('openNotebook', JSON.parse(assignment), JSON.parse(notebook), type);
     }
 }
 

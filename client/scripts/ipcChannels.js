@@ -39,8 +39,8 @@ const setChannels = (renderer, session) => {
         })
     });
 
-    ipcMain.on('openNotebook', (event, assignment, notebook) => {
-        renderer.renderNotebookIndex(assignment, notebook, undefined);
+    ipcMain.on('openNotebook', (event, assignment, notebook, type) => {
+        renderer.renderNotebookIndex(assignment, notebook, type, undefined);
     });
 
     ipcMain.on('showAssignment', (event, assignment) => {

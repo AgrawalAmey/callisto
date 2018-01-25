@@ -90,12 +90,16 @@ function Renderer(mainWindow){
         this.mainWindow.loadURL(path.join('file://', __dirname, '../views', 'assignmentDownloader.ejs'));
     }
 
-    this.renderNotebookIndex = (assignment, notebook, modalError) => {
+    this.renderNotebookIndex = (assignment, notebook, type, modalError) => {
         assignment.name = assignment.name.replace(/ /g, "%20")
         notebook.name = notebook.name.replace(/ /g, "%20")
 
         var jupyterAddr = require('../config').jupyterAddr
-        var notebookURL = "http://" + jupyterAddr + "/notebooks/submitted/user/" + assignment.name + "/" + notebook.name;
+        if (type == 'problems'){
+            var notebookURL = "http://" + jupyterAddr + "/notebooks/submitted/user/" + assignment.name + "/" + notebook.name;
+        } else {
+            var notebookURL = "http://" + jupyterAddr + "/notebooks/source/" + assignment.name + "/" + notebook.name;
+        }
 
         tokenFile = path.join(app.getPath('temp'), 'tokenFile.txt');
 

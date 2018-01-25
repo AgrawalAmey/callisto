@@ -39,16 +39,16 @@ function NotebookHandler(renderer) {
 
         request(options, function (error, response, body) {
             if (error) {
-                renderer.renderNotebookIndex(assignment, notebook, 'Oops! Something went wrong! Please try again')
+                renderer.renderNotebookIndex(assignment, notebook, 'problems', 'Oops! Something went wrong! Please try again')
             } else {
                 if (response.statusCode === 400) {
-                    renderer.renderNotebookIndex(assignment, notebook, body)
+                    renderer.renderNotebookIndex(assignment, notebook, 'problems', body)
                 } else {
                     body = JSON.parse(body)
                     notebook.score = body.score
                     notebook.attemptsRemaining = body.attemptsRemaining
                     notebook.isSubmitted = body.isSubmitted
-                    renderer.renderNotebookIndex(assignment, notebook, undefined)
+                    renderer.renderNotebookIndex(assignment, notebook, 'problems', undefined)
                 }
             }
         });

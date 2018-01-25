@@ -94,13 +94,14 @@
                                                         <td>
                                                             <% delete assignment.readme %>
                                                             <a class="btn-sm btn-primary m-t-n-xs" 
-                                                                onclick="assignments.openNotebook('<%= JSON.stringify(assignment) %>', '<%= JSON.stringify(assignment.notebooks[i]) %>')">
+                                                                onclick="assignments.openNotebook('<%= JSON.stringify(assignment) %>', '<%= JSON.stringify(assignment.notebooks[i]) %>', 'problems')">
                                                                 <%=  assignment.notebooks[i].name.slice(0, -6) %>
                                                             </a>
                                                         </td>
                                                         <% if (assignment.solutionsAvailable) { %>
                                                             <td>
-                                                                <a class="btn-sm btn-default m-t-n-xs" href="#">
+                                                                <a class="btn-sm btn-success m-t-n-xs"
+                                                                 onclick="assignments.openNotebook('<%= JSON.stringify(assignment) %>', '<%= JSON.stringify(assignment.notebooks[i]) %>', 'solutions')">
                                                                     Solution
                                                                 </a>
                                                             </td>
