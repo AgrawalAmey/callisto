@@ -1,0 +1,7 @@
+{
+    "uid": "nnfl-server",
+    "append": true,
+    "watch": true,
+    "script": "server.js",
+    "sourceDir": "."
+}
