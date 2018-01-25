@@ -47,6 +47,7 @@ function NotebookHandler(renderer) {
                     body = JSON.parse(body)
                     notebook.score = body.score
                     notebook.attemptsRemaining = body.attemptsRemaining
+                    notebook.isSubmitted = body.isSubmitted
                     renderer.renderNotebookIndex(assignment, notebook, undefined)
                 }
             }

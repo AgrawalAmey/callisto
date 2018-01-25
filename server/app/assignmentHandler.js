@@ -277,7 +277,7 @@ function AssignmentHandler (){
                                     console.log(err)
                                     res.status(500).send('Oops! Something went wrong.')
                                 } else {
-                                    res.json({score: score, attemptsRemaining: attemptsRemaining})
+                                    res.json({score: score, attemptsRemaining: attemptsRemaining, isSubmitted: true})
                                 }
 
                                 return

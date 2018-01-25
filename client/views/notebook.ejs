@@ -17,9 +17,9 @@
         <div class="col-md-6"></div>
         <div class="col-md-4" style="padding-bottom: 15px;padding-top: 23px;padding-right: 30px; text-align: right;">
           <% if (notebook.isSubmitted) { %>
-              <lable><b>Submitted:</b><i style="padding-left: 8px" class="fa fa-check-square" aria-hidden="true"></i></lable><br>
+              <label><b>Submitted:</b><i style="padding-left: 8px" class="fa fa-check-square" aria-hidden="true"></i></lable><br>
           <% } else { %>
-              <lable><b>Submitted:</b><i style="padding-left: 8px" class="fa fa-window-close" aria-hidden="true"></i></lable><br>
+              <label><b>Submitted:</b><i style="padding-left: 8px" class="fa fa-window-close" aria-hidden="true"></i></lable><br>
           <% } %>
           <% if (assignment.isEvaluated) { %>
             <label><b>Score:</b> <%= notebook.score %></label><br>
