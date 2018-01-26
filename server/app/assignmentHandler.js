@@ -241,6 +241,8 @@ function AssignmentHandler (){
                                 return
                             }
 
+                            var updateQuery = {}
+
                             var submissionIndex = assignment.notebooks[notebookIndex].submissions.findIndex((submission) => {
                                 return submission.username == req.user.username
                             })
@@ -248,30 +250,36 @@ function AssignmentHandler (){
                             if (submissionIndex < 0) {
                                 submissionIndex = assignment.notebooks[notebookIndex].submissions.length
                                 
-                                assignment.notebooks[notebookIndex].submissions.push({
+                                updateQuery["$push"] = {}
+                                updateQuery["$push"]["notebooks." + notebookIndex + ".submissions"] = {
                                     username: req.user.username,
-                                    attempts: 0,
+                                    attempts: 1,
                                     score: 0
-                                })
+                                }
+                                var score = 0
+                                var attemptsRemaining = 4
+                            } else {
+                                updateQuery["$inc"] = {}
+                                updateQuery["$inc"]["notebooks." + notebookIndex + ".submissions." + submissionIndex + ".attempts"] = 1
+                                var score = assignment.notebooks[notebookIndex].submissions[submissionIndex].score
+                                var attemptsRemaining = config.maxSubmissionAttempts
+                                attemptsRemaining -= assignment.notebooks[notebookIndex].submissions[submissionIndex].attempts
+                                attemptsRemaining -= 1
                             }
-
-                            
-                            attempts = ++assignment.notebooks[notebookIndex].submissions[submissionIndex].attempts
-                            attemptsRemaining = config.maxSubmissionAttempts - attempts
 
                             if (attemptsRemaining <0){
                                 res.status(400).send('Maximum submission limit reached.')
                                 return
                             }
 
-                            var score = 1
-                            assignment.notebooks[notebookIndex].submissions[submissionIndex].score = score
-
                             if (!assignment.whoSubmitted.includes(req.user.username)) {
-                                assignment.whoSubmitted.push(req.user.username)
+                                if (!updateQuery["$push"]) {
+                                    updateQuery["$push"] = {}
+                                }
+                                updateQuery["$push"]["whoSubmitted"] = req.user.username
                             }
 
-                            assignment.save((err, editedUser) => {
+                            Assignments.update({ _id: assignment._id }, updateQuery, (err, oldAssignment) => {
                                 if (err) {
                                     console.log(err)
                                     res.status(500).send('Oops! Something went wrong.')

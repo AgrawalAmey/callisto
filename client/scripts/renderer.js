@@ -110,17 +110,17 @@ function Renderer(mainWindow){
                     if (err) {
                         throw err;
                     } else {
-                        checkAndStartJupyter(token, assignment, notebook, modalError, notebookURL)
+                        checkAndStartJupyter(token, assignment, notebook, type, modalError, notebookURL)
                     }
                 });
             } else {
                 var token = data.toString();
-                checkAndStartJupyter(token, assignment, notebook, modalError, notebookURL)
+                checkAndStartJupyter(token, assignment, notebook, type, modalError, notebookURL)
             }
         });
     }
 
-    checkAndStartJupyter = (token, assignment, notebook, modalError, notebookURL) => {
+    checkAndStartJupyter = (token, assignment, notebook, type, modalError, notebookURL) => {
         var jupyterAddr = config.jupyterAddr;
         notebookURL = notebookURL + '?token=' + token;
         var opts = {
@@ -145,20 +145,20 @@ function Renderer(mainWindow){
                 }
                 var notebookCmd = jupyterPath + " --NotebookApp.token=\"" + token + "\" --notebook-dir=\"" + userDataPath + "\" --no-browser --port=" + jupyterPort;
                 var child = exec(notebookCmd);
-                wrapper(assignment, notebook, modalError, notebookURL, child);
+                wrapper(assignment, notebook, type,  modalError, notebookURL, child);
             } else {
-                loadNotebookURL(assignment, notebook, modalError, notebookURL);
+                loadNotebookURL(assignment, notebook, type,  modalError, notebookURL);
             }
         });
     }
 
-    wrapper = (assignment, notebook, modalError, notebookURL, child) => {
+    wrapper = (assignment, notebook, type, modalError, notebookURL, child) => {
         var buffer = '';
 
         stderrHandler = (data, cb) => {
             buffer = buffer + data;
             if(buffer.includes('The Jupyter Notebook is running at')) {
-                loadNotebookURL(assignment, notebook, modalError, notebookURL);
+                loadNotebookURL(assignment, notebook, type, modalError, notebookURL);
                 buffer = '';
                 child.stderr.removeListener('data', stderrHandler);
             }
@@ -167,7 +167,7 @@ function Renderer(mainWindow){
         child.stderr.on('data', stderrHandler);
     }
 
-    loadNotebookURL = (assignment, notebook, modalError, notebookURL) => {
+    loadNotebookURL = (assignment, notebook, type, modalError, notebookURL) => {
         if (modalError) {
             ejse.data('modalError', modalError);
         } else {
@@ -175,6 +175,7 @@ function Renderer(mainWindow){
         }
         ejse.data('assignment', assignment);
         ejse.data('notebook', notebook);
+        ejse.data('type', type)
         ejse.data('notebookURL', notebookURL);
         this.mainWindow.loadURL(path.join('file://', __dirname, '../views', 'notebook.ejs'));
     }
