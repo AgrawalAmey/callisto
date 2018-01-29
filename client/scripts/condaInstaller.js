@@ -108,7 +108,8 @@ function  CondaInstaller() {
             }
 
             if(this.platform == 'linux' || this.platform == 'darwin') {
-                this.installNbgrader(callback)
+                // this.installNbgrader(callback)
+                callback()
             } else {
                 this.waitTillWindowsInstallation(callback)
             }
@@ -119,7 +120,8 @@ function  CondaInstaller() {
         startTime = startTime || new Date()
 
         if (this.isInstalled()){
-            this.installNbgrader(callback)
+            // this.installNbgrader(callback)
+            callback()
         } else if (new Date() - startTime > config.windowsInstallationTimeOut) {
             rimraf(this.getInstallationPath(), () => {
                 callback(new Error('Installation TimeOut.'))
