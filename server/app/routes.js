@@ -99,7 +99,7 @@ module.exports = function(app, passport) {
     // Account Settings ====================
     // =====================================
 
-    app.get('/accountSettings', isLoggedIn, function(req, res) {
+    app.get('/accountSettings', isLoggedIn, isAdmin, function(req, res) {
         res.render('accountSetting.ejs', {
             user: req.user,
             alterUserError: req.flash('alterUserError'),
