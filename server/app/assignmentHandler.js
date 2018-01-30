@@ -367,12 +367,21 @@ function AssignmentHandler (){
         process.nextTick(() => {
 
             fileUploader.upload(req, res, (err) => {
+
                 if (err) {
                     console.log(err)
                     if (err.message == 'FileTypeNotSupported') {
                         req.flash('alterAssignmentError', 'Select a zip file for uploading problems.')
                     } else {
                         req.flash('alterAssignmentError', 'Oops! Something went wrong.')
+                    }
+
+                    if (req.tempProblemsDir) {
+                        fileUploader.rmdirSync(req.tempProblemsDir)
+                    }
+
+                    if (req.tempSolutionsDir) {
+                        fileUploader.rmdirSync(req.tempSolutionsDir)
                     }
 
                     res.redirect('/assignments')
@@ -389,6 +398,14 @@ function AssignmentHandler (){
 
                     existingAssignment = this.editOrCreateAssignment(req, existingAssignment)
 
+                    if (req.tempProblemsDir) {
+                        fileUploader.tempToFinal(req.tempProblemsDir, req.body.name, 'problems')
+                    }
+
+                    if (req.tempSolutionsDir) {
+                        fileUploader.tempToFinal(req.tempSolutionsDir, req.body.name, 'solutions')
+                    }
+
                     existingAssignment.save((err) => {
                         if (err) {
                             console.log(err)
@@ -397,7 +414,9 @@ function AssignmentHandler (){
                             return
                         }
 
-                        this.updateNotebooksDatabase(existingAssignment)
+                        if (Object.keys(req.files).length > 0) {
+                            this.updateNotebooksDatabase(existingAssignment)
+                        }
 
                         req.flash('alterAssignmentSuccess', 'Assignment edited successfully.')
 
