@@ -316,6 +316,14 @@ function AssignmentHandler (){
                         req.flash('alterAssignmentError', 'Oops! Something went wrong.')
                     }
 
+                    if (req.tempProblemsDir) {
+                        fileUploader.rmdirSync(req.tempProblemsDir)
+                    }
+
+                    if (req.tempSolutionsDir) {
+                        fileUploader.rmdirSync(req.tempSolutionsDir)
+                    }
+
                     res.redirect('/assignments')
                     return
                 }
@@ -337,6 +345,14 @@ function AssignmentHandler (){
                     }
 
                     var newAssignment = this.editOrCreateAssignment(req)
+
+                    if (req.tempProblemsDir) {
+                        fileUploader.tempToFinal(req.tempProblemsDir, req.body.name, 'problems')
+                    }
+
+                    if (req.tempSolutionsDir) {
+                        fileUploader.tempToFinal(req.tempSolutionsDir, req.body.name, 'solutions')
+                    }
 
                     newAssignment.save((err) => {
                         if (err) {
@@ -485,7 +501,6 @@ function AssignmentHandler (){
                             var text = fs.readFileSync(path.join(problemsUnzipPath, readme[0]), 'utf8')
                             try {
                                 assignment.readme = converter.makeHtml(text)
-                                console.log(1)
                             } catch(err) {
                                 console.log(err)
                             }
