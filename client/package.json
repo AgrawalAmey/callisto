@@ -1,13 +1,13 @@
 {
-  "name": "NNFL-App",
+  "name": "ML-App",
   "version": "1.0.0",
-  "description": "Official app for NNFL",
-  "productName": "NNFL-App",
+  "description": "Official app for ML",
+  "productName": "ML-App",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "author": "Team NNFL",
+  "author": "Team ML",
   "license": "MIT",
   "devDependencies": {
     "electron": "~1.7.8"

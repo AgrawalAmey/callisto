@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var User = require('./app/models/user');
 
 
-mongoose.connect('mongodb://127.0.0.1/nnfl');
+mongoose.connect('mongodb://127.0.0.1/ml');
 
 csv
  .fromPath("passwords.csv")

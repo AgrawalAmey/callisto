@@ -1,5 +1,5 @@
 {
-    "uid": "nnfl-server",
+    "uid": "ml-server",
     "append": true,
     "watch": true,
     "script": "server.js",

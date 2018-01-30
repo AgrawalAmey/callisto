@@ -5,7 +5,7 @@ from pymongo import MongoClient
 
 def add_users(args):
     client = MongoClient('mongodb://localhost:27017/')
-    users = client.nnfl.users
+    users = client.ml.users
     df = pd.read_csv(args.csv_path)
 
     for _, row in df.iterrows():
@@ -21,7 +21,7 @@ def add_users(args):
 
 def update_passwords(args):
     client = MongoClient('mongodb://localhost:27017/')
-    users = client.nnfl.users   
+    users = client.ml.users   
 
     df = pd.read_csv(args.csv_path)
 

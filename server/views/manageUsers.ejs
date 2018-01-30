@@ -2,7 +2,7 @@
 <html>
 <head>
     <% include ./partials/head.ejs %>
-    <title>Neural Nets & Fuzzy Logic | Manage USers</title>
+    <title>Machine Learning | Manage USers</title>
 </head>
 
 <body class="fixed-navbar fixed-sidebar">
@@ -209,11 +209,11 @@
             </div>
         </div>
         <!-- Footer-->
-        <footer class=footer>&copy; 2018 Team NNFL</footer>
+        <footer class=footer>&copy; 2018 Team ML</footer>
     </div>
 
     <% include ./partials/js_imports.ejs %>
-    <script src="nnfl://js/manageUsers.js"></script>
+    <script src="ml://js/manageUsers.js"></script>
     <script>
     <% if (typeof alterUserSuccess !== 'undefined' && alterUserSuccess.length > 0) { %>
         $('#alterUserSuccessModal').modal('show');

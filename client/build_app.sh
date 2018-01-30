@@ -8,7 +8,7 @@ set -x
 
 buid_for_linux()
 {
-    electron-packager . nnfl-app \
+    electron-packager . ml-app \
         --overwrite --platform=linux \
         --arch=x64 --icon=static/img/icons/1024x1024.png \
         --overwrite --ignore=conda_installers/Anaconda3-5.0.1-MacOSX-x86_64.sh \
@@ -18,7 +18,7 @@ buid_for_linux()
 
 buid_for_mac()
 {
-    electron-packager . nnfl-app \
+    electron-packager . ml-app \
         --overwrite --platform=darwin \
         --arch=x64 --icon=static/img/icons/icon.icns \
         --overwrite --ignore=conda_installers/Anaconda3-5.0.1-Linux-x86_64.sh \
@@ -28,13 +28,13 @@ buid_for_mac()
 
 buid_for_windows()
 {
-    electron-packager . nnfl-app \
+    electron-packager . ml-app \
         --overwrite --platform=win32 \
         --arch=x64 --icon=static/img/icons/icon.ico \
         --overwrite --ignore=conda_installers/Anaconda3-5.0.1-MacOSX-x86_64.sh \
         --ignore=conda_installers/Anaconda3-5.0.1-Linux-x86_64.sh \
         --version-string.CompanyName=CE --version-string.FileDescription=CE \
-        --version-string.ProductName="NNFL-App" \
+        --version-string.ProductName="ML-App" \
         --prune=true --out=release-builds
 }
 

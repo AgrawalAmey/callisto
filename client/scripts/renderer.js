@@ -28,7 +28,7 @@ function Renderer(mainWindow){
             this.renderCondaInstaller(undefined)
             condaInstaller.install((err) => {
                 if (err) {
-                    self.renderCondaInstaller("Installation failed.")
+                    self.renderCondaInstaller(err)
                     return;
                 } else {
                     self.checkRemoteServerAddressAndRender(remoteServerAddr)

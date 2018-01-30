@@ -27,8 +27,8 @@ function createWindow () {
     var shouldQuit = makeSingleInstance()
     if (shouldQuit) return app.quit()
 
-    // Register nnfl protocol to serve static files locally
-    registerNNFLProtocol()
+    // Register ml protocol to serve static files locally
+    registerMLProtocol()
 
     const menu = Menu.buildFromTemplate(menuTemplate)
     Menu.setApplicationMenu(menu)
@@ -75,8 +75,8 @@ function makeSingleInstance() {
     })
 }
 
-function registerNNFLProtocol() {
-    protocol.registerFileProtocol('nnfl', (request, callback) => {
+function registerMLProtocol() {
+    protocol.registerFileProtocol('ml', (request, callback) => {
         const url = request.url.replace(/^.*\/\//, '')
         callback({ path: path.normalize(`${__dirname}/static/${url}`) })
     }, (error) => {

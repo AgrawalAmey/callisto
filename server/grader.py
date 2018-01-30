@@ -5,7 +5,7 @@ class Grader(object):
     def __init__(self):
         self.api = NbGraderAPI()
         self.client = MongoClient('mongodb://localhost:27017/')
-        self.assignments = self.client.nnfl.assignments
+        self.assignments = self.client.ml.assignments
 
     def update_grades(self, assignment_name):
         for assignment in self.assignments.find({"name": assignment_name}):

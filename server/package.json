@@ -1,5 +1,5 @@
 {
-  "name": "NNFL-Portal",
+  "name": "ML-Portal",
   "main": "server.js",
   "dependencies": {
     "bcrypt-nodejs": "*",
@@ -24,12 +24,12 @@
     "showdown": "^1.8.6",
     "unzip": "^0.1.11"
   },
-  "repository": "agrawalamey/nnfl-portal",
+  "repository": "agrawalamey/ml-portal",
   "version": "0.0.5",
-  "description": "NNFL Portal",
+  "description": "ML Portal",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Amey Agrawal",
+  "author": "Team ML",
   "license": "MIT"
 }

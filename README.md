@@ -1,6 +1,6 @@
-# NNFL App
+# ML App
 
-NNFL-App provides a zero setup solution for python assignments via a multi-platform electron app.
+ML-App provides a zero setup solution for python assignments via a multi-platform electron app.
 
 Click on the image below for a short tour of the app.
 
