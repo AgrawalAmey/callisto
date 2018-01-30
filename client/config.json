@@ -1,6 +1,6 @@
 {
   "appName": "ML-App",
-  "remoteServerAddr": "172.24.2.30:17350",
+  "remoteServerAddr": "localhost:17350",
   "jupyterAddr": "localhost:19350",
   "windowsInstallationTimeOut": 900000,
   "encryptionKey": "musicmakers"
