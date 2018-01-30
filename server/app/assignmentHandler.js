@@ -414,6 +414,12 @@ function AssignmentHandler (){
 
                     existingAssignment = this.editOrCreateAssignment(req, existingAssignment)
 
+                    if ('problems' in req.files && this.showToStudents(existingAssignment)) {
+                        req.flash('alterAssignmentError', 'Cannot edit problems now.')
+                        res.redirect('/assignments')
+                        return
+                    }
+
                     if (req.tempProblemsDir) {
                         fileUploader.tempToFinal(req.tempProblemsDir, req.body.name, 'problems')
                     }
@@ -430,7 +436,7 @@ function AssignmentHandler (){
                             return
                         }
 
-                        if (Object.keys(req.files).length > 0) {
+                        if (!this.showToStudents(existingAssignment)) {
                             this.updateNotebooksDatabase(existingAssignment)
                         }
 
@@ -475,6 +481,8 @@ function AssignmentHandler (){
     // ========================================================================= 
 
     this.updateNotebooksDatabase = (assignment) => {
+
+        console.log('called')
 
         // asynchronous
         process.nextTick(() => {
