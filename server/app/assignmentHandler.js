@@ -482,8 +482,6 @@ function AssignmentHandler (){
 
     this.updateNotebooksDatabase = (assignment) => {
 
-        console.log('called')
-
         // asynchronous
         process.nextTick(() => {
             var problemsZipPath = fileUploader.getProblemsZipPath(assignment.name)

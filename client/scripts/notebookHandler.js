@@ -28,7 +28,7 @@ function NotebookHandler(renderer) {
             timeout: 10000,
             formData: { 
                 submissions: { 
-                    value: 'fs.createReadStream("' + filePath + '")',
+                    value: fs.createReadStream(filePath),
                     options: { 
                         filename: filePath,
                         contentType: null 

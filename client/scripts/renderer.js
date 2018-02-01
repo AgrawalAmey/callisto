@@ -96,7 +96,7 @@ function Renderer(mainWindow){
 
         var jupyterAddr = require('../config').jupyterAddr
         if (type == 'problems'){
-            var notebookURL = "http://" + jupyterAddr + "/notebooks/submitted/user/" + assignment.name + "/" + notebook.name;
+            var notebookURL = "http://" + jupyterAddr + "/notebooks/release/" + assignment.name + "/" + notebook.name;
         } else {
             var notebookURL = "http://" + jupyterAddr + "/notebooks/source/" + assignment.name + "/" + notebook.name;
         }

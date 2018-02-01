@@ -65,10 +65,11 @@ function Assignments() {
             if (resp.statusCode == 200) {
                 r.pipe(unzip.Extract({ path: problemsDir }))
                     .on('close', () => {
-                        mkdirp.sync(submissionsDir)
-                        ncp(problemsDir, submissionsDir, (err) => {
-                            callback(err)
-                        })
+                        // mkdirp.sync(submissionsDir)
+                        // ncp(problemsDir, submissionsDir, (err) => {
+                        //     callback(err)
+                        // })
+                        callback()
                     })
                     .on('error', (err) => {
                         callback(err)
