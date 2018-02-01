@@ -1,6 +1,6 @@
 // Load vender scripts
 const { app } = require('electron');
-const fs = require('fs-extra')
+const fs = require('fs')
 const mkdirp = require('mkdirp')
 const ncp = require('ncp').ncp;
 const path = require('path')
@@ -66,7 +66,7 @@ function Assignments() {
                 r.pipe(unzip.Extract({ path: problemsDir }))
                     .on('close', () => {
                         mkdirp.sync(submissionsDir)
-                        fs.copy(problemsDir, submissionsDir, (err) => {
+                        ncp(problemsDir, submissionsDir, (err) => {
                             callback(err)
                         })
                     })
