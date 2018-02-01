@@ -19,6 +19,8 @@ function NotebookHandler(renderer) {
 
         var filePath = path.join(assignmentDir, notebook.name)
 
+        notebook.name = notebook.name.replace(/%20/g, ' ')
+
         var options = { 
             method: 'POST',
             url: 'http://' + remoteServerAddr + '/assignment/upload/' + assignment.name + '/' + notebook.name,
@@ -39,6 +41,7 @@ function NotebookHandler(renderer) {
 
         request(options, function (error, response, body) {
             if (error) {
+                console.log(error)
                 renderer.renderNotebookIndex(assignment, notebook, 'problems', 'Oops! Something went wrong! Please try again')
             } else {
                 if (response.statusCode === 400) {

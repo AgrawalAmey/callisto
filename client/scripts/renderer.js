@@ -91,8 +91,8 @@ function Renderer(mainWindow){
     }
 
     this.renderNotebookIndex = (assignment, notebook, type, modalError) => {
-        assignment.name = assignment.name.replace(/ /g, "%20")
-        notebook.name = notebook.name.replace(/ /g, "%20")
+        // assignment.name = assignment.name.replace(/ /g, "%20")
+        // notebook.name = notebook.name.replace(/ /g, "%20")
 
         var jupyterAddr = require('../config').jupyterAddr
         if (type == 'problems'){
