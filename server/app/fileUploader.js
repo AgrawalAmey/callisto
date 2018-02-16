@@ -67,7 +67,7 @@ function FileUploader(basePath) {
             } else if (file.fieldname == 'solutions') {
                 // dest = self.getSolutionsPath(req.body.name)
                 dest = path.join('assignments', tempDir)
-                req.tempSoultionsDir = dest
+                req.tempSolutionsDir = dest
             } else if (file.fieldname == 'submissions') {
                 dest = self.getSubmissionsPath(req.user.username, req.params.assignmentName)
             }

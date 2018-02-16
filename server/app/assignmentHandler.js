@@ -352,6 +352,13 @@ function AssignmentHandler (){
 
                     if (req.tempSolutionsDir) {
                         fileUploader.tempToFinal(req.tempSolutionsDir, req.body.name, 'solutions')
+                        var solutionsZipPath = fileUploader.getSolutionsZipPath(req.body.name)
+                        var solutionsUnzipPath = fileUploader.getSolutionsPath(req.body.name)
+
+                        if (fs.existsSync(solutionsZipPath)) {
+                            fs.createReadStream(solutionsZipPath)
+                                .pipe(unzip.Extract({ path: solutionsUnzipPath }))
+                        }
                     }
 
                     newAssignment.save((err) => {
@@ -426,6 +433,13 @@ function AssignmentHandler (){
 
                     if (req.tempSolutionsDir) {
                         fileUploader.tempToFinal(req.tempSolutionsDir, req.body.name, 'solutions')
+                        var solutionsZipPath = fileUploader.getSolutionsZipPath(req.body.name)
+                        var solutionsUnzipPath = fileUploader.getSolutionsPath(req.body.name)
+
+                        if (fs.existsSync(solutionsZipPath)) {
+                            fs.createReadStream(solutionsZipPath)
+                                .pipe(unzip.Extract({ path: solutionsUnzipPath }))
+                        }
                     }
 
                     existingAssignment.save((err) => {
@@ -487,13 +501,13 @@ function AssignmentHandler (){
             var problemsZipPath = fileUploader.getProblemsZipPath(assignment.name)
             var problemsUnzipPath = fileUploader.getProblemsPath(assignment.name)
 
-            var solutionsZipPath = fileUploader.getSolutionsZipPath(assignment.name)
-            var solutionsUnzipPath = fileUploader.getSolutionsPath(assignment.name)
+            // var solutionsZipPath = fileUploader.getSolutionsZipPath(assignment.name)
+            // var solutionsUnzipPath = fileUploader.getSolutionsPath(assignment.name)
 
-            if (fs.existsSync(solutionsZipPath)) {
-                fs.createReadStream(solutionsZipPath)
-                    .pipe(unzip.Extract({ path: solutionsUnzipPath }))
-            }
+            // if (fs.existsSync(solutionsZipPath)) {
+            //     fs.createReadStream(solutionsZipPath)
+            //         .pipe(unzip.Extract({ path: solutionsUnzipPath }))
+            // }
             if (fs.existsSync(problemsZipPath)){
                 fs.createReadStream(problemsZipPath)
                     .pipe(unzip.Extract({ path: problemsUnzipPath }))

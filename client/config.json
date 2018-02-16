@@ -1,7 +1,8 @@
 {
   "appName": "NNFL-App",
-  "remoteServerAddr": "172.24.2.30:18350",
+  "remoteServerAddr": "localhost:18350",
   "jupyterAddr": "localhost:19350",
   "windowsInstallationTimeOut": 900000,
-  "encryptionKey": "musicmakers"
+  "encryptionKey": "musicmakers",
+  "version": "0.1.0"
 }

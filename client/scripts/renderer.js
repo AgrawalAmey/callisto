@@ -18,6 +18,8 @@ function Renderer(mainWindow){
 
     this.platform = os.platform()
     this.mainWindow = mainWindow
+
+    ejse.data('appVersion', config.version)
     
     this.render = () => {
         var remoteServerAddr = remoteServerAddrHandler.getRemoteServerAddr();
