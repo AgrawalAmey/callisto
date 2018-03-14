@@ -12,7 +12,7 @@ function Creds() {
     this.getCredsPath = () => {
         if (this.credsPath == undefined) {
             var tempDir = app.getPath('temp')
-            this.credsPath = path.join(tempDir, Date.now() + '.txt')
+            this.credsPath = path.join(tempDir, Date.now() + '.json')
         }
 
         return this.credsPath
@@ -21,8 +21,8 @@ function Creds() {
     this.login = (username, password) => {
         var credsPath = this.getCredsPath()
         var encryptedCreds = {
-            "username": cipher.encrypt(username),
-            "password": cipher.encrypt(password)
+            username: cipher.encrypt(username),
+            password: cipher.encrypt(password)
         }
 
         fs.writeFileSync(credsPath, JSON.stringify(encryptedCreds, null, 2), function (err) {
@@ -34,8 +34,8 @@ function Creds() {
         var encryptedCreds = require(this.getCredsPath())
 
         var creds = {
-            "username": cipher.decrypt(username),
-            "password": cipher.decrypt(password)
+            username: cipher.decrypt(encryptedCreds.username),
+            password: cipher.decrypt(encryptedCreds.password)
         }
 
         return creds

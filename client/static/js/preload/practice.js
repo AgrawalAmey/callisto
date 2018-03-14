@@ -9,19 +9,29 @@ const config = require('../../../config')
 
 function Practice() {
     this.NBList = (callback) => {
-	    var practiceNBPath = app.getPath('userData');
-	    practiceNBPath = path.join(practiceNBPath, 'assignments', 'practice');
+    	ipcRenderer.send('practiceNBList')
 
-	    fs.access(practiceNBPath, (err) => {
-	        if (err) {
-	            mkdirp.sync(practiceNBPath);
-	            callback([]);
-	        } else {
-	            fs.readdir(practiceNBPath, (err, list) => {
-	                callback(list);
-	            });
-	        }
-	    })
+    	ipcRenderer.on('practiceNBList-reply', (event, username) => {
+    		this.userName = username
+
+    		var practiceNBPath = app.getPath('userData');
+		    practiceNBPath = path.join(practiceNBPath, 'assignments', this.userName, 'practice');
+
+		    fs.access(practiceNBPath, (err) => {
+		        if (err) {
+		            mkdirp.sync(practiceNBPath);
+		            callback([]);
+		        } else {
+		            fs.readdir(practiceNBPath, (err, list) => {
+		                callback(list);
+		            });
+		        }
+		    })
+    	})
+
+    	ipcRenderer.on('removeCreds', (event) => {
+    		delete this.userName
+    	})
 	}
 
 	this.openNB = (notebook) => {
@@ -76,8 +86,9 @@ function Practice() {
 	}
 
 	this.copyNewNB = (name) => {
+		console.log(this.userName)
 		var practiceNBPath = app.getPath('userData');
-	    practiceNBPath = path.join(practiceNBPath, 'assignments', 'practice', name);
+	    practiceNBPath = path.join(practiceNBPath, 'assignments', this.userName, 'practice', name);
 		fs.readFile(path.join(__dirname, '..', '..', 'templates', 'Template.ipynb'), (err, data) => {
 			if (err) {
 				throw err;
@@ -96,7 +107,7 @@ function Practice() {
 
 	this.deleteNB = (name, callback) => {
 		var practiceNBPath = app.getPath('userData');
-	    practiceNBPath = path.join(practiceNBPath, 'assignments', 'practice', name)
+	    practiceNBPath = path.join(practiceNBPath, 'assignments', this.userName, 'practice', name)
 		fs.unlink(practiceNBPath, (err) => {
 			if (err) {
 				throw err;

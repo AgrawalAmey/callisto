@@ -7,22 +7,23 @@ const path = require('path')
 const unzip = require('unzip')
 
 // Load custom scripts
+const creds = require('./creds.js')
 const sessionHandler = require('./sessionHandler.js')
 
 function Assignments() {
     this.getProblemsDir = (assignmentName) => {
         var userDataPath = app.getPath('userData')
-        return path.join(userDataPath, 'assignments', 'release', assignmentName)
+        return path.join(userDataPath, 'assignments', creds.getCreds().username, 'release', assignmentName)
     } 
 
     this.getSolutionsDir = (assignmentName) => {
         var userDataPath = app.getPath('userData')
-        return path.join(userDataPath, 'assignments', 'source', assignmentName)
+        return path.join(userDataPath, 'assignments', creds.getCreds().username, 'source', assignmentName)
     }
 
     this.getSubmissionDir = (assignmentName) => {
         var userDataPath = app.getPath('userData')
-        return path.join(userDataPath, 'assignments', 'submitted', 'user', assignmentName)
+        return path.join(userDataPath, 'assignments', creds.getCreds().username, 'submitted', 'user', assignmentName)
     }
 
     this.isProblems = (assignmentName) => {

@@ -10,6 +10,7 @@ const request = require('request')
 // Load custom scripts
 const condaInstaller = require('./condaInstaller')
 const config = require('../config')
+const creds = require('./creds.js')
 const { exec, execSync } = require('child_process')
 const remoteServerAddrHandler = require('./remoteServerAddrHandler')
 
@@ -138,7 +139,7 @@ function Renderer(mainWindow){
 
         request(opts, (err, response, body) => {
             if (err) {
-                var userDataPath = path.join(app.getPath('userData'), 'assignments')
+                var userDataPath = path.join(app.getPath('userData'), 'assignments', creds.getCreds().username)
                 var jupyterPort = jupyterAddr.split(":")[1]
                 if (this.platform == 'win32') {
                     var jupyterPath = path.join(condaInstaller.getInstallationPath(), 'Scripts', 'jupyter-notebook.exe')
@@ -238,7 +239,7 @@ function Renderer(mainWindow){
 
         request(opts, (err, response, body) => {
             if (err) {
-                var userDataPath = path.join(app.getPath('userData'), 'assignments')
+                var userDataPath = path.join(app.getPath('userData'), 'assignments', creds.getCreds().username)
                 var jupyterPort = jupyterAddr.split(":")[1]
                 if (this.platform == 'win32') {
                     var jupyterPath = path.join(condaInstaller.getInstallationPath(), 'Scripts', 'jupyter-notebook.exe')

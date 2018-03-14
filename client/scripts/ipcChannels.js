@@ -8,6 +8,7 @@ const practice = require('./practice')
 
 // Config
 const config = require('../config')
+const creds = require('./creds')
 
 const setChannels = (renderer, session) => {
     this.notebookHandler = new NotebookHandler(renderer)
@@ -18,8 +19,9 @@ const setChannels = (renderer, session) => {
     });
     
     // Delete user credentials on logout
-    ipcMain.on('logout', function () {
+    ipcMain.on('logout', function (event) {
         session.logout()
+        event.sender.send('removeCreds')
     });
 
     // Save user credentials on login
@@ -52,9 +54,11 @@ const setChannels = (renderer, session) => {
     });
 
     ipcMain.on('practiceNBList', (event) => {
-        practice.NBList((list) => {
-            ipcMain.send('practiceNBList-reply', list);
-        });
+        // practice.NBList((list) => {
+        //     ipcMain.send('practiceNBList-reply', list);
+        // });
+
+        event.sender.send('practiceNBList-reply', creds.getCreds().username)
     });
 
     ipcMain.on('showPractice', (event) => {
