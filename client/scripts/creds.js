@@ -1,6 +1,6 @@
 // Vendor scripts
 const { app } = require('electron')
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 
 // Custom scripts
@@ -31,7 +31,8 @@ function Creds() {
     }
 
     this.getCreds = () => {
-        var encryptedCreds = require(this.getCredsPath())
+        // var encryptedCreds = require(this.getCredsPath())
+        var encryptedCreds = fs.readJsonSync(this.getCredsPath())
 
         var creds = {
             username: cipher.decrypt(encryptedCreds.username),

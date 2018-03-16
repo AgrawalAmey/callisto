@@ -99,9 +99,9 @@ function Renderer(mainWindow){
 
         var jupyterAddr = require('../config').jupyterAddr
         if (type == 'problems'){
-            var notebookURL = "http://" + jupyterAddr + "/notebooks/release/" + assignment.name + "/" + notebook.name;
+            var notebookURL = "http://" + jupyterAddr + "/notebooks/" + creds.getCreds().username + "/release/" + assignment.name + "/" + notebook.name;
         } else {
-            var notebookURL = "http://" + jupyterAddr + "/notebooks/source/" + assignment.name + "/" + notebook.name;
+            var notebookURL = "http://" + jupyterAddr + "/notebooks/" + creds.getCreds().username + "/source/" + assignment.name + "/" + notebook.name;
         }
 
         tokenFile = path.join(app.getPath('temp'), 'tokenFile.txt');
@@ -139,7 +139,7 @@ function Renderer(mainWindow){
 
         request(opts, (err, response, body) => {
             if (err) {
-                var userDataPath = path.join(app.getPath('userData'), 'assignments', creds.getCreds().username)
+                var userDataPath = path.join(app.getPath('userData'), 'assignments')
                 var jupyterPort = jupyterAddr.split(":")[1]
                 if (this.platform == 'win32') {
                     var jupyterPath = path.join(condaInstaller.getInstallationPath(), 'Scripts', 'jupyter-notebook.exe')
@@ -225,7 +225,7 @@ function Renderer(mainWindow){
 
     checkAndStartJupyterPractice = (notebook, token) => {
         var jupyterAddr = config.jupyterAddr;
-        var practiceNBURL = "http://" + jupyterAddr + "/notebooks/practice/" + notebook + '?token=' + token;
+        var practiceNBURL = "http://" + jupyterAddr + "/notebooks/" + creds.getCreds().username + "/practice/" + notebook + '?token=' + token;
         var opts = {
             url: 'http://' + jupyterAddr,
             qs: {
@@ -239,7 +239,7 @@ function Renderer(mainWindow){
 
         request(opts, (err, response, body) => {
             if (err) {
-                var userDataPath = path.join(app.getPath('userData'), 'assignments', creds.getCreds().username)
+                var userDataPath = path.join(app.getPath('userData'), 'assignments')
                 var jupyterPort = jupyterAddr.split(":")[1]
                 if (this.platform == 'win32') {
                     var jupyterPath = path.join(condaInstaller.getInstallationPath(), 'Scripts', 'jupyter-notebook.exe')
