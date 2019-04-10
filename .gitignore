@@ -11,3 +11,4 @@ client/conda_installers/
 client/release-builds/
 client/nbgrader_src/
 client/static/docs
+.history

@@ -3,5 +3,5 @@
     "append": true,
     "watch": true,
     "script": "server.js",
-    "sourceDir": "."
+    "sourceDir": ".."
 }
