@@ -1,6 +1,6 @@
 # NNFL App
 
-NNFL App is developed to enable to provide a easy solution for conducting courses with Jupyter Notebooks.
+NNFL App is developed to provide a easy solution for conducting courses with Jupyter Notebooks.
 
 Click on the image below for a short tour of the app.
 
