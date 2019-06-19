@@ -1,8 +1,8 @@
 # Callisto
 
-Callisto is developed to provide a easy solution for conducting courses with Jupyter Notebooks.
+Callisto is developed to provide an easy solution for conducting courses with Jupyter Notebooks.
 
-Click on the image below for a short tour of the app.
+Click on the image below for a short tour of Callisto.
 
 [![Tour Video](https://j.gifs.com/l5EDy7.gif)](https://www.youtube.com/watch?v=fiKaIJcfsAs&feature=youtu.be)
 
