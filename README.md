@@ -1,17 +1,17 @@
-# NNFL App
+# Callisto
 
-NNFL App is developed to provide a easy solution for conducting courses with Jupyter Notebooks.
+Callisto is developed to provide a easy solution for conducting courses with Jupyter Notebooks.
 
 Click on the image below for a short tour of the app.
 
 [![Tour Video](https://j.gifs.com/l5EDy7.gif)](https://www.youtube.com/watch?v=fiKaIJcfsAs&feature=youtu.be)
 
 
-## Why Use NNFL App
+## Why Use Callisto
 
 ### For Students
 
-- NNFL App comes with an electron based desktop client for all major operating systems. On installation the app sets up the Python environment with all the required dependencies for the student.
+- Callisto comes with an electron based desktop client for all major operating systems. On installation the app sets up the Python environment with all the required dependencies for the student.
 - All requires binaries are bundled with the app distribution, in-case of limited internet bandwidth students can directly download the app distribution from faster local network.
 - Fetch and launch latest assignment notebooks with a single click.
 - Single button submission during tests.
