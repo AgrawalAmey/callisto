@@ -10,7 +10,7 @@
   "author": "Team NNFL",
   "license": "MIT",
   "devDependencies": {
-    "electron": "~1.8.8"
+    "electron": "~11.5.0"
   },
   "dependencies": {
     "download-file": "^0.1.5",
